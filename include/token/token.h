@@ -6,23 +6,27 @@
 namespace hdc {
     class Token {
         public:
+            Token();
+            Token(TokenKind kind, int line, int column, const char* value);
+
+        public:
             /* Setters */
             void set_kind(TokenKind kind);
             void set_line(int line);
             void set_column(int column);
-            void set_value(char* value);
+            void set_value(const char* value);
 
             /* Getters */
             TokenKind get_kind();
             int get_line();
             int get_column();
-            char* get_value();
+            const char* get_value();
 
         private:
             TokenKind kind;
             int line;
             int column;
-            char* value;
+            const char* value;
     };
 }
 
