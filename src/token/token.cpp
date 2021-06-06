@@ -1,4 +1,8 @@
+#include <sstream>
+
 #include "token/token.h"
+#include "utils/utils.h"
+#include "utils/string_pool.h"
 
 using namespace hdc;
 
@@ -13,7 +17,23 @@ Token::Token(TokenKind kind, int line, int column, const char* value) {
     this->kind = kind;
     this->line = line;
     this->column = column;
-    this->value = value;
+    this->value = StringPool::add(value);
+}
+
+std::string Token::to_str() {
+    std::stringstream builder;
+
+    builder << "(";
+    builder << get_token_kind_as_string(kind) << ' ';
+    builder << line << ' ' << column;
+
+    if (value != nullptr) {
+        builder << ' ' << value;
+    }
+
+    builder << ')';
+
+    return builder.str();
 }
 
 /* Setters */

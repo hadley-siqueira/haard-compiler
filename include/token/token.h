@@ -1,6 +1,8 @@
 #ifndef HDC_TOKEN_H
 #define HDC_TOKEN_H
 
+#include <string>
+
 #include "defs.h"
 
 namespace hdc {
@@ -10,6 +12,8 @@ namespace hdc {
             Token(TokenKind kind, int line, int column, const char* value);
 
         public:
+            std::string to_str();
+
             /* Setters */
             void set_kind(TokenKind kind);
             void set_line(int line);
