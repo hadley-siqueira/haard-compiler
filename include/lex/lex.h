@@ -21,6 +21,7 @@ namespace hdc {
         private:
             bool has_next();
             void advance();
+            bool lookahead(char c);
 
         private:
             std::string buffer;

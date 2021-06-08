@@ -5,6 +5,7 @@
 using namespace hdc;
 
 Lex::Lex() {
+    /* Empty */
 }
 
 void Lex::read(const char* path) {
@@ -53,4 +54,10 @@ void Lex::advance() {
     }
 
     state.increase_buffer_index();
+}
+
+bool Lex::lookahead(char c) {
+    int index = state.get_buffer_index();
+
+    return index < buffer.size() && buffer[index] == c;
 }

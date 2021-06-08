@@ -1,6 +1,8 @@
 #ifndef HDC_DEFS_H
 #define HDC_DEFS_H
 
+#include <map>
+
 namespace hdc {
     typedef enum TokenKind {
         /* Keywords */
@@ -161,6 +163,77 @@ namespace hdc {
         /* For debug purpose */
         TK_UNKNOWN
     } TokenKind;
+
+    const std::map<std::string, TokenKind> hdc_keywords_map = {
+        {"def", TK_DEF},
+        {"class", TK_CLASS},
+        {"var", TK_VAR},
+        {"const", TK_CONSTANT},
+        {"constant", TK_CONSTANT},
+
+        {"struct", TK_STRUCT},
+        {"enum", TK_ENUM},
+        {"union", TK_UNION},
+
+        {"new", TK_NEW},
+        {"delete", TK_DELETE},
+        {"case", TK_CASE},
+        {"default", TK_DEFAULT},
+        {"with", TK_WITH},
+        {"pass", TK_PASS},
+        {"do", TK_DO},
+        {"from", TK_FROM},
+        {"sizeof", TK_SIZEOF},
+
+        {"import", TK_IMPORT},
+        {"as", TK_AS},
+        {"in", TK_IN},
+        {"null", TK_NULL},
+        {"true", TK_TRUE},
+        {"false", TK_FALSE},
+
+        {"if", TK_IF},
+        {"elif", TK_ELIF},
+        {"else", TK_ELSE},
+
+        {"for", TK_FOR},
+        {"while", TK_WHILE},
+
+        {"break", TK_BREAK},
+        {"continue", TK_CONTINUE},
+        {"goto", TK_GOTO},
+        {"yield", TK_YIELD},
+        {"return", TK_RETURN},
+
+        {"and", TK_AND},
+        {"or", TK_OR},
+        {"not", TK_NOT},
+
+        /* types */
+        {"u8", TK_U8},
+        {"u16", TK_U16},
+        {"u32", TK_U32},
+        {"u64", TK_U64},
+
+        {"i8", TK_I8},
+        {"i16", TK_I16},
+        {"i32", TK_I32},
+        {"i64", TK_I64},
+
+        {"void", TK_VOID},
+        {"symbol", TK_SYMBOL},
+        {"bool", TK_BOOL},
+        {"uchar", TK_UCHAR},
+        {"char", TK_CHAR},
+        {"ushort", TK_USHORT},
+        {"short", TK_SHORT},
+        {"uint", TK_UINT},
+        {"int", TK_INT},
+        {"ulong", TK_ULONG},
+        {"long", TK_LONG},
+        {"float", TK_FLOAT},
+        {"double", TK_DOUBLE}
+    };
 }
 
 #endif
