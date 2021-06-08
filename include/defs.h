@@ -234,6 +234,90 @@ namespace hdc {
         {"float", TK_FLOAT},
         {"double", TK_DOUBLE}
     };
+
+    const std::map<std::string, TokenKind> hdc_operators_map = {
+        {"++", TK_INC},
+        {"--", TK_DEC},
+
+        /* arithmetic */
+        {"+", TK_PLUS},
+        {"-", TK_MINUS},
+        {"*", TK_TIMES},
+        {"/", TK_DIVISION},
+        {"//", TK_INTEGER_DIVISION},
+        {"%", TK_MODULO},
+        {"**", TK_POWER},
+
+        /* relational */
+        {"==", TK_EQ},
+        {"!=", TK_NE},
+        {">", TK_GT},
+        {"<", TK_LT},
+        {">=", TK_GE},
+        {"<=", TK_LE},
+
+        /* bitwise */
+        {"&", TK_BITWISE_AND},
+        {"|", TK_BITWISE_OR},
+        {"^", TK_BITWISE_XOR},
+        {"~", TK_BITWISE_NOT},
+        {"<<", TK_SLL},
+        {">>", TK_SRA},
+        {">>>", TK_SRL},
+
+        /* logical */
+        {"&&", TK_LOGICAL_AND},
+        {"||", TK_LOGICAL_OR},
+        {"!", TK_LOGICAL_NOT},
+
+        /* member access */
+        {"->", TK_ARROW},
+        {".", TK_DOT},
+
+        /* scope */
+        {"::", TK_SCOPE},
+        {"$", TK_DOLAR},
+
+        /* ranges */
+        {"..", TK_INCLUSIVE_RANGE},
+        {"...", TK_EXCLUSIVE_RANGE},
+
+        /* ternary */
+        {"?", TK_TERNARY},
+
+        /* hash arrow*/
+        {"=>", TK_HASH_ARROW},
+
+        /* assignments */
+        {"=", TK_ASSIGNMENT},
+        {"&=", TK_BITWISE_AND_ASSIGNMENT},
+        {"^=", TK_BITWISE_XOR_ASSIGNMENT},
+        {"|=", TK_BITWISE_OR_ASSIGNMENT},
+        {"~=", TK_BITWISE_NOT_ASSIGNMENT},
+        {"/=", TK_DIVISION_ASSIGNMENT},
+        {"//=", TK_INTEGER_DIVISION_ASSIGNMENT},
+        {"-=", TK_MINUS_ASSIGNMENT},
+        {"%=", TK_MODULO_ASSIGNMENT},
+        {"+=", TK_PLUS_ASSIGNMENT},
+        {"*=", TK_TIMES_ASSIGNMENT},
+        {"<<=", TK_SLL_ASSIGNMENT},
+        {">>=", TK_SRA_ASSIGNMENT},
+        {">>>=", TK_SRL_ASSIGNMENT},
+        {":=", TK_SPECIAL_ASSIGNMENT},
+
+        /* punctuation */
+        {"@", TK_AT},
+        {":", TK_COLON},
+        {",", TK_COMMA},
+        {"},", TK_SEMICOLON},
+        {"(", TK_LEFT_PARENTHESIS},
+        {")", TK_RIGHT_PARENTHESIS},
+        {"[", TK_LEFT_SQUARE_BRACKET},
+        {"]", TK_RIGHT_SQUARE_BRACKET},
+        {"{", TK_LEFT_CURLY_BRACKET},
+        {"}", TK_RIGHT_CURLY_BRACKET}
+
+    };
 }
 
 #endif
