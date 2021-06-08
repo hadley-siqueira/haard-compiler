@@ -1,4 +1,5 @@
 #include <sstream>
+#include <cstring>
 
 #include "token/token.h"
 #include "utils/utils.h"
@@ -27,7 +28,7 @@ std::string Token::to_str() {
     builder << get_token_kind_as_string(kind) << ' ';
     builder << line << ' ' << column;
 
-    if (value != nullptr) {
+    if (value != nullptr && strlen(value) > 0) {
         builder << ' ' << value;
     }
 

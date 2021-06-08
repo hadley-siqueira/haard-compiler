@@ -25,8 +25,6 @@ void Lex::read(const char* path) {
 }
 
 Token Lex::get_token() {
-    Token token;
-
     if (has_next()) {
         if (is_whitespace()) {
             skip_whitespace();
@@ -36,6 +34,7 @@ Token Lex::get_token() {
         }
     }
 
+    state.start_lexeme();
     return create_token(TK_EOF);
 }
 
