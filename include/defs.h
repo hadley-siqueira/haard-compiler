@@ -316,7 +316,6 @@ namespace hdc {
         {"]", TK_RIGHT_SQUARE_BRACKET},
         {"{", TK_LEFT_CURLY_BRACKET},
         {"}", TK_RIGHT_CURLY_BRACKET}
-
     };
 }
 
