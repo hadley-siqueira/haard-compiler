@@ -87,6 +87,7 @@ void Lex::advance() {
         state.increase_row();
         state.set_column(1);
         state.set_new_line(true);
+        state.set_n_spaces(0);
     } else {
         state.increase_column();
     }
