@@ -9,8 +9,11 @@ int main(int argc, char* argv[]) {
 
     lex.read("foo.hd");
 
-    for (int i = 0; i < 30; ++i) {
-        std::cout << lex.get_token().to_str() << std::endl;
+    while (true) {
+        Token token = lex.get_token();
+        std::cout << token.to_str() << std::endl;
+
+        if (token.get_kind() == TK_EOF) break;
     }
 
     return 0;

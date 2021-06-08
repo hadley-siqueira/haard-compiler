@@ -26,15 +26,37 @@ void Lex::read(const char* path) {
 
 Token Lex::get_token() {
     if (has_next()) {
-        if (is_whitespace()) {
+        if (lookahead('\n')) {
+            if (!state.get_new_line() && state.get_block_stack_size() == 0) {
+                state.start_lexeme();
+                advance();
+                return create_token(TK_NEWLINE);
+            } else {
+                advance();
+                return get_token();
+            }
+        } else if (is_whitespace()) {
             skip_whitespace();
             return get_token();
+        } else if (lookahead('#')) {
+            skip_comment();
+            return get_token();
+        } else if (state.get_new_line()) {
+            return get_indentation();
         } else if (is_alpha()) {
             return get_keyword_or_identifier();
+        } else if (is_operator()) {
+            return get_operator();
         }
     }
 
     state.start_lexeme();
+
+    if (state.get_indentation_stack_top() != 0) {
+        state.indentation_stack_pop();
+        return create_token(TK_END);
+    }
+
     return create_token(TK_EOF);
 }
 
@@ -105,9 +127,40 @@ bool Lex::is_whitespace() {
 }
 
 void Lex::skip_whitespace() {
+    state.set_n_spaces(0);
+
     while (is_whitespace()) {
         advance();
+        state.increase_n_spaces();
     }
+}
+
+void Lex::skip_comment() {
+    while (!lookahead('\n')) {
+        advance();
+    }
+}
+
+Token Lex::get_indentation() {
+    state.start_lexeme();
+
+    if (state.get_block_stack_size() > 0) {
+        state.set_new_line(false);
+        return get_token();
+    }
+
+    int n_spaces = state.get_n_spaces();
+
+    if (n_spaces > state.get_indentation_stack_top()) {
+        state.indentation_stack_push(n_spaces);
+        return create_token(TK_BEGIN);
+    } else if (n_spaces < state.get_indentation_stack_top()) {
+        state.indentation_stack_pop();
+        return create_token(TK_END);
+    }
+
+    state.set_new_line(false);
+    return get_token();
 }
 
 Token Lex::get_keyword_or_identifier() {
@@ -124,6 +177,10 @@ Token Lex::get_keyword_or_identifier() {
     }
 
     return create_token(kind);
+}
+
+Token Lex::get_operator() {
+
 }
 
 Token Lex::create_token(TokenKind kind) {

@@ -20,19 +20,27 @@ namespace hdc {
             int get_lexeme_row();
             int get_lexeme_column();
             int get_buffer_index();
+            int get_n_spaces();
             bool get_new_line();
             const std::string get_lexeme();
+            int get_block_stack_size();
+            int get_indentation_stack_top();
 
             void increase_row(int value=1);
             void increase_column(int value=1);
             void increase_buffer_index(int value=1);
+            void increase_n_spaces(int value=1);
             void add_to_lexeme(char value);
 
             void set_row(int value);
             void set_column(int value);
             void set_buffer_index(int value);
+            void set_n_spaces(int value);
             void set_new_line(bool value);
             void set_lexem(std::string& value);
+
+            void indentation_stack_push(int value);
+            void indentation_stack_pop();
 
         private:
             int row;
@@ -40,6 +48,7 @@ namespace hdc {
             int lexeme_row;
             int lexeme_column;
             int buffer_index;
+            int n_spaces;
             bool new_line;
 
             std::string lexeme;

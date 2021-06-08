@@ -31,7 +31,11 @@ namespace hdc {
             bool is_whitespace();
 
             void skip_whitespace();
+            void skip_comment();
+
+            Token get_indentation();
             Token get_keyword_or_identifier();
+            Token get_operator();
 
             Token create_token(TokenKind kind);
 
