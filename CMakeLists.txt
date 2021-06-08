@@ -14,10 +14,16 @@ set(TOKEN_SRC
     src/token/token.cpp
 )
 
+set(LEX_SRC
+    src/lex/lex_state.cpp
+    src/lex/lex.cpp
+)
+
 set(SOURCES
     src/main.cpp
     ${UTILS_SRC}
     ${TOKEN_SRC}
+    ${LEX_SRC}
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
