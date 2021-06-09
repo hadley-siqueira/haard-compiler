@@ -9,6 +9,9 @@
 namespace hdc {
     class AST {
         public:
+            ~AST();
+
+        public:
             void set_kind(AstKind kind);
             void set_parent(AST* parent);
             void set_token(Token& token);

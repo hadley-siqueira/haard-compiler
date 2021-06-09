@@ -23,12 +23,17 @@ set(AST_SRC
     src/ast/ast.cpp
 )
 
+set(PARSER_SRC
+    src/parser/parser.cpp
+)
+
 set(SOURCES
     src/main.cpp
     ${UTILS_SRC}
     ${TOKEN_SRC}
     ${LEX_SRC}
     ${AST_SRC}
+    ${PARSER_SRC}
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
