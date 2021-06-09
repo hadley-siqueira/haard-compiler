@@ -29,12 +29,17 @@ namespace hdc {
             bool is_digit();
             bool is_operator();
             bool is_whitespace();
+            bool is_binary_digit();
+            bool is_octal_digit();
+            bool is_hexa_digit();
+            bool has_base();
 
             void skip_whitespace();
             void skip_comment();
 
             Token get_indentation();
             Token get_keyword_or_identifier();
+            Token get_number();
             Token get_operator();
 
             Token create_token(TokenKind kind);

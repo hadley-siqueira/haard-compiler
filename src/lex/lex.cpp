@@ -43,6 +43,8 @@ Token Lex::get_token() {
             return get_token();
         } else if (state.get_new_line()) {
             return get_indentation();
+        } else if (is_digit()) {
+            return get_number();
         } else if (is_alpha()) {
             return get_keyword_or_identifier();
         } else if (is_operator()) {
@@ -127,6 +129,40 @@ bool Lex::is_whitespace() {
     return lookahead(' ');
 }
 
+bool Lex::is_binary_digit() {
+    int index = state.get_buffer_index();
+
+    return buffer[index] == '0' || buffer[index] == '1';
+}
+
+bool Lex::is_octal_digit() {
+    int index = state.get_buffer_index();
+
+    return buffer[index] >= '0' && buffer[index] <= '7';
+}
+
+bool Lex::is_hexa_digit() {
+    int index = state.get_buffer_index();
+
+    return buffer[index] >= '0' && buffer[index] <= '9' ||
+           buffer[index] >= 'a' && buffer[index] <= 'f' ||
+           buffer[index] >= 'A' && buffer[index] <= 'F';
+}
+
+bool Lex::has_base() {
+    int index = state.get_buffer_index();
+
+    if (index + 2 >= buffer.size()) {
+        return false;
+    }
+
+    char base = buffer[index + 1];
+    bool flag1 = base == 'o' || base == 'b' || base == 'x';
+    bool flag2 = base >= '0' && base <= '7';
+
+    return buffer[index] == '0' && (flag1 || flag2);
+}
+
 void Lex::skip_whitespace() {
     state.set_n_spaces(0);
 
@@ -175,6 +211,73 @@ Token Lex::get_keyword_or_identifier() {
 
     if (hdc_keywords_map.count(state.get_lexeme()) > 0) {
         kind = hdc_keywords_map.at(state.get_lexeme());
+    }
+
+    return create_token(kind);
+}
+
+Token Lex::get_number() {
+    TokenKind kind = TK_LITERAL_INTEGER;
+
+    state.start_lexeme();
+
+    if (has_base()) {
+        advance();
+
+        if (lookahead('b')) {
+            advance();
+
+            while (is_binary_digit()) {
+                advance();
+            }
+        } else if (lookahead('o')) {
+            advance();
+
+            while (is_octal_digit()) {
+                advance();
+            }
+        } else if (lookahead('x')) {
+            advance();
+
+            while (is_hexa_digit()) {
+                advance();
+            }
+        } else {
+            while (is_octal_digit()) {
+                advance();
+            }
+        }
+    } else {
+        while (is_digit()) {
+            advance();
+        }
+
+        if (lookahead('.')) {
+            kind = TK_LITERAL_DOUBLE;
+            advance();
+
+            while (is_digit()) {
+                advance();
+            }
+        }
+
+        if (lookahead('e') || lookahead('E')) {
+            kind = TK_LITERAL_DOUBLE;
+            advance();
+
+            if (lookahead('-') || lookahead('+')) {
+                advance();
+            }
+
+            while (is_digit()) {
+                advance();
+            }
+        }
+
+        if (lookahead('f') || lookahead('F')) {
+            kind = TK_LITERAL_FLOAT;
+            advance();
+        }
     }
 
     return create_token(kind);
