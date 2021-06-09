@@ -2,13 +2,14 @@
 
 #include "scanner/scanner.h"
 #include "ast/ast.h"
+#include "parser/parser.h"
 
 using namespace hdc;
 
-int main(int argc, char* argv[]) {
+void test_scanner() {
     Scanner scanner;
 
-    scanner.read("foo.hd");
+    scanner.read("import.hd");
 
     while (true) {
         Token token = scanner.get_token();
@@ -16,8 +17,20 @@ int main(int argc, char* argv[]) {
 
         if (token.get_kind() == TK_EOF) break;
     }
+}
 
-    std::cout << "AST size: " << sizeof(AST) << std::endl;
+void test_parser() {
+    AST* root;
+    Parser parser;
+
+    root = parser.read("import.hd");
+    std::cout << "ast: " << root->to_str() << std::endl;
+    std::cout << "the end" << std::endl;
+}
+
+int main(int argc, char* argv[]) {
+    test_scanner();
+    test_parser();
 
     return 0;
 }

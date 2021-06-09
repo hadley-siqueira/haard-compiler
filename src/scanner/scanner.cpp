@@ -284,7 +284,51 @@ Token Scanner::get_number() {
 }
 
 Token Scanner::get_operator() {
+    Token token;
+    TokenKind kind;
+    std::string lexeme_tmp;
 
+    for (int i = 0; i < 4; ++i) {
+        lexeme_tmp += buffer[state.get_buffer_index() + i];
+    }
+
+    while (lexeme_tmp.size() > 0) {
+        if (hdc_operators_map.count(lexeme_tmp) > 0) {
+            kind = hdc_operators_map.at(lexeme_tmp);
+            break;
+        }
+
+        lexeme_tmp.pop_back();
+    }
+
+    if (lexeme_tmp.size() > 0) {
+        state.start_lexeme();
+
+        for (int i = 0; i < lexeme_tmp.size() - 1; ++i) {
+            advance();
+        }
+
+        token = create_token(kind);
+        advance();
+
+        switch (kind) {
+        case TK_LEFT_CURLY_BRACKET:
+        case TK_LEFT_PARENTHESIS:
+        case TK_LEFT_SQUARE_BRACKET:
+            state.block_stack_push(kind);
+            break;
+
+        case TK_RIGHT_CURLY_BRACKET:
+        case TK_RIGHT_PARENTHESIS:
+        case TK_RIGHT_SQUARE_BRACKET:
+            state.block_stack_pop();
+            break;
+        }
+    } else {
+        exit(0);
+    }
+
+    return token;
 }
 
 Token Scanner::create_token(TokenKind kind) {

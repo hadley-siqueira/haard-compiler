@@ -169,7 +169,7 @@ namespace hdc {
         AST_SOURCEFILE,
         AST_CLASS,
         AST_DEF,
-        AST_IMPORT,
+        AST_IMPORT, AST_IMPORT_PATH, AST_IMPORT_STAR, AST_IMPORT_ALIAS
     } AstKind;
 
     const std::map<std::string, TokenKind> hdc_keywords_map = {

@@ -32,7 +32,6 @@ set(SOURCES
     ${UTILS_SRC}
     ${TOKEN_SRC}
     ${SCANNER_SRC}
-    ${LEX_SRC}
     ${AST_SRC}
     ${PARSER_SRC}
 )

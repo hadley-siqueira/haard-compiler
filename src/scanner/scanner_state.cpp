@@ -122,3 +122,11 @@ void ScannerState::indentation_stack_push(int value) {
 void ScannerState::indentation_stack_pop() {
     indentation_stack.pop();
 }
+
+void ScannerState::block_stack_push(TokenKind value) {
+    block_stack.push(value);
+}
+
+void ScannerState::block_stack_pop() {
+    block_stack.pop();
+}

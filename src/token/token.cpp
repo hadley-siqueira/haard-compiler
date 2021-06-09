@@ -11,7 +11,7 @@ Token::Token() {
     this->kind = TK_UNKNOWN;
     this-> line = -1;
     this->column = -1;
-    this->value = nullptr;
+    this->value = StringPool::add("");
 }
 
 Token::Token(TokenKind kind, int line, int column, const char* value) {

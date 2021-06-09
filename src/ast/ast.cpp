@@ -1,6 +1,19 @@
+#include <sstream>
+
 #include "ast/ast.h"
 
 using namespace hdc;
+
+AST::AST(AstKind kind) {
+    this->kind = kind;
+    parent = nullptr;
+}
+
+AST::AST(AstKind kind, Token& token) {
+    this->kind = kind;
+    this->token = token;
+    parent = nullptr;
+}
 
 AST::~AST() {
     for (int i = 0; i < children.size(); ++i) {
@@ -37,4 +50,25 @@ void AST::add_child(AST* child) {
     child->set_parent(this);
 }
 
+std::string AST::to_str() {
+    std::stringstream buf;
+    int i;
+
+    buf << "(";
+    buf << token.get_value();
+
+    if (children.size() > 0) {
+        buf << " ";
+
+        for (i = 0; i < children.size() - 1; ++i) {
+            buf << children[i]->to_str() << " ";
+        }
+
+        buf << children[i]->to_str();
+    }
+
+    buf << ")";
+
+    return buf.str();
+}
 

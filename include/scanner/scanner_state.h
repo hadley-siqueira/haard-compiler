@@ -41,6 +41,8 @@ namespace hdc {
 
             void indentation_stack_push(int value);
             void indentation_stack_pop();
+            void block_stack_push(TokenKind value);
+            void block_stack_pop();
 
         private:
             int row;

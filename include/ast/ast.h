@@ -2,6 +2,7 @@
 #define HDC_AST_H
 
 #include <vector>
+#include <string>
 
 #include "defs.h"
 #include "token/token.h"
@@ -9,6 +10,8 @@
 namespace hdc {
     class AST {
         public:
+            AST(AstKind kind);
+            AST(AstKind kind, Token& token);
             ~AST();
 
         public:
@@ -22,6 +25,7 @@ namespace hdc {
 
         public:
             void add_child(AST* child);
+            std::string to_str();
 
         private:
             AstKind kind;
