@@ -164,6 +164,14 @@ namespace hdc {
         TK_UNKNOWN
     } TokenKind;
 
+    typedef enum AstKind {
+        AST_PROGRAM,
+        AST_SOURCEFILE,
+        AST_CLASS,
+        AST_DEF,
+        AST_IMPORT,
+    } AstKind;
+
     const std::map<std::string, TokenKind> hdc_keywords_map = {
         {"def", TK_DEF},
         {"class", TK_CLASS},

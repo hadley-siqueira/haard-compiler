@@ -19,11 +19,16 @@ set(LEX_SRC
     src/lex/lex.cpp
 )
 
+set(AST_SRC
+    src/ast/ast.cpp
+)
+
 set(SOURCES
     src/main.cpp
     ${UTILS_SRC}
     ${TOKEN_SRC}
     ${LEX_SRC}
+    ${AST_SRC}
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
