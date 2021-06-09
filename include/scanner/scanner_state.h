@@ -1,5 +1,5 @@
-#ifndef HDC_LEX_STATE_H
-#define HDC_LEX_STATE_H
+#ifndef HDC_SCANNER_STATE_H
+#define HDC_SCANNER_STATE_H
 
 #include <stack>
 #include <string>
@@ -7,10 +7,10 @@
 #include "defs.h"
 
 namespace hdc {
-    class LexState {
+    class ScannerState {
         public:
-            LexState();
-            LexState(const LexState& other);
+            ScannerState();
+            ScannerState(const ScannerState& other);
 
         public:
             void start_lexeme();

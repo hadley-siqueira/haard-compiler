@@ -1,11 +1,11 @@
 #include <iostream>
 
-#include "lex/lex.h"
+#include "scanner/scanner.h"
 
 using namespace hdc;
 
 int main(int argc, char* argv[]) {
-    Lex lex;
+    Scanner lex;
 
     lex.read("foo.hd");
 
