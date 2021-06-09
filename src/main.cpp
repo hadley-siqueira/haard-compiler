@@ -26,6 +26,7 @@ void test_parser() {
     root = parser.read("import.hd");
     std::cout << "ast: " << root->to_str() << std::endl;
     std::cout << "the end" << std::endl;
+    std::cout << "dot: " << root->to_dot() << std::endl;
 }
 
 int main(int argc, char* argv[]) {

@@ -26,6 +26,10 @@ namespace hdc {
         public:
             void add_child(AST* child);
             std::string to_str();
+            std::string to_dot();
+
+        private:
+            std::string to_dot_aux(int& count);
 
         private:
             AstKind kind;

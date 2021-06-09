@@ -55,6 +55,7 @@ std::string AST::to_str() {
     int i;
 
     buf << "(";
+    buf << hdc_astkind_map.at(kind) << ' ';
     buf << token.get_value();
 
     if (children.size() > 0) {
@@ -72,3 +73,49 @@ std::string AST::to_str() {
     return buf.str();
 }
 
+std::string AST::to_dot() {
+    std::stringstream buf;
+    int count = 0;
+    int tc = 0;
+    int sz;
+
+    buf << "digraph {\n";
+
+    buf << "    " << count << " [label=\"" << hdc_astkind_map.at(kind) 
+        << ' ' << token.get_value() << ' ' << tc << "\"];\n";
+
+    sz = children.size();
+
+    for (int i = 1; i < children.size(); ++i) {
+        buf << children[i - 1]->to_dot_aux(count);
+        buf << "    " << tc << " -> " << (sz + tc + i) << ";\n";
+    }
+
+    buf << "}\n";
+
+    return buf.str();
+}
+
+std::string AST::to_dot_aux(int& count) {
+    std::stringstream buf;
+    int sz;
+
+    if (flag) {
+        buf << "digraph {\n";
+    }
+
+    buf << "    " << count << " [label=\"" << hdc_astkind_map.at(kind) 
+        << ' ' << token.get_value() << ' ' << count << "\"];\n";
+
+    sz = children.size();
+    for (int i = 0; i < children.size(); ++i) {
+        buf << children[i]->to_dot(false, sz + count + i + 1);
+        buf << "    " << count << " -> " << (sz + count + i + 1) << ";\n";
+    }
+
+    if (flag) {
+        buf << "}\n";
+    }
+
+    return buf.str();
+}
