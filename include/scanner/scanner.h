@@ -1,16 +1,16 @@
-#ifndef HDC_LEX_H
-#define HDC_LEX_H
+#ifndef HDC_SCANNER_H
+#define HDC_SCANNER_H
 
 #include <string>
 #include <stack>
 
-#include "lex/lex_state.h"
+#include "scanner/scanner_state.h"
 #include "token/token.h"
 
 namespace hdc {
-    class Lex {
+    class Scanner {
         public:
-            Lex();
+            Scanner();
 
         public:
             void read(const char* path);
@@ -46,8 +46,8 @@ namespace hdc {
 
         private:
             std::string buffer;
-            LexState state;
-            std::stack<LexState> state_stack;
+            ScannerState state;
+            std::stack<ScannerState> state_stack;
     };
 }
 

@@ -14,9 +14,9 @@ set(TOKEN_SRC
     src/token/token.cpp
 )
 
-set(LEX_SRC
-    src/lex/lex_state.cpp
-    src/lex/lex.cpp
+set(SCANNER_SRC
+    src/scanner/scanner_state.cpp
+    src/scanner/scanner.cpp
 )
 
 set(AST_SRC
@@ -31,6 +31,7 @@ set(SOURCES
     src/main.cpp
     ${UTILS_SRC}
     ${TOKEN_SRC}
+    ${SCANNER_SRC}
     ${LEX_SRC}
     ${AST_SRC}
     ${PARSER_SRC}

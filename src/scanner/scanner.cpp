@@ -2,15 +2,15 @@
 #include <iostream>
 
 #include "utils/string_pool.h"
-#include "lex/lex.h"
+#include "scanner/scanner.h"
 
 using namespace hdc;
 
-Lex::Lex() {
+Scanner::Scanner() {
     /* Empty */
 }
 
-void Lex::read(const char* path) {
+void Scanner::read(const char* path) {
     char c;
     std::ifstream file;
 
@@ -24,7 +24,7 @@ void Lex::read(const char* path) {
     file.close();
 }
 
-Token Lex::get_token() {
+Token Scanner::get_token() {
     if (has_next()) {
         if (lookahead('\n')) {
             if (!state.get_new_line() && state.get_block_stack_size() == 0) {
@@ -62,26 +62,26 @@ Token Lex::get_token() {
     return create_token(TK_EOF);
 }
 
-void Lex::reset_state() {
+void Scanner::reset_state() {
     buffer = "";
-    state = LexState();
-    state_stack = std::stack<LexState>();
+    state = ScannerState();
+    state_stack = std::stack<ScannerState>();
 }
 
-void Lex::save_state() {
+void Scanner::save_state() {
     state_stack.push(state);
 }
 
-void Lex::restore_state() {
+void Scanner::restore_state() {
     state = state_stack.top();
     state_stack.pop();
 }
 
-bool Lex::has_next() {
+bool Scanner::has_next() {
     return state.get_buffer_index() < buffer.size();
 }
 
-void Lex::advance() {
+void Scanner::advance() {
     if (!has_next())
         return;
 
@@ -98,13 +98,13 @@ void Lex::advance() {
     state.increase_buffer_index();
 }
 
-bool Lex::lookahead(char c) {
+bool Scanner::lookahead(char c) {
     int index = state.get_buffer_index();
 
     return index < buffer.size() && buffer[index] == c;
 }
 
-bool Lex::is_alpha() {
+bool Scanner::is_alpha() {
     int index = state.get_buffer_index();
 
     return buffer[index] >= 'a' && buffer[index] <= 'z' ||
@@ -112,36 +112,36 @@ bool Lex::is_alpha() {
            buffer[index] == '_';
 }
 
-bool Lex::is_digit() {
+bool Scanner::is_digit() {
     int index = state.get_buffer_index();
 
     return buffer[index] >= '0' && buffer[index] <= '9';
 }
 
-bool Lex::is_operator() {
+bool Scanner::is_operator() {
     std::string oper;
 
     oper += buffer[state.get_buffer_index()];
     return hdc_operators_map.count(oper) > 0;
 }
 
-bool Lex::is_whitespace() {
+bool Scanner::is_whitespace() {
     return lookahead(' ');
 }
 
-bool Lex::is_binary_digit() {
+bool Scanner::is_binary_digit() {
     int index = state.get_buffer_index();
 
     return buffer[index] == '0' || buffer[index] == '1';
 }
 
-bool Lex::is_octal_digit() {
+bool Scanner::is_octal_digit() {
     int index = state.get_buffer_index();
 
     return buffer[index] >= '0' && buffer[index] <= '7';
 }
 
-bool Lex::is_hexa_digit() {
+bool Scanner::is_hexa_digit() {
     int index = state.get_buffer_index();
 
     return buffer[index] >= '0' && buffer[index] <= '9' ||
@@ -149,7 +149,7 @@ bool Lex::is_hexa_digit() {
            buffer[index] >= 'A' && buffer[index] <= 'F';
 }
 
-bool Lex::has_base() {
+bool Scanner::has_base() {
     int index = state.get_buffer_index();
 
     if (index + 2 >= buffer.size()) {
@@ -163,7 +163,7 @@ bool Lex::has_base() {
     return buffer[index] == '0' && (flag1 || flag2);
 }
 
-void Lex::skip_whitespace() {
+void Scanner::skip_whitespace() {
     state.set_n_spaces(0);
 
     while (is_whitespace()) {
@@ -172,13 +172,13 @@ void Lex::skip_whitespace() {
     }
 }
 
-void Lex::skip_comment() {
+void Scanner::skip_comment() {
     while (!lookahead('\n')) {
         advance();
     }
 }
 
-Token Lex::get_indentation() {
+Token Scanner::get_indentation() {
     state.start_lexeme();
 
     if (state.get_block_stack_size() > 0) {
@@ -200,7 +200,7 @@ Token Lex::get_indentation() {
     return get_token();
 }
 
-Token Lex::get_keyword_or_identifier() {
+Token Scanner::get_keyword_or_identifier() {
     TokenKind kind = TK_ID;
 
     state.start_lexeme();
@@ -216,7 +216,7 @@ Token Lex::get_keyword_or_identifier() {
     return create_token(kind);
 }
 
-Token Lex::get_number() {
+Token Scanner::get_number() {
     TokenKind kind = TK_LITERAL_INTEGER;
 
     state.start_lexeme();
@@ -283,11 +283,11 @@ Token Lex::get_number() {
     return create_token(kind);
 }
 
-Token Lex::get_operator() {
+Token Scanner::get_operator() {
 
 }
 
-Token Lex::create_token(TokenKind kind) {
+Token Scanner::create_token(TokenKind kind) {
     Token token;
 
     token.set_kind(kind);
