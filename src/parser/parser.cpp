@@ -6,14 +6,20 @@
 using namespace hdc;
 
 AST* Parser::read(const char* path) {
-    AST* node = new AST(AST_SOURCEFILE);
-
     scanner.read(path);
     advance();
+
+    return parse_sourcefile();
+}
+
+AST* Parser::parse_sourcefile() {
+    AST* node = new AST(AST_SOURCEFILE);
 
     while (true) {
         if (lookahead(TK_IMPORT)) {
             node->add_child(parse_import());
+        } else if (lookahead(TK_DEF)) {
+            node->add_child(parse_def());
         } else {
             break;
         }
@@ -50,6 +56,72 @@ AST* Parser::parse_import() {
     return node;
 }
 
+AST* Parser::parse_def() {
+    AST* node = nullptr;
+
+    expect(TK_DEF);
+    expect(TK_ID);
+
+    node = new AST(AST_DEF, matched_token);
+
+    expect(TK_COLON);
+    node->add_child(parse_type());
+
+    expect(TK_NEWLINE);
+    expect(TK_BEGIN);
+
+    if (has_parameters()) {
+        node->add_child(parse_parameters()); 
+    }
+
+    node->add_child(parse_statements());
+    expect(TK_END);
+
+    return node;
+}
+
+AST* Parser::parse_parameters() {
+    AST* node = new AST(AST_PARAMETERS);
+    AST* param = nullptr;
+
+    while (has_parameters()) { std::cout << "parsing type\n";
+        expect(TK_AT);
+        expect(TK_ID);
+        param = new AST(AST_PARAMETER, matched_token);
+
+        expect(TK_COLON);
+        param->add_child(parse_type());
+
+        expect(TK_NEWLINE);
+        node->add_child(param);
+    }
+
+    return node;
+}
+
+AST* Parser::parse_type() {
+    expect(TK_VOID);
+    return nullptr;
+}
+
+AST* Parser::parse_statements() {
+    expect(TK_PASS);
+    expect(TK_NEWLINE);
+    return nullptr;
+}
+
+bool Parser::has_parameters() {
+    bool flag = false;
+    Token tmp = current_token;
+
+    scanner.save_state();
+    flag = match(TK_AT) && match(TK_ID) && match(TK_COLON);
+    scanner.restore_state();
+    current_token = tmp;
+
+    return flag;
+}
+
 void Parser::advance() {
     current_token = scanner.get_token();
 }
@@ -74,10 +146,11 @@ void Parser::expect(TokenKind kind) {
     }
 
     Token token;
-
     token.set_kind(kind);
-    std::cout << token.to_str() << std::endl;
 
-    std::cout << "ERROR\n";
+    std::cout << "Expected a '" << token.to_str()
+              << "' but got a '" << current_token.to_str()
+              << "' instead";
+
     exit(0);
 }

@@ -10,7 +10,14 @@ namespace hdc {
             AST* read(const char* path);
 
         private:
+            AST* parse_sourcefile();
             AST* parse_import();
+            AST* parse_def();
+            AST* parse_parameters();
+            AST* parse_type();
+            AST* parse_statements();
+
+            bool has_parameters();
 
             void advance();
             bool lookahead(TokenKind kind);

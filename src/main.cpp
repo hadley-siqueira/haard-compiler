@@ -17,16 +17,20 @@ void test_scanner() {
 
         if (token.get_kind() == TK_EOF) break;
     }
+
+    std::cout << "end of test_scanner()\n";
 }
 
 void test_parser() {
-    AST* root;
+    AST* root = nullptr;
     Parser parser;
 
     root = parser.read("import.hd");
     std::cout << "ast: " << root->to_str() << std::endl;
     std::cout << "the end" << std::endl;
     std::cout << "dot: " << root->to_dot() << std::endl;
+
+    delete root;
 }
 
 int main(int argc, char* argv[]) {

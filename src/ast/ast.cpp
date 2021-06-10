@@ -46,8 +46,10 @@ Token AST::get_token() {
 }
 
 void AST::add_child(AST* child) {
-    children.push_back(child);
-    child->set_parent(this);
+    if (child != nullptr) {
+        children.push_back(child);
+        child->set_parent(this);
+    }
 }
 
 std::string AST::to_str() {
