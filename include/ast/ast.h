@@ -29,7 +29,7 @@ namespace hdc {
             std::string to_dot();
 
         private:
-            std::string to_dot_aux(int& count);
+            std::string to_dot_aux(int& count, int& tc);
 
         private:
             AstKind kind;
