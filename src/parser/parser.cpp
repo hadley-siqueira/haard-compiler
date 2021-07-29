@@ -17,7 +17,7 @@ AST* Parser::parse_sourcefile() {
 
     while (true) {
         if (lookahead(TK_IMPORT)) {
-            node->add_child(parse_import());
+        //    node->add_child(parse_import());
         } else if (lookahead(TK_DEF)) {
             node->add_child(parse_def());
         } else {
@@ -28,28 +28,29 @@ AST* Parser::parse_sourcefile() {
     return node;
 }
 
-AST* Parser::parse_import() {
-    AST* node = nullptr;
+Import* Parser::parse_import() {
+    Import* node = nullptr;
 
     expect(TK_IMPORT);
-    node = new AST(AST_IMPORT, matched_token);
+    node = new Import();
+    node->set_token(matched_token);
 
     expect(TK_ID);
-    node->add_child(new AST(AST_IMPORT_PATH, matched_token));
+    node->add_to_path(matched_token);
 
     while (match(TK_DOT)) {
         if (match(TK_TIMES)) {
-            node->add_child(new AST(AST_IMPORT_STAR, matched_token));
+            node->add_to_path(matched_token);
             break;
         }
 
         expect(TK_ID);
-        node->add_child(new AST(AST_IMPORT_PATH, matched_token));
+        node->add_to_path(matched_token);
     }
 
     if (match(TK_AS)) {
         expect(TK_ID);
-        node->add_child(new AST(AST_IMPORT_ALIAS, matched_token));
+        node->set_alias(matched_token);
     }
 
     expect(TK_NEWLINE);

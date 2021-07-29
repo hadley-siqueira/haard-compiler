@@ -2,9 +2,13 @@
 
 #include "scanner/scanner.h"
 #include "ast/ast.h"
+
+#include "ast/ast_node.h"
+
 #include "parser/parser.h"
 
 using namespace hdc;
+using namespace hdc::ast;
 
 void test_scanner() {
     Scanner scanner;
@@ -23,6 +27,7 @@ void test_scanner() {
 
 void test_parser() {
     AST* root = nullptr;
+    AstNode* node = nullptr;
     Parser parser;
 
     root = parser.read("import.hd");

@@ -21,6 +21,8 @@ set(SCANNER_SRC
 
 set(AST_SRC
     src/ast/ast.cpp
+    src/ast/ast_node.cpp
+    src/ast/import.cpp
 )
 
 set(PARSER_SRC
