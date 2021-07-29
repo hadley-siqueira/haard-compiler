@@ -4,6 +4,7 @@
 #include "ast/ast.h"
 
 #include "ast/ast_node.h"
+#include "ast/source_file.h"
 
 #include "parser/parser.h"
 
@@ -26,16 +27,10 @@ void test_scanner() {
 }
 
 void test_parser() {
-    AST* root = nullptr;
-    AstNode* node = nullptr;
+    SourceFile* node = nullptr;
     Parser parser;
 
-    root = parser.read("import.hd");
-    std::cout << "ast: " << root->to_str() << std::endl;
-    std::cout << "the end" << std::endl;
-    std::cout << "dot: " << root->to_dot() << std::endl;
-
-    delete root;
+    node = parser.read("import.hd");
 }
 
 int main(int argc, char* argv[]) {

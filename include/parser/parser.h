@@ -5,6 +5,7 @@
 
 #include "ast/ast.h"
 #include "ast/ast_node.h"
+#include "ast/source_file.h"
 #include "ast/import.h"
 
 namespace hdc {
@@ -12,10 +13,10 @@ namespace hdc {
 
     class Parser {
         public:
-            AST* read(const char* path);
+            SourceFile* read(const char* path);
 
         private:
-            AST* parse_sourcefile();
+            SourceFile* parse_sourcefile();
             Import* parse_import();
             AST* parse_def();
             AST* parse_parameters();

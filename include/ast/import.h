@@ -19,11 +19,14 @@ namespace hdc {
                 Token get_token();
                 Token get_alias();
 
+                bool has_alias();
+
                 void add_to_path(Token token);
 
             private:
                 Token token;
                 Token alias;
+                bool alias_flag;
                 std::vector<Token> path;
         };
     }

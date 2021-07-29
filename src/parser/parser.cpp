@@ -5,21 +5,25 @@
 
 using namespace hdc;
 
-AST* Parser::read(const char* path) {
+SourceFile* Parser::read(const char* path) {
+    SourceFile* node = nullptr;
     scanner.read(path);
     advance();
 
-    return parse_sourcefile();
+    node = parse_sourcefile();
+    node->set_path(path);
+
+    return node;
 }
 
-AST* Parser::parse_sourcefile() {
-    AST* node = new AST(AST_SOURCEFILE);
+SourceFile* Parser::parse_sourcefile() {
+    SourceFile* node = new SourceFile();
 
     while (true) {
         if (lookahead(TK_IMPORT)) {
-        //    node->add_child(parse_import());
+            node->add_import(parse_import());
         } else if (lookahead(TK_DEF)) {
-            node->add_child(parse_def());
+            //node->add_child(parse_def());
         } else {
             break;
         }
