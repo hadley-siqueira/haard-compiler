@@ -23,7 +23,7 @@ SourceFile* Parser::parse_sourcefile() {
         if (lookahead(TK_IMPORT)) {
             node->add_import(parse_import());
         } else if (lookahead(TK_DEF)) {
-            //node->add_child(parse_def());
+            node->add_function(parse_function());
         } else {
             break;
         }
@@ -61,47 +61,46 @@ Import* Parser::parse_import() {
     return node;
 }
 
-AST* Parser::parse_def() {
-    AST* node = nullptr;
+Function* Parser::parse_function() {
+    Function* node = nullptr;
 
     expect(TK_DEF);
     expect(TK_ID);
 
-    node = new AST(AST_DEF, matched_token);
+    node = new Function();
+    node->set_name(matched_token);
 
     expect(TK_COLON);
-    node->add_child(parse_type());
+    parse_type(); //node->add_child(parse_type());
 
     expect(TK_NEWLINE);
     expect(TK_BEGIN);
 
     if (has_parameters()) {
-        node->add_child(parse_parameters()); 
+        parse_parameters(node);
     }
 
-    node->add_child(parse_statements());
+    parse_statements(); //node->add_child(parse_statements());
     expect(TK_END);
 
     return node;
 }
 
-AST* Parser::parse_parameters() {
-    AST* node = new AST(AST_PARAMETERS);
-    AST* param = nullptr;
+void Parser::parse_parameters(Function* function) {
+    Variable* parameter = nullptr;
 
-    while (has_parameters()) { std::cout << "parsing type\n";
+    while (has_parameters()) {
         expect(TK_AT);
         expect(TK_ID);
-        param = new AST(AST_PARAMETER, matched_token);
+        parameter = new Variable(AST_PARAMETER);
+        parameter->set_name(matched_token);
 
         expect(TK_COLON);
-        param->add_child(parse_type());
+        parse_type(); //param->add_child(parse_type());
 
         expect(TK_NEWLINE);
-        node->add_child(param);
+        function->add_parameter(parameter);
     }
-
-    return node;
 }
 
 AST* Parser::parse_type() {

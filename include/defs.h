@@ -164,32 +164,6 @@ namespace hdc {
         TK_UNKNOWN
     } TokenKind;
 
-    typedef enum AstKind {
-        AST_PROGRAM,
-        AST_SOURCEFILE,
-        AST_CLASS,
-        AST_DEF,
-        AST_PARAMETERS,
-        AST_PARAMETER,
-        AST_IMPORT,
-        AST_IMPORT_PATH,
-        AST_IMPORT_STAR,
-        AST_IMPORT_ALIAS,
-    } AstKind;
-
-    const std::map<AstKind, std::string> hdc_astkind_map = {
-        {AST_PROGRAM, "AST_PROGRAM"},
-        {AST_SOURCEFILE, "AST_SOURCEFILE"},
-        {AST_CLASS, "AST_CLASS"},
-        {AST_DEF, "AST_DEF"},
-        {AST_PARAMETERS, "AST_PARAMETERS"},
-        {AST_PARAMETER, "AST_PARAMETER"},
-        {AST_IMPORT, "AST_IMPORT"},
-        {AST_IMPORT_PATH, "AST_IMPORT_PATH"},
-        {AST_IMPORT_STAR, "AST_IMPORT_STAR"},
-        {AST_IMPORT_ALIAS, "AST_IMPORT_ALIAS"},
-    };
-
     const std::map<std::string, TokenKind> hdc_keywords_map = {
         {"def", TK_DEF},
         {"class", TK_CLASS},
@@ -342,6 +316,32 @@ namespace hdc {
         {"]", TK_RIGHT_SQUARE_BRACKET},
         {"{", TK_LEFT_CURLY_BRACKET},
         {"}", TK_RIGHT_CURLY_BRACKET}
+    };
+
+    typedef enum AstKind {
+        AST_PROGRAM,
+        AST_SOURCEFILE,
+        AST_IMPORT,
+        AST_CLASS,
+        AST_FUNCTION,
+        AST_METHOD,
+        AST_VARIABLE,
+        AST_LOCAL_VARIABLE,
+        AST_GLOBAL_VARIABLE,
+        AST_PARAMETER,
+    } AstKind;
+
+    const std::map<AstKind, std::string> hdc_astkind_map = {
+        {AST_PROGRAM, "AST_PROGRAM"},
+        {AST_SOURCEFILE, "AST_SOURCEFILE"},
+        {AST_IMPORT, "AST_IMPORT"},
+        {AST_CLASS, "AST_CLASS"},
+        {AST_FUNCTION, "AST_FUNCTION"},
+        {AST_METHOD, "AST_METHOD"},
+        {AST_VARIABLE, "AST_VARIABLE"},
+        {AST_LOCAL_VARIABLE, "AST_LOCAL_VARIABLE"},
+        {AST_GLOBAL_VARIABLE, "AST_GLOBAL_VARIABLE"},
+        {AST_PARAMETER, "AST_PARAMETER"},
     };
 }
 

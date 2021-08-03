@@ -31,6 +31,7 @@ void test_parser() {
     Parser parser;
 
     node = parser.read("import.hd");
+    delete node;
 }
 
 int main(int argc, char* argv[]) {

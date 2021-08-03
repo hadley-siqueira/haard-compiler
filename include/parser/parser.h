@@ -7,6 +7,7 @@
 #include "ast/ast_node.h"
 #include "ast/source_file.h"
 #include "ast/import.h"
+#include "ast/function.h"
 
 namespace hdc {
     using namespace ast;
@@ -18,8 +19,8 @@ namespace hdc {
         private:
             SourceFile* parse_sourcefile();
             Import* parse_import();
-            AST* parse_def();
-            AST* parse_parameters();
+            Function* parse_function();
+            void parse_parameters(Function* function);
             AST* parse_type();
             AST* parse_statements();
 

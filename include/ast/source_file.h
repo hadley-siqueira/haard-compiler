@@ -6,12 +6,14 @@
 #include "token/token.h"
 #include "ast_node.h"
 #include "import.h"
+#include "function.h"
 
 namespace hdc {
     namespace ast {
         class SourceFile : public AstNode {
             public:
                 SourceFile();
+                ~SourceFile();
 
             public:
                 void set_path(std::string path);
@@ -19,10 +21,12 @@ namespace hdc {
                 std::string get_path();
 
                 void add_import(Import* import);
+                void add_function(Function* function);
 
             private:
                 std::string path;
                 std::vector<Import*> imports;
+                std::vector<Function*> functions;
         };
     }
 }
