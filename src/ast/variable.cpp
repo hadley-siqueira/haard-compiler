@@ -21,6 +21,7 @@ void Variable::set_name(Token name) {
 
 void Variable::set_type(Type* type) {
     this->type = type;
+    type->set_parent_node(this);
 }
 
 Token Variable::get_name() {

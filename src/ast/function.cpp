@@ -1,3 +1,4 @@
+#include "ast/source_file.h"
 #include "ast/function.h"
 
 using namespace hdc;
@@ -22,10 +23,12 @@ void Function::set_name(Token name) {
 
 void Function::set_source_file(SourceFile* source_file) {
     this->source_file = source_file;
+    set_parent_node(source_file);
 }
 
 void Function::set_return_type(Type* type) {
     this->return_type = type;
+    type->set_parent_node(this);
 }
 
 Token Function::get_name() {
@@ -42,5 +45,6 @@ Type* Function::get_return_type() {
 
 void Function::add_parameter(Variable* parameter) {
     parameters.push_back(parameter);
+    parameter->set_parent_node(this);
 }
 

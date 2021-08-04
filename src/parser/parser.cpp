@@ -24,6 +24,8 @@ SourceFile* Parser::parse_sourcefile() {
             node->add_import(parse_import());
         } else if (lookahead(TK_DEF)) {
             node->add_function(parse_function());
+        } else if (lookahead(TK_CLASS)) {
+            node->add_class(parse_class());
         } else {
             break;
         }
@@ -61,6 +63,37 @@ Import* Parser::parse_import() {
     return node;
 }
 
+Class* Parser::parse_class() {
+    Token name;
+    Class* klass = new Class();
+
+    expect(TK_CLASS);
+    expect(TK_ID);
+    klass->set_name(matched_token);
+
+    if (match(TK_LEFT_PARENTHESIS)) {
+        klass->set_parent(parse_type());
+        expect(TK_RIGHT_PARENTHESIS);
+    }
+
+    expect(TK_COLON);
+    expect(TK_NEWLINE);
+    expect(TK_BEGIN);
+
+    while (true) {
+        if (lookahead(TK_DEF)) {
+            klass->add_method(parse_method());
+        } else if (lookahead(TK_ID)){
+            klass->add_variable(parse_class_variable());
+        } else {
+            break;
+        }
+    }
+
+    expect(TK_END);
+    return klass;
+}
+
 Function* Parser::parse_function() {
     Function* node = nullptr;
 
@@ -86,6 +119,44 @@ Function* Parser::parse_function() {
     return node;
 }
 
+Method* Parser::parse_method() {
+    Method* node = nullptr;
+
+    expect(TK_DEF);
+    expect(TK_ID);
+
+    node = new Method();
+    node->set_name(matched_token);
+
+    expect(TK_COLON);
+    node->set_return_type(parse_type());
+
+    expect(TK_NEWLINE);
+    expect(TK_BEGIN);
+
+    if (has_parameters()) {
+        parse_parameters(node);
+    }
+
+    parse_statements(); //node->add_child(parse_statements());
+    expect(TK_END);
+
+    return node;
+}
+
+Variable* Parser::parse_class_variable() {
+    Variable* var = new Variable(AST_CLASS_VARIABLE);
+
+    expect(TK_ID);
+    var->set_name(matched_token);
+
+    expect(TK_COLON);
+    var->set_type(parse_type());
+    expect(TK_NEWLINE);
+
+    return var;
+}
+
 void Parser::parse_parameters(Function* function) {
     Variable* parameter = nullptr;
 
@@ -105,10 +176,6 @@ void Parser::parse_parameters(Function* function) {
 
 Type* Parser::parse_type() {
     Type* type = nullptr;
-
-    if (match(TK_INT)) {
-    } else if (match(TK_VOID)) {
-    }
 
     if (match(TK_INT)) {
         type = new Type(AST_INT_TYPE, matched_token);

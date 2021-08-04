@@ -24,7 +24,9 @@ set(AST_SRC
     src/ast/ast_node.cpp
     src/ast/source_file.cpp
     src/ast/import.cpp
+    src/ast/class.cpp
     src/ast/function.cpp
+    src/ast/method.cpp
     src/ast/variable.cpp
     src/ast/type.cpp
 )

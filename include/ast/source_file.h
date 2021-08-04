@@ -7,6 +7,7 @@
 #include "ast_node.h"
 #include "import.h"
 #include "function.h"
+#include "class.h"
 
 namespace hdc {
     namespace ast {
@@ -22,11 +23,13 @@ namespace hdc {
 
                 void add_import(Import* import);
                 void add_function(Function* function);
+                void add_class(Class* klass);
 
             private:
                 std::string path;
                 std::vector<Import*> imports;
                 std::vector<Function*> functions;
+                std::vector<Class*> classes;
         };
     }
 }

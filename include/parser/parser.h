@@ -20,7 +20,10 @@ namespace hdc {
         private:
             SourceFile* parse_sourcefile();
             Import* parse_import();
+            Class* parse_class();
             Function* parse_function();
+            Method* parse_method();
+            Variable* parse_class_variable();
             void parse_parameters(Function* function);
             Type* parse_type();
             AST* parse_statements();
