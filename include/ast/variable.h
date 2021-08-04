@@ -5,6 +5,7 @@
 
 #include "token/token.h"
 #include "ast_node.h"
+#include "type.h"
 
 namespace hdc {
     namespace ast {
@@ -16,13 +17,14 @@ namespace hdc {
 
             public:
                 void set_name(Token token);
-                // void set_type(Token token);
+                void set_type(Type* type);
 
                 Token get_name();
-                // Type* get_type();
+                Type* get_type();
 
             private:
                 Token name;
+                Type* type;
         };
     }
 }

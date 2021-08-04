@@ -26,6 +26,7 @@ set(AST_SRC
     src/ast/import.cpp
     src/ast/function.cpp
     src/ast/variable.cpp
+    src/ast/type.cpp
 )
 
 set(PARSER_SRC
