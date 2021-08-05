@@ -26,6 +26,8 @@ namespace hdc {
             Variable* parse_class_variable();
             void parse_parameters(Function* function);
             Type* parse_type();
+            Type* parse_named_type();
+            void parse_template_list();
             AST* parse_statements();
 
             bool has_parameters();

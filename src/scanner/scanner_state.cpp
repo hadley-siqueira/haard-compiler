@@ -9,6 +9,7 @@ ScannerState::ScannerState() {
     lexeme_column = 1;
     buffer_index = 0;
     n_spaces = 0;
+    template_counter = 0;
     new_line = true;
     template_flag = false;
     indentation_stack.push(0);
@@ -21,6 +22,7 @@ ScannerState::ScannerState(const ScannerState& other) {
     lexeme_column = other.lexeme_column;
     buffer_index = other.buffer_index;
     n_spaces = other.n_spaces;
+    template_counter = other.template_counter;
     new_line = other.new_line;
     template_flag = other.template_flag;
     lexeme = other.lexeme;
@@ -65,6 +67,10 @@ bool ScannerState::get_template_flag() {
     return template_flag;
 }
 
+int ScannerState::get_template_counter() {
+    return template_counter;
+}
+
 const std::string ScannerState::get_lexeme() {
     return lexeme;
 }
@@ -91,6 +97,10 @@ void ScannerState::increase_buffer_index(int value) {
 
 void ScannerState::increase_n_spaces(int value) {
     n_spaces += value;
+}
+
+void ScannerState::increase_template_counter_by(int value) {
+    template_counter += value;
 }
 
 void ScannerState::add_to_lexeme(char value) {

@@ -71,6 +71,10 @@ Class* Parser::parse_class() {
     expect(TK_ID);
     klass->set_name(matched_token);
 
+    if (lookahead(TK_BEGIN_TEMPLATE)) {
+        parse_template_list();
+    }
+
     if (match(TK_LEFT_PARENTHESIS)) {
         klass->set_parent(parse_type());
         expect(TK_RIGHT_PARENTHESIS);
@@ -103,6 +107,10 @@ Function* Parser::parse_function() {
     node = new Function();
     node->set_name(matched_token);
 
+    if (lookahead(TK_BEGIN_TEMPLATE)) {
+        parse_template_list();
+    }
+
     expect(TK_COLON);
     node->set_return_type(parse_type());
 
@@ -127,6 +135,10 @@ Method* Parser::parse_method() {
 
     node = new Method();
     node->set_name(matched_token);
+
+    if (lookahead(TK_BEGIN_TEMPLATE)) {
+        parse_template_list();
+    }
 
     expect(TK_COLON);
     node->set_return_type(parse_type());
@@ -219,9 +231,37 @@ Type* Parser::parse_type() {
         type = new Type(AST_U32_TYPE, matched_token);
     } else if (match(TK_U64)) {
         type = new Type(AST_U64_TYPE, matched_token);
-    } 
+    } else if (lookahead(TK_ID)) {
+        type = parse_named_type();
+    }
 
     return type;
+}
+
+Type* Parser::parse_named_type() {
+    expect(TK_ID);
+
+    if (match(TK_SCOPE)) {
+        expect(TK_ID);
+    }
+
+    if (lookahead(TK_BEGIN_TEMPLATE)) {
+        parse_template_list();
+    }
+
+    return new Type(AST_UINT_TYPE, matched_token);
+}
+
+void Parser::parse_template_list() {
+    expect(TK_BEGIN_TEMPLATE);
+
+    parse_type();
+
+    while (match(TK_COMMA)) {
+        parse_type();
+    }
+
+    expect(TK_END_TEMPLATE);
 }
 
 AST* Parser::parse_statements() {
@@ -270,7 +310,7 @@ void Parser::expect(TokenKind kind) {
 
     std::cout << "Expected a '" << token.to_str()
               << "' but got a '" << current_token.to_str()
-              << "' instead";
+              << "' instead\n";
 
     exit(0);
 }

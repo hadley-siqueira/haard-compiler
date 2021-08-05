@@ -11,10 +11,10 @@
 using namespace hdc;
 using namespace hdc::ast;
 
-void test_scanner() {
+void test_scanner(char* path) {
     Scanner scanner;
 
-    scanner.read("import.hd");
+    scanner.read(path);
 
     while (true) {
         Token token = scanner.get_token();
@@ -26,17 +26,17 @@ void test_scanner() {
     std::cout << "end of test_scanner()\n";
 }
 
-void test_parser() {
+void test_parser(char* path) {
     SourceFile* node = nullptr;
     Parser parser;
 
-    node = parser.read("import.hd");
+    node = parser.read(path);
     delete node;
 }
 
 int main(int argc, char* argv[]) {
-    test_scanner();
-    test_parser();
+    test_scanner(argv[1]);
+    test_parser(argv[1]);
 
     return 0;
 }

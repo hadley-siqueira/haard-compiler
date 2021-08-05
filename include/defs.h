@@ -160,6 +160,7 @@ namespace hdc {
         TK_RIGHT_PARENTHESIS,
         TK_RIGHT_SQUARE_BRACKET,
         TK_BEGIN_TEMPLATE,
+        TK_END_TEMPLATE,
 
         /* For debug purpose */
         TK_UNKNOWN

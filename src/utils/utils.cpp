@@ -381,6 +381,9 @@ namespace hdc {
         case TK_BEGIN_TEMPLATE:
             return "TK_BEGIN_TEMPLATE";
 
+        case TK_END_TEMPLATE:
+            return "TK_END_TEMPLATE";
+
         case TK_UNKNOWN:
             return "TK_UNKNOW";
 

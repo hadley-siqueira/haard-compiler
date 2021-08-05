@@ -23,6 +23,7 @@ namespace hdc {
             int get_n_spaces();
             bool get_new_line();
             bool get_template_flag();
+            int get_template_counter();
             const std::string get_lexeme();
             int get_block_stack_size();
             int get_indentation_stack_top();
@@ -31,6 +32,7 @@ namespace hdc {
             void increase_column(int value=1);
             void increase_buffer_index(int value=1);
             void increase_n_spaces(int value=1);
+            void increase_template_counter_by(int value=1);
             void add_to_lexeme(char value);
 
             void set_row(int value);
@@ -53,6 +55,7 @@ namespace hdc {
             int lexeme_column;
             int buffer_index;
             int n_spaces;
+            int template_counter;
             bool new_line;
             bool template_flag;
 

@@ -296,11 +296,20 @@ Token Scanner::get_operator() {
         state.start_lexeme();
         advance();
         state.set_template_flag(false);
+        state.increase_template_counter_by(1);
         return create_token(TK_BEGIN_TEMPLATE);
     }
 
     for (int i = 0; i < 4; ++i) {
         lexeme_tmp += buffer[state.get_buffer_index() + i];
+    }
+
+    if (lexeme_tmp[0] == '>' && state.get_template_counter() > 0) {
+        kind = TK_END_TEMPLATE;
+        state.start_lexeme();
+        advance();
+        state.increase_template_counter_by(-1);
+        return create_token(kind);
     }
 
     while (lexeme_tmp.size() > 0) {
