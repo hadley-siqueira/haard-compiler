@@ -10,6 +10,7 @@ ScannerState::ScannerState() {
     buffer_index = 0;
     n_spaces = 0;
     new_line = true;
+    template_flag = false;
     indentation_stack.push(0);
 }
 
@@ -21,6 +22,7 @@ ScannerState::ScannerState(const ScannerState& other) {
     buffer_index = other.buffer_index;
     n_spaces = other.n_spaces;
     new_line = other.new_line;
+    template_flag = other.template_flag;
     lexeme = other.lexeme;
     indentation_stack = other.indentation_stack;
 }
@@ -57,6 +59,10 @@ int ScannerState::get_n_spaces() {
 
 bool ScannerState::get_new_line() {
     return new_line;
+}
+
+bool ScannerState::get_template_flag() {
+    return template_flag;
 }
 
 const std::string ScannerState::get_lexeme() {
@@ -109,6 +115,10 @@ void ScannerState::set_n_spaces(int value) {
 
 void ScannerState::set_new_line(bool value) {
     new_line = value;
+}
+
+void ScannerState::set_template_flag(bool value) {
+    template_flag = value;
 }
 
 void ScannerState::set_lexem(std::string& value) {

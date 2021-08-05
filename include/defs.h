@@ -159,6 +159,7 @@ namespace hdc {
         TK_RIGHT_CURLY_BRACKET,
         TK_RIGHT_PARENTHESIS,
         TK_RIGHT_SQUARE_BRACKET,
+        TK_BEGIN_TEMPLATE,
 
         /* For debug purpose */
         TK_UNKNOWN
@@ -315,7 +316,8 @@ namespace hdc {
         {"[", TK_LEFT_SQUARE_BRACKET},
         {"]", TK_RIGHT_SQUARE_BRACKET},
         {"{", TK_LEFT_CURLY_BRACKET},
-        {"}", TK_RIGHT_CURLY_BRACKET}
+        {"}", TK_RIGHT_CURLY_BRACKET},
+        {"<", TK_BEGIN_TEMPLATE}
     };
 
     typedef enum AstKind {

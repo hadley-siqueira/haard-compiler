@@ -378,6 +378,9 @@ namespace hdc {
         case TK_RIGHT_SQUARE_BRACKET:
             return "TK_RIGHT_SQUARE_BRACKET";
 
+        case TK_BEGIN_TEMPLATE:
+            return "TK_BEGIN_TEMPLATE";
+
         case TK_UNKNOWN:
             return "TK_UNKNOW";
 

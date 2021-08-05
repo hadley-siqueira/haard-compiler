@@ -22,6 +22,7 @@ namespace hdc {
             int get_buffer_index();
             int get_n_spaces();
             bool get_new_line();
+            bool get_template_flag();
             const std::string get_lexeme();
             int get_block_stack_size();
             int get_indentation_stack_top();
@@ -37,6 +38,7 @@ namespace hdc {
             void set_buffer_index(int value);
             void set_n_spaces(int value);
             void set_new_line(bool value);
+            void set_template_flag(bool value);
             void set_lexem(std::string& value);
 
             void indentation_stack_push(int value);
@@ -52,6 +54,7 @@ namespace hdc {
             int buffer_index;
             int n_spaces;
             bool new_line;
+            bool template_flag;
 
             std::string lexeme;
             std::stack<int> indentation_stack;

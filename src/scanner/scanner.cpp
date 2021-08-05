@@ -211,6 +211,10 @@ Token Scanner::get_keyword_or_identifier() {
 
     if (hdc_keywords_map.count(state.get_lexeme()) > 0) {
         kind = hdc_keywords_map.at(state.get_lexeme());
+    } 
+
+    if (lookahead('<')) {
+        state.set_template_flag(true);
     }
 
     return create_token(kind);
@@ -287,6 +291,13 @@ Token Scanner::get_operator() {
     Token token;
     TokenKind kind;
     std::string lexeme_tmp;
+
+    if (state.get_template_flag()) {
+        state.start_lexeme();
+        advance();
+        state.set_template_flag(false);
+        return create_token(TK_BEGIN_TEMPLATE);
+    }
 
     for (int i = 0; i < 4; ++i) {
         lexeme_tmp += buffer[state.get_buffer_index() + i];
