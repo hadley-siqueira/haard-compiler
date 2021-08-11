@@ -72,7 +72,7 @@ Class* Parser::parse_class() {
     klass->set_name(matched_token);
 
     if (lookahead(TK_BEGIN_TEMPLATE)) {
-        parse_template_list();
+        klass->set_template_list(parse_template_list());
     }
 
     if (match(TK_LEFT_PARENTHESIS)) {
@@ -108,7 +108,7 @@ Function* Parser::parse_function() {
     node->set_name(matched_token);
 
     if (lookahead(TK_BEGIN_TEMPLATE)) {
-        parse_template_list();
+        node->set_template_list(parse_template_list());
     }
 
     expect(TK_COLON);
@@ -137,7 +137,7 @@ Method* Parser::parse_method() {
     node->set_name(matched_token);
 
     if (lookahead(TK_BEGIN_TEMPLATE)) {
-        parse_template_list();
+        node->set_template_list(parse_template_list());
     }
 
     expect(TK_COLON);
@@ -231,37 +231,54 @@ Type* Parser::parse_type() {
         type = new Type(AST_U32_TYPE, matched_token);
     } else if (match(TK_U64)) {
         type = new Type(AST_U64_TYPE, matched_token);
-    } else if (lookahead(TK_ID)) {
-        type = parse_named_type();
+    } else if (lookahead(TK_ID) || lookahead(TK_SCOPE)) {
+        type = new NamedType(parse_identifier());
     }
 
     return type;
 }
 
-Type* Parser::parse_named_type() {
-    expect(TK_ID);
+Identifier* Parser::parse_identifier() {
+    Identifier* node = new Identifier();
 
+    // matches ::name (a global scope)
     if (match(TK_SCOPE)) {
         expect(TK_ID);
+        node->set_global_flag(true);
+        node->set_alias_flag(true);
+        node->set_name(matched_token);
+    } else {
+        expect(TK_ID);
+        node->set_alias(matched_token); // we set both name and alias and let the
+        node->set_name(matched_token);  // alias_flag decide if alias should be used
+
+        if (match(TK_SCOPE)) {
+            expect(TK_ID);
+            node->set_name(matched_token); // update to the correct name
+            node->set_alias_flag(true);    // indicates that indeed has an alias
+        }
     }
 
     if (lookahead(TK_BEGIN_TEMPLATE)) {
-        parse_template_list();
+        node->set_template_list(parse_template_list());
     }
 
-    return new Type(AST_UINT_TYPE, matched_token);
+    return node;
 }
 
-void Parser::parse_template_list() {
+TemplateList* Parser::parse_template_list() {
+    TemplateList* list = new TemplateList();
+
     expect(TK_BEGIN_TEMPLATE);
 
-    parse_type();
+    list->add_type(parse_type());
 
     while (match(TK_COMMA)) {
-        parse_type();
+        list->add_type(parse_type());
     }
 
     expect(TK_END_TEMPLATE);
+    return list;
 }
 
 AST* Parser::parse_statements() {

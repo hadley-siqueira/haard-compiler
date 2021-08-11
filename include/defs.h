@@ -321,7 +321,7 @@ namespace hdc {
         {"<", TK_BEGIN_TEMPLATE}
     };
 
-    typedef enum AstKind {
+   typedef enum AstKind {
         AST_PROGRAM,
         AST_SOURCEFILE,
         AST_IMPORT,
@@ -354,6 +354,10 @@ namespace hdc {
         AST_U16_TYPE,
         AST_U32_TYPE,
         AST_U64_TYPE,
+        AST_EXPRESSION,
+        AST_IDENTIFIER,
+        AST_NAMED_TYPE,
+        AST_TEMPLATE_LIST,
     } AstKind;
 
     const std::map<AstKind, std::string> hdc_astkind_map = {
@@ -389,6 +393,10 @@ namespace hdc {
         {AST_U16_TYPE, "AST_U16_TYPE"},
         {AST_U32_TYPE, "AST_U32_TYPE"},
         {AST_U64_TYPE, "AST_U64_TYPE"},
+        {AST_EXPRESSION, "AST_EXPRESSION"},
+        {AST_IDENTIFIER, "AST_IDENTIFIER"},
+        {AST_NAMED_TYPE, "AST_NAMED_TYPE"},
+        {AST_TEMPLATE_LIST, "AST_TEMPLATE_LIST"},
     };
 }
 

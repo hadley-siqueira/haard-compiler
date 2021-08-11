@@ -8,6 +8,7 @@ Class::Class() {
     set_kind(AST_CLASS);
     parent = nullptr;
     source_file = nullptr;
+    template_list = nullptr;
 }
 
 Class::~Class() {
@@ -18,6 +19,9 @@ Class::~Class() {
     for (int i = 0; i < variables.size(); ++i) {
         delete variables[i];
     }
+
+    delete template_list;
+    delete parent;
 }
 
 void Class::set_name(Token token) {
@@ -34,6 +38,11 @@ void Class::set_source_file(SourceFile* source_file) {
     set_parent_node(source_file);
 }
 
+void Class::set_template_list(TemplateList* list) {
+    this->template_list = list;
+    list->set_parent_node(this);
+}
+
 Token Class::get_name() {
     return name;
 }
@@ -44,6 +53,10 @@ Type* Class::get_parent() {
 
 SourceFile* Class::get_source_file() {
     return source_file;
+}
+
+TemplateList* Class::get_template_list() {
+    return template_list;
 }
 
 void Class::add_method(Method* method) {

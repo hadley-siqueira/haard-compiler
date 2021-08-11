@@ -7,10 +7,13 @@ using namespace hdc::ast;
 Function::Function() {
     set_kind(AST_FUNCTION);
     source_file = nullptr;
+    template_list = nullptr;
+    return_type = nullptr;
 }
 
 Function::~Function() {
     delete return_type;
+    delete template_list;
 
     for (int i = 0; i < parameters.size(); ++i) {
         delete parameters[i];
@@ -31,6 +34,11 @@ void Function::set_return_type(Type* type) {
     type->set_parent_node(this);
 }
 
+void Function::set_template_list(TemplateList* list) {
+    this->template_list = list;
+    list->set_parent_node(this);
+}
+
 Token Function::get_name() {
     return name;
 }
@@ -41,6 +49,10 @@ SourceFile* Function::get_source_file() {
 
 Type* Function::get_return_type() {
     return return_type;
+}
+
+TemplateList* Function::get_template_list() {
+    return template_list;
 }
 
 void Function::add_parameter(Variable* parameter) {
