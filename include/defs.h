@@ -321,7 +321,7 @@ namespace hdc {
         {"<", TK_BEGIN_TEMPLATE}
     };
 
-   typedef enum AstKind {
+    typedef enum AstKind {
         AST_PROGRAM,
         AST_SOURCEFILE,
         AST_IMPORT,
@@ -357,6 +357,8 @@ namespace hdc {
         AST_EXPRESSION,
         AST_IDENTIFIER,
         AST_NAMED_TYPE,
+        AST_POINTER_TYPE,
+        AST_REFERENCE_TYPE,
         AST_TEMPLATE_LIST,
     } AstKind;
 
@@ -396,6 +398,8 @@ namespace hdc {
         {AST_EXPRESSION, "AST_EXPRESSION"},
         {AST_IDENTIFIER, "AST_IDENTIFIER"},
         {AST_NAMED_TYPE, "AST_NAMED_TYPE"},
+        {AST_POINTER_TYPE, "AST_POINTER_TYPE"},
+        {AST_REFERENCE_TYPE, "AST_REFERENCE_TYPE"},
         {AST_TEMPLATE_LIST, "AST_TEMPLATE_LIST"},
     };
 }

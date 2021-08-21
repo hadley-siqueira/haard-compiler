@@ -10,6 +10,7 @@
 #include "ast/function.h"
 #include "ast/type.h"
 #include "ast/named_type.h"
+#include "ast/indirection_type.h"
 #include "ast/template_list.h"
 #include "ast/identifier.h"
 

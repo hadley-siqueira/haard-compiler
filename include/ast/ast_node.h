@@ -8,6 +8,7 @@ namespace hdc {
         class AstNode {
             public:
                 AstNode();
+                virtual ~AstNode();
 
             public:
                 void set_kind(AstKind kind);

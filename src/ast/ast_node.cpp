@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "ast/ast_node.h"
 
 using namespace hdc;
@@ -5,6 +7,13 @@ using namespace hdc::ast;
 
 AstNode::AstNode() {
     parent_node = nullptr;
+}
+
+AstNode::~AstNode() {
+    if (parent_node == nullptr) {
+        std::string s = hdc_astkind_map.at(kind);
+        std::cout << "null parent detected " << s << '\n';
+    }
 }
 
 void AstNode::set_kind(AstKind kind) {

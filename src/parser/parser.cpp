@@ -235,6 +235,19 @@ Type* Parser::parse_type() {
         type = new NamedType(parse_identifier());
     }
 
+    while (type != nullptr) {
+        if (match(TK_TIMES)) {
+            type = new IndirectionType(AST_POINTER_TYPE, matched_token, type);
+        } else if (match(TK_POWER)) {
+            type = new IndirectionType(AST_POINTER_TYPE, matched_token, type);
+            type = new IndirectionType(AST_POINTER_TYPE, matched_token, type);
+        } else if (match(TK_BITWISE_AND)) {
+            type = new IndirectionType(AST_REFERENCE_TYPE, matched_token, type);
+        } else {
+            break;
+        }
+    }
+
     return type;
 }
 
