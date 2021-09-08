@@ -34,6 +34,10 @@ set(AST_SRC
     src/ast/template_list.cpp
     src/ast/identifier.cpp
     src/ast/expression.cpp
+    src/ast/statement.cpp
+    src/ast/compound_statement.cpp
+    src/ast/literal_expression.cpp
+    src/ast/binary_expression.cpp
 )
 
 set(PARSER_SRC

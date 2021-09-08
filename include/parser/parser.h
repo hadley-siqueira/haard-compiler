@@ -12,7 +12,13 @@
 #include "ast/named_type.h"
 #include "ast/indirection_type.h"
 #include "ast/template_list.h"
+
+#include "ast/statement.h"
+#include "ast/compound_statement.h"
+
 #include "ast/identifier.h"
+#include "ast/literal_expression.h"
+#include "ast/binary_expression.h"
 
 namespace hdc {
     using namespace ast;
@@ -32,7 +38,12 @@ namespace hdc {
             Type* parse_type();
             Identifier* parse_identifier();
             TemplateList* parse_template_list();
-            AST* parse_statements();
+            Expression* parse_primary_expression();
+            Expression* parse_arith_expression();
+            Expression* parse_assignment_expression();
+
+            Statement* parse_statement();
+            CompoundStatement* parse_statements();
 
             bool has_parameters();
 

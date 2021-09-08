@@ -121,7 +121,8 @@ Function* Parser::parse_function() {
         parse_parameters(node);
     }
 
-    parse_statements(); //node->add_child(parse_statements());
+    node->set_statements(parse_statements()); 
+    
     expect(TK_END);
 
     return node;
@@ -150,7 +151,7 @@ Method* Parser::parse_method() {
         parse_parameters(node);
     }
 
-    parse_statements(); //node->add_child(parse_statements());
+    node->set_statements(parse_statements()); 
     expect(TK_END);
 
     return node;
@@ -294,10 +295,99 @@ TemplateList* Parser::parse_template_list() {
     return list;
 }
 
-AST* Parser::parse_statements() {
-    expect(TK_PASS);
-    expect(TK_NEWLINE);
-    return nullptr;
+Expression* Parser::parse_primary_expression() {
+    Expression* expr = nullptr;
+
+    if (match(TK_LITERAL_INTEGER)) {
+        expr = new LiteralExpression(AST_LITERAL_INTEGER, matched_token);
+    } else if (match(TK_LITERAL_FLOAT)) {
+        expr = new LiteralExpression(AST_LITERAL_FLOAT, matched_token);
+    } else if (match(TK_LITERAL_DOUBLE)) {
+        expr = new LiteralExpression(AST_LITERAL_DOUBLE, matched_token);
+    } else if (match(TK_LITERAL_CHAR)) {
+        expr = new LiteralExpression(AST_LITERAL_CHAR, matched_token);
+    } else if (match(TK_LITERAL_STRING)) {
+        expr = new LiteralExpression(AST_LITERAL_STRING, matched_token);
+    } else if (match(TK_LITERAL_SYMBOL)) {
+        expr = new LiteralExpression(AST_LITERAL_SYMBOL, matched_token);
+    } else if (match(TK_NULL)) {
+        expr = new LiteralExpression(AST_LITERAL_NULL, matched_token);
+    } else if (match(TK_TRUE)) {
+        expr = new LiteralExpression(AST_LITERAL_BOOL, matched_token);
+    } else if (match(TK_FALSE)) {
+        expr = new LiteralExpression(AST_LITERAL_BOOL, matched_token);
+    }
+
+    return expr;
+}
+
+Expression* Parser::parse_arith_expression() {
+    Token oper;
+    Expression* expr = parse_primary_expression();
+
+    while (true) {
+        if (match(TK_PLUS)) {
+            oper = matched_token;
+            expr = new BinaryExpression(AST_PLUS, oper, expr, parse_primary_expression());
+        } else if (match(TK_MINUS)) {
+            oper = matched_token;
+            expr = new BinaryExpression(AST_MINUS, oper, expr, parse_primary_expression());
+        } else {
+            break;
+        }
+    }
+
+    return expr;
+}
+
+Expression* Parser::parse_assignment_expression() {
+    Token oper;
+    Expression* expr = parse_arith_expression();
+
+    while (true) {
+        if (match(TK_ASSIGNMENT)) {
+            expr = new BinaryExpression(AST_ASSIGNMENT, oper, expr, parse_arith_expression());
+        } else {
+            break;
+        }
+    }
+
+    return expr;
+}
+
+Statement* Parser::parse_statement() {
+    Statement* stmt = nullptr;
+
+    if (lookahead(TK_FOR)) {
+
+    } else if (lookahead(TK_WHILE)) {
+
+    } else if (lookahead(TK_IF)) {
+
+    } else if (lookahead(TK_RETURN)) {
+
+    } else if (lookahead(TK_VAR)) {
+
+    } else {
+        stmt = parse_assignment_expression();
+        expect(TK_NEWLINE);
+    }
+
+    return stmt;
+}
+
+CompoundStatement* Parser::parse_statements() {
+    CompoundStatement* stmts = new CompoundStatement();
+
+    if (match(TK_PASS)) {
+        expect(TK_NEWLINE);
+    } else {
+        while (!lookahead(TK_END)) {
+            stmts->add_statement(parse_statement());
+        }
+    }
+
+    return stmts;
 }
 
 bool Parser::has_parameters() {

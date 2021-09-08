@@ -5,10 +5,11 @@
 #include "ast_node.h"
 #include "type.h"
 #include "template_list.h"
+#include "expression.h"
 
 namespace hdc {
     namespace ast {
-        class Identifier : public AstNode {
+        class Identifier : public Expression {
             public:
                 Identifier();
                 ~Identifier();

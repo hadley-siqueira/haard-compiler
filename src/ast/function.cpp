@@ -14,9 +14,14 @@ Function::Function() {
 Function::~Function() {
     delete return_type;
     delete template_list;
+    delete statements;
 
     for (int i = 0; i < parameters.size(); ++i) {
         delete parameters[i];
+    }
+
+    for (int i = 0; i < local_variables.size(); ++i) {
+        delete local_variables[i];
     }
 }
 
@@ -39,6 +44,11 @@ void Function::set_template_list(TemplateList* list) {
     list->set_parent_node(this);
 }
 
+void Function::set_statements(CompoundStatement* stmts) {
+    this->statements = stmts;
+    stmts->set_parent_node(this);
+}
+
 Token Function::get_name() {
     return name;
 }
@@ -53,6 +63,10 @@ Type* Function::get_return_type() {
 
 TemplateList* Function::get_template_list() {
     return template_list;
+}
+
+CompoundStatement* Function::get_statements() {
+    return statements;
 }
 
 void Function::add_parameter(Variable* parameter) {
