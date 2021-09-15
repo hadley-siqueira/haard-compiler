@@ -295,10 +295,29 @@ TemplateList* Parser::parse_template_list() {
     return list;
 }
 
+ExpressionList* Parser::parse_argument_list() {
+    ExpressionList* arguments = new ExpressionList();
+
+    if (!lookahead(TK_RIGHT_PARENTHESIS)) {
+        arguments->add_expression(parse_expression());
+
+        while (match(TK_COMMA)) {
+            arguments->add_expression(parse_expression());
+        }
+    }
+
+    return arguments;
+}
+
 Expression* Parser::parse_primary_expression() {
     Expression* expr = nullptr;
+    Token oper;
 
-    if (match(TK_LITERAL_INTEGER)) {
+    if (match(TK_LEFT_PARENTHESIS)) {
+        oper = matched_token;
+        expr = new UnaryExpression(AST_PARENTHESIS, oper, parse_expression());
+        expect(TK_RIGHT_PARENTHESIS);
+    } else if (match(TK_LITERAL_INTEGER)) {
         expr = new LiteralExpression(AST_LITERAL_INTEGER, matched_token);
     } else if (match(TK_LITERAL_FLOAT)) {
         expr = new LiteralExpression(AST_LITERAL_FLOAT, matched_token);
@@ -316,6 +335,34 @@ Expression* Parser::parse_primary_expression() {
         expr = new LiteralExpression(AST_LITERAL_BOOL, matched_token);
     } else if (match(TK_FALSE)) {
         expr = new LiteralExpression(AST_LITERAL_BOOL, matched_token);
+    } else {
+        expr = parse_identifier();
+    }
+
+    return expr;
+}
+
+Expression* Parser::parse_postfix_expression() {
+    Expression* expr = parse_primary_expression();
+    Token oper;
+
+    while (true) {
+        if (match(TK_DOT)) {
+            oper = matched_token;
+            expr = new BinaryExpression(AST_DOT, oper, expr, parse_identifier());
+        } else if (match(TK_ARROW)) {
+            oper = matched_token;
+            expr = new BinaryExpression(AST_ARROW, oper, expr, parse_identifier());
+        } else if (match(TK_LEFT_SQUARE_BRACKET)) {
+            oper = matched_token;
+            expr = new BinaryExpression(AST_INDEX, oper, expr, parse_expression());
+        } else if (match(TK_LEFT_PARENTHESIS)) {
+            oper = matched_token;
+            expr = new BinaryExpression(AST_CALL, oper, expr, parse_argument_list());
+            expect(TK_RIGHT_PARENTHESIS);
+        } else {
+            break;
+        }
     }
 
     return expr;
@@ -323,15 +370,15 @@ Expression* Parser::parse_primary_expression() {
 
 Expression* Parser::parse_arith_expression() {
     Token oper;
-    Expression* expr = parse_primary_expression();
+    Expression* expr = parse_postfix_expression();
 
     while (true) {
         if (match(TK_PLUS)) {
             oper = matched_token;
-            expr = new BinaryExpression(AST_PLUS, oper, expr, parse_primary_expression());
+            expr = new BinaryExpression(AST_PLUS, oper, expr, parse_postfix_expression());
         } else if (match(TK_MINUS)) {
             oper = matched_token;
-            expr = new BinaryExpression(AST_MINUS, oper, expr, parse_primary_expression());
+            expr = new BinaryExpression(AST_MINUS, oper, expr, parse_postfix_expression());
         } else {
             break;
         }
@@ -353,6 +400,10 @@ Expression* Parser::parse_assignment_expression() {
     }
 
     return expr;
+}
+
+Expression* Parser::parse_expression() {
+    return parse_assignment_expression();
 }
 
 Statement* Parser::parse_statement() {

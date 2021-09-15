@@ -321,7 +321,7 @@ namespace hdc {
         {"<", TK_BEGIN_TEMPLATE}
     };
 
-    typedef enum AstKind {
+   typedef enum AstKind {
         AST_PROGRAM,
         AST_SOURCEFILE,
         AST_IMPORT,
@@ -362,6 +362,7 @@ namespace hdc {
         AST_POINTER_TYPE,
         AST_REFERENCE_TYPE,
         AST_TEMPLATE_LIST,
+        AST_PARENTHESIS,
         AST_LITERAL_INTEGER,
         AST_LITERAL_CHAR,
         AST_LITERAL_FLOAT,
@@ -370,6 +371,11 @@ namespace hdc {
         AST_LITERAL_SYMBOL,
         AST_LITERAL_NULL,
         AST_LITERAL_BOOL,
+        AST_DOT,
+        AST_ARROW,
+        AST_INDEX,
+        AST_CALL,
+        AST_EXPRESSION_LIST,
         AST_PLUS,
         AST_MINUS,
         AST_ASSIGNMENT,
@@ -430,6 +436,7 @@ namespace hdc {
         {AST_POINTER_TYPE, "AST_POINTER_TYPE"},
         {AST_REFERENCE_TYPE, "AST_REFERENCE_TYPE"},
         {AST_TEMPLATE_LIST, "AST_TEMPLATE_LIST"},
+        {AST_PARENTHESIS, "AST_PARENTHESIS"},
         {AST_LITERAL_INTEGER, "AST_LITERAL_INTEGER"},
         {AST_LITERAL_CHAR, "AST_LITERAL_CHAR"},
         {AST_LITERAL_FLOAT, "AST_LITERAL_FLOAT"},
@@ -438,6 +445,11 @@ namespace hdc {
         {AST_LITERAL_SYMBOL, "AST_LITERAL_SYMBOL"},
         {AST_LITERAL_NULL, "AST_LITERAL_NULL"},
         {AST_LITERAL_BOOL, "AST_LITERAL_BOOL"},
+        {AST_DOT, "AST_DOT"},
+        {AST_ARROW, "AST_ARROW"},
+        {AST_INDEX, "AST_INDEX"},
+        {AST_CALL, "AST_CALL"},
+        {AST_EXPRESSION_LIST, "AST_EXPRESSION_LIST"},
         {AST_PLUS, "AST_PLUS"},
         {AST_MINUS, "AST_MINUS"},
         {AST_ASSIGNMENT, "AST_ASSIGNMENT"},

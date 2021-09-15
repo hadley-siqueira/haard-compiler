@@ -19,6 +19,8 @@
 #include "ast/identifier.h"
 #include "ast/literal_expression.h"
 #include "ast/binary_expression.h"
+#include "ast/unary_expression.h"
+#include "ast/expression_list.h"
 
 namespace hdc {
     using namespace ast;
@@ -38,9 +40,12 @@ namespace hdc {
             Type* parse_type();
             Identifier* parse_identifier();
             TemplateList* parse_template_list();
+            ExpressionList* parse_argument_list();
             Expression* parse_primary_expression();
+            Expression* parse_postfix_expression();
             Expression* parse_arith_expression();
             Expression* parse_assignment_expression();
+            Expression* parse_expression();
 
             Statement* parse_statement();
             CompoundStatement* parse_statements();
