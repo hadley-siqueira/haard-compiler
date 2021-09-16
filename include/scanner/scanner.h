@@ -40,6 +40,8 @@ namespace hdc {
             Token get_indentation();
             Token get_keyword_or_identifier();
             Token get_number();
+            Token get_char_or_string();
+            Token get_string();
             Token get_operator();
 
             Token create_token(TokenKind kind);

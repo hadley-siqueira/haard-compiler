@@ -47,6 +47,10 @@ Token Scanner::get_token() {
             return get_number();
         } else if (is_alpha()) {
             return get_keyword_or_identifier();
+        } else if (lookahead('\'')) {
+            return get_char_or_string();
+        } else if (lookahead('"')) {
+            return get_string();
         } else if (is_operator()) {
             return get_operator();
         }
@@ -285,6 +289,53 @@ Token Scanner::get_number() {
     }
 
     return create_token(kind);
+}
+
+Token Scanner::get_char_or_string() {
+    Token token;
+    TokenKind kind;
+    std::string lexeme_tmp;
+    int count = 0;
+
+    state.start_lexeme();
+    advance();
+
+    while (!lookahead('\'')) {
+        if (lookahead('\\')) {
+            advance();
+        }
+
+        advance();
+        ++count;
+    }
+
+    advance();
+
+    if (count > 1) {
+        return create_token(TK_LITERAL_STRING);
+    }
+
+    return create_token(TK_LITERAL_CHAR);
+}
+
+Token Scanner::get_string() {
+    Token token;
+    TokenKind kind;
+    std::string lexeme_tmp;
+
+    state.start_lexeme();
+    advance();
+
+    while (!lookahead('"')) {
+        if (lookahead('\\')) {
+            advance();
+        }
+
+        advance();
+    }
+
+    advance();
+    return create_token(TK_LITERAL_STRING);
 }
 
 Token Scanner::get_operator() {
