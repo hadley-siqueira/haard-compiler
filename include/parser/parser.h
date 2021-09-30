@@ -16,6 +16,7 @@
 #include "ast/statement.h"
 #include "ast/compound_statement.h"
 #include "ast/while_statement.h"
+#include "ast/if_statement.h"
 
 #include "ast/identifier.h"
 #include "ast/literal_expression.h"
