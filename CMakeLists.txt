@@ -36,6 +36,7 @@ set(AST_SRC
     src/ast/expression.cpp
     src/ast/statement.cpp
     src/ast/compound_statement.cpp
+    src/ast/while_statement.cpp
     src/ast/literal_expression.cpp
     src/ast/binary_expression.cpp
     src/ast/unary_expression.cpp

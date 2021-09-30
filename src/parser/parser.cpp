@@ -410,15 +410,15 @@ Statement* Parser::parse_statement() {
     Statement* stmt = nullptr;
 
     if (lookahead(TK_FOR)) {
-
+        stmt = parse_for_statement();
     } else if (lookahead(TK_WHILE)) {
-
+        stmt = parse_while_statement();
     } else if (lookahead(TK_IF)) {
-
+        stmt = parse_if_statement();
     } else if (lookahead(TK_RETURN)) {
-
+        stmt = parse_return_statement();
     } else if (lookahead(TK_VAR)) {
-
+        stmt = parse_variable_statement();
     } else {
         stmt = parse_assignment_expression();
         expect(TK_NEWLINE);
@@ -439,6 +439,51 @@ CompoundStatement* Parser::parse_statements() {
     }
 
     return stmts;
+}
+
+Statement* Parser::parse_for_statement() {
+    return nullptr;
+}
+
+Statement* Parser::parse_while_statement() {
+    Token token;
+    Expression* expression;
+    CompoundStatement* statements;
+
+    expect(TK_WHILE);
+    token = matched_token;
+    expression = parse_expression();
+
+    expect(TK_COLON);
+    expect(TK_NEWLINE);
+    expect(TK_BEGIN);
+    statements = parse_statements();
+    expect(TK_END);
+
+    return new WhileStatement(token, expression, statements);
+}
+
+Statement* Parser::parse_if_statement() {
+
+    return nullptr;
+}
+
+Statement* Parser::parse_elif_statement() {
+
+    return nullptr;
+}
+
+Statement* Parser::parse_else_statement() {
+
+    return nullptr;
+}
+
+Statement* Parser::parse_return_statement() {
+    return nullptr;
+}
+
+Statement* Parser::parse_variable_statement() {
+    return nullptr;
 }
 
 bool Parser::has_parameters() {

@@ -321,7 +321,7 @@ namespace hdc {
         {"<", TK_BEGIN_TEMPLATE}
     };
 
-   typedef enum AstKind {
+    typedef enum AstKind {
         AST_PROGRAM,
         AST_SOURCEFILE,
         AST_IMPORT,
@@ -356,6 +356,16 @@ namespace hdc {
         AST_U64_TYPE,
         AST_STATEMENT,
         AST_COMPOUND_STATEMENT,
+        AST_WHILE,
+        AST_FOR,
+        AST_FOREACH,
+        AST_IF,
+        AST_ELIF,
+        AST_ELSE,
+        AST_CONTINUE,
+        AST_RETURN,
+        AST_BREAK,
+        AST_YIELD,
         AST_EXPRESSION,
         AST_IDENTIFIER,
         AST_NAMED_TYPE,
@@ -430,6 +440,16 @@ namespace hdc {
         {AST_U64_TYPE, "AST_U64_TYPE"},
         {AST_STATEMENT, "AST_STATEMENT"},
         {AST_COMPOUND_STATEMENT, "AST_COMPOUND_STATEMENT"},
+        {AST_WHILE, "AST_WHILE"},
+        {AST_FOR, "AST_FOR"},
+        {AST_FOREACH, "AST_FOREACH"},
+        {AST_IF, "AST_IF"},
+        {AST_ELIF, "AST_ELIF"},
+        {AST_ELSE, "AST_ELSE"},
+        {AST_CONTINUE, "AST_CONTINUE"},
+        {AST_RETURN, "AST_RETURN"},
+        {AST_BREAK, "AST_BREAK"},
+        {AST_YIELD, "AST_YIELD"},
         {AST_EXPRESSION, "AST_EXPRESSION"},
         {AST_IDENTIFIER, "AST_IDENTIFIER"},
         {AST_NAMED_TYPE, "AST_NAMED_TYPE"},

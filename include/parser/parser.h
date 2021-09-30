@@ -15,6 +15,7 @@
 
 #include "ast/statement.h"
 #include "ast/compound_statement.h"
+#include "ast/while_statement.h"
 
 #include "ast/identifier.h"
 #include "ast/literal_expression.h"
@@ -49,6 +50,13 @@ namespace hdc {
 
             Statement* parse_statement();
             CompoundStatement* parse_statements();
+            Statement* parse_for_statement();
+            Statement* parse_while_statement();
+            Statement* parse_if_statement();
+            Statement* parse_elif_statement();
+            Statement* parse_else_statement();
+            Statement* parse_return_statement();
+            Statement* parse_variable_statement();
 
             bool has_parameters();
 
