@@ -469,6 +469,7 @@ Statement* Parser::parse_if_statement() {
     CompoundStatement* statements;
 
     expect(TK_IF);
+    token = matched_token;
     expression = parse_expression();
 
     expect(TK_COLON);
@@ -492,6 +493,7 @@ Statement* Parser::parse_elif_statement() {
     CompoundStatement* statements;
 
     expect(TK_ELIF);
+    token = matched_token;
     expression = parse_expression();
 
     expect(TK_COLON);
@@ -510,8 +512,19 @@ Statement* Parser::parse_elif_statement() {
 }
 
 Statement* Parser::parse_else_statement() {
+    Token token;
+    CompoundStatement* statements;
 
-    return nullptr;
+    expect(TK_ELSE);
+    token = matched_token;
+
+    expect(TK_COLON);
+    expect(TK_NEWLINE);
+    expect(TK_BEGIN);
+    statements = parse_statements();
+    expect(TK_END);
+
+    return new ElseStatement(token, statements);
 }
 
 Statement* Parser::parse_return_statement() {
