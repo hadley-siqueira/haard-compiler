@@ -487,8 +487,26 @@ Statement* Parser::parse_if_statement() {
 }
 
 Statement* Parser::parse_elif_statement() {
+    Token token;
+    Expression* expression;
+    CompoundStatement* statements;
 
-    return nullptr;
+    expect(TK_ELIF);
+    expression = parse_expression();
+
+    expect(TK_COLON);
+    expect(TK_NEWLINE);
+    expect(TK_BEGIN);
+    statements = parse_statements();
+    expect(TK_END);
+
+    if (lookahead(TK_ELIF)) {
+        return new ElifStatement(token, expression, statements, parse_elif_statement());
+    } else if (lookahead(TK_ELSE)) {
+        return new ElifStatement(token, expression, statements, parse_else_statement());
+    }
+
+    return new ElifStatement(token, expression, statements);
 }
 
 Statement* Parser::parse_else_statement() {
