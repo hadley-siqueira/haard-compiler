@@ -50,6 +50,10 @@ set(PARSER_SRC
     src/parser/parser.cpp
 )
 
+set(SYMTAB_SRC
+    src/symtab/symbol.cpp
+)
+
 set(SOURCES
     src/main.cpp
     ${UTILS_SRC}
@@ -57,6 +61,7 @@ set(SOURCES
     ${SCANNER_SRC}
     ${AST_SRC}
     ${PARSER_SRC}
+    ${SYMTAB_SRC}
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})

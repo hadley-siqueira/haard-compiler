@@ -4,6 +4,10 @@
 #include <map>
 
 namespace hdc {
+    typedef enum SymbolKind {
+        SYM_VAR
+    } SymbolKind;
+
     typedef enum TokenKind {
         /* Keywords */
         TK_DEF,
