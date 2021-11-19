@@ -25,6 +25,14 @@ namespace hdc {
                 void add_function(Function* function);
                 void add_class(Class* klass);
 
+                int imports_count();
+                int functions_count();
+                int classes_count();
+
+                Import* get_import(int i);
+                Function* get_function(int i);
+                Class* get_class(int i);
+
             private:
                 std::string path;
                 std::vector<Import*> imports;

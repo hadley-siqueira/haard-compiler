@@ -18,10 +18,12 @@ namespace hdc {
 
                 Token get_token();
                 Token get_alias();
+                Token get_path(int i);
 
                 bool has_alias();
 
                 void add_to_path(Token token);
+                int path_size();
 
             private:
                 Token token;

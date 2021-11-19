@@ -45,3 +45,28 @@ void SourceFile::add_class(Class* klass) {
     klass->set_source_file(this);
     klass->set_parent_node(this);
 }
+
+int SourceFile::imports_count() {
+    return imports.size();
+}
+
+int SourceFile::functions_count() {
+    return functions.size();
+}
+
+int SourceFile::classes_count() {
+    return classes.size();
+}
+
+Import* SourceFile::get_import(int i) {
+    return imports[i];
+}
+
+Function* SourceFile::get_function(int i) {
+    return functions[i];
+}
+
+Class* SourceFile::get_class(int i) {
+    return classes[i];
+}
+

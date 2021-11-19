@@ -54,6 +54,10 @@ set(SYMTAB_SRC
     src/symtab/symbol.cpp
 )
 
+set(DRIVER_SRC
+    src/driver/driver.cpp
+)
+
 set(SOURCES
     src/main.cpp
     ${UTILS_SRC}
@@ -62,6 +66,7 @@ set(SOURCES
     ${AST_SRC}
     ${PARSER_SRC}
     ${SYMTAB_SRC}
+    ${DRIVER_SRC}
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
