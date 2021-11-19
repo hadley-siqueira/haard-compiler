@@ -8,6 +8,8 @@
 
 namespace hdc {
     namespace ast {
+        class SourceFile;
+
         class Import : public AstNode {
             public:
                 Import();
@@ -15,6 +17,7 @@ namespace hdc {
             public:
                 void set_token(Token token);
                 void set_alias(Token token);
+                void set_source_file(SourceFile* source_file);
 
                 Token get_token();
                 Token get_alias();
@@ -30,6 +33,7 @@ namespace hdc {
                 Token alias;
                 bool alias_flag;
                 std::vector<Token> path;
+                SourceFile* source_file;
         };
     }
 }

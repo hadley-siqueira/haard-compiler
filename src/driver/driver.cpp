@@ -20,6 +20,37 @@ Driver::Driver() {
     env_var = "HDC_PATH";
 }
 
+Driver::~Driver() {
+    std::map<std::string, SourceFile*>::iterator it = source_files.begin();
+
+    while (it != source_files.end()) {
+        delete it->second;
+        it++;
+    }
+}
+
+void Driver::run() {
+    set_root_path_from_main_file();
+    configure_search_path();
+    parse_program();
+}
+
+void Driver::set_flags(int argc, char* argv[]) {
+    for (int i = 1; i < argc; ++i) {
+        if (strstr(argv[i], ".hd") != nullptr) {
+            main_file_path = std::string(argv[i]);
+        } else if (strcmp(argv[i], "-o") == 0) {
+            ++i;
+            output_name = std::string(argv[i]);
+        } else if (strcmp(argv[i], "-i") == 0) {
+            ++i;
+            search_path.push_back(argv[i]);
+        } else if (strcmp(argv[i], "-info") == 0) {
+            print_information();
+        }
+    }
+}
+
 void Driver::parse_program() {
     parse_imports(parse_file(main_file_path));
 }
@@ -34,6 +65,17 @@ void Driver::parse_imports(SourceFile* file) {
         for (int i = 0; i < count; ++i) {
             parse_import(file->get_import(i));
         }
+    }
+}
+
+void Driver::print_information() {
+    std::cout << "Main file: " << main_file_path << std::endl;
+    std::cout << "Root path: " << root_path << std::endl;
+
+    std::cout << "Search path:\n";
+
+    for (int i = 0; i < search_path.size(); ++i) {
+        std::cout << search_path[i] << std::endl;
     }
 }
 
@@ -59,6 +101,8 @@ void Driver::parse_simple_import(Import* import) {
 }
 
 SourceFile* Driver::parse_file(std::string path) {
+    std::cout << "Parsing: " << path << std::endl;
+
     if (source_files.count(path) == 0) {
         Parser parser;
         source_files[path] = parser.read(path.c_str());

@@ -17,6 +17,10 @@ void Import::set_alias(Token token) {
     alias_flag = true;
 }
 
+void Import::set_source_file(SourceFile* source_file) {
+    this->source_file = source_file;
+}
+
 Token Import::get_token() {
     return token;
 }

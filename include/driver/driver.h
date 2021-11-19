@@ -8,6 +8,11 @@ namespace hdc {
     class Driver {
         public:
             Driver();
+            ~Driver();
+
+        public:
+            void run();
+            void set_flags(int argc, char* argv[]);
 
         private:
             std::string get_env_path(std::string key);
@@ -23,6 +28,8 @@ namespace hdc {
             std::string build_import_path(ast::Import* import);
 
             bool file_exists(std::string path);
+
+            void print_information();
 
         private:
             char path_delimiter;
