@@ -7,6 +7,7 @@ namespace hdc {
     class Symbol {
         public:
             Symbol();
+            Symbol(SymbolKind kind, std::string name, void* descriptor);
 
         public:
             void set_name(std::string name);

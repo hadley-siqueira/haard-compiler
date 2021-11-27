@@ -10,6 +10,7 @@
 
 #include "driver/driver.h"
 #include "parser/parser.h"
+#include "symtab/scope_builder.h"
 
 using namespace hdc;
 using namespace hdc::ast;
@@ -18,6 +19,7 @@ Driver::Driver() {
     path_delimiter = '/';
     output_name = "a.out";
     env_var = "HDC_PATH";
+    print_information_flag = false;
 }
 
 Driver::~Driver() {
@@ -29,10 +31,28 @@ Driver::~Driver() {
     }
 }
 
+void Driver::run_flags() {
+    if (print_information_flag) {
+        print_information();
+    }
+}
+
 void Driver::run() {
     set_root_path_from_main_file();
     configure_search_path();
+    run_flags();
     parse_program();
+    build_scopes();
+}
+
+void Driver::build_scopes() {
+    std::map<std::string, SourceFile*>::iterator it = source_files.begin();
+
+    while (it != source_files.end()) {
+        ScopeBuilder builder;
+        builder.visit(it->second);
+        it++;
+    }
 }
 
 void Driver::set_flags(int argc, char* argv[]) {
@@ -46,7 +66,7 @@ void Driver::set_flags(int argc, char* argv[]) {
             ++i;
             search_path.push_back(argv[i]);
         } else if (strcmp(argv[i], "-info") == 0) {
-            print_information();
+            print_information_flag = true;
         }
     }
 }
@@ -69,13 +89,14 @@ void Driver::parse_imports(SourceFile* file) {
 }
 
 void Driver::print_information() {
-    std::cout << "Main file: " << main_file_path << std::endl;
-    std::cout << "Root path: " << root_path << std::endl;
+    std::cout << "Compiler information:\n";
+    std::cout << " - Main file: " << main_file_path << std::endl;
+    std::cout << " - Root path: " << root_path << std::endl;
 
-    std::cout << "Search path:\n";
+    std::cout << " - Search path:\n";
 
     for (int i = 0; i < search_path.size(); ++i) {
-        std::cout << search_path[i] << std::endl;
+        std::cout << "\t\"" << search_path[i] << '"' << std::endl;
     }
 }
 
@@ -101,6 +122,11 @@ void Driver::parse_simple_import(Import* import) {
 }
 
 SourceFile* Driver::parse_file(std::string path) {
+    if (!file_exists(path)) {
+        std::cout << "Error: file '" << path << "' doesn't exist\n";
+        exit(0);
+    }
+
     std::cout << "Parsing: " << path << std::endl;
 
     if (source_files.count(path) == 0) {

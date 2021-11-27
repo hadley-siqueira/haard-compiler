@@ -26,10 +26,12 @@ namespace hdc {
             ast::SourceFile* parse_file(std::string path);
 
             std::string build_import_path(ast::Import* import);
+            void build_scopes();
 
             bool file_exists(std::string path);
 
             void print_information();
+            void run_flags();
 
         private:
             char path_delimiter;
@@ -39,6 +41,9 @@ namespace hdc {
             std::string env_var;
             std::vector<std::string> search_path;
             std::map<std::string, ast::SourceFile*> source_files;
+
+            // flags
+            bool print_information_flag;
     };
 }
 

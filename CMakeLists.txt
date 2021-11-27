@@ -52,6 +52,8 @@ set(PARSER_SRC
 
 set(SYMTAB_SRC
     src/symtab/symbol.cpp
+    src/symtab/scope.cpp
+    src/symtab/scope_builder.cpp
 )
 
 set(DRIVER_SRC

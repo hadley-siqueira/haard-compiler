@@ -5,7 +5,8 @@
 
 namespace hdc {
     typedef enum SymbolKind {
-        SYM_VAR
+        SYM_VAR,
+        SYM_CLASS
     } SymbolKind;
 
     typedef enum TokenKind {

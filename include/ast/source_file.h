@@ -8,6 +8,7 @@
 #include "import.h"
 #include "function.h"
 #include "class.h"
+#include "symtab/scope.h"
 
 namespace hdc {
     namespace ast {
@@ -32,12 +33,14 @@ namespace hdc {
                 Import* get_import(int i);
                 Function* get_function(int i);
                 Class* get_class(int i);
+                Scope* get_scope();
 
             private:
                 std::string path;
                 std::vector<Import*> imports;
                 std::vector<Function*> functions;
                 std::vector<Class*> classes;
+                Scope* scope;
         };
     }
 }

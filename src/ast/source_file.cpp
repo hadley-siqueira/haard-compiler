@@ -5,6 +5,7 @@ using namespace hdc::ast;
 
 SourceFile::SourceFile() {
     set_kind(AST_SOURCEFILE);
+    scope = new Scope();
 }
 
 SourceFile::~SourceFile() {
@@ -19,6 +20,8 @@ SourceFile::~SourceFile() {
     for (int i = 0; i < classes.size(); ++i) {
         delete classes[i];
     }
+
+    delete scope;
 }
 
 void SourceFile::set_path(std::string path) {
@@ -68,5 +71,9 @@ Function* SourceFile::get_function(int i) {
 
 Class* SourceFile::get_class(int i) {
     return classes[i];
+}
+
+Scope* SourceFile::get_scope() {
+    return scope;
 }
 
