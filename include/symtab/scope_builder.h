@@ -15,6 +15,7 @@ namespace hdc {
             void visit(ast::Function* function);
 
         private:
+            void first_pass(ast::Program* program);
             void add_classes(ast::SourceFile* source_file);
             void add_class(ast::Class* klass);
             void add_functions(ast::SourceFile* source_file);

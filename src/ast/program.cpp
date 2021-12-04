@@ -8,27 +8,37 @@ Program::Program() {
 }
 
 Program::~Program() {
-    std::map<std::string, SourceFile*>::iterator it = source_files.begin();
-
-    while (it != source_files.end()) {
-        delete it->second;
-        it++;
+    for (int i = 0; i < source_files.size(); ++i) {
+        delete source_files[i];
     }
 }
 
 void Program::add_source_file(std::string path, SourceFile* source_file) {
-    source_files[path] = source_file;
+    source_files_map[path] = source_file;
+    source_files.push_back(source_file);
+    source_file->set_parent_node(this);
 }
 
 SourceFile* Program::get_source_file(std::string path) {
     if (has_source_file(path)) {
-        return source_files[path];
+        return source_files_map[path];
+    }
+
+    return nullptr;
+}
+
+SourceFile* Program::get_source_file(int i) {
+    if (i < source_files.size()) {
+        return source_files[i];
     }
 
     return nullptr;
 }
 
 bool Program::has_source_file(std::string path) {
-    return source_files.count(path) > 0;
+    return source_files_map.count(path) > 0;
 }
 
+int Program::source_files_count() {
+    return source_files.size();
+}

@@ -6,7 +6,13 @@ using namespace hdc;
 using namespace hdc::ast;
 
 void ScopeBuilder::visit(ast::Program* program) {
+    first_pass(program);
+}
 
+void ScopeBuilder::first_pass(ast::Program* program) {
+    for (int i = 0; i < program->source_files_count(); ++i) {
+        visit(program->get_source_file(i));
+    }
 }
 
 void ScopeBuilder::visit(ast::SourceFile* source_file) {
