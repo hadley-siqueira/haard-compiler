@@ -26,3 +26,6 @@ Scope* Scope::get_enclosing_scope() {
     return enclosing_scope;
 }
 
+void Scope::set_enclosing_scope(Scope* scope) {
+    enclosing_scope = scope;
+}

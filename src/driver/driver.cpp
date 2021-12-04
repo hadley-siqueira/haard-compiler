@@ -20,15 +20,11 @@ Driver::Driver() {
     output_name = "a.out";
     env_var = "HDC_PATH";
     print_information_flag = false;
+    program = new Program();
 }
 
 Driver::~Driver() {
-    std::map<std::string, SourceFile*>::iterator it = source_files.begin();
-
-    while (it != source_files.end()) {
-        delete it->second;
-        it++;
-    }
+    delete program;
 }
 
 void Driver::run_flags() {
@@ -46,13 +42,8 @@ void Driver::run() {
 }
 
 void Driver::build_scopes() {
-    std::map<std::string, SourceFile*>::iterator it = source_files.begin();
-
-    while (it != source_files.end()) {
-        ScopeBuilder builder;
-        builder.visit(it->second);
-        it++;
-    }
+    ScopeBuilder builder;
+    builder.visit(program);
 }
 
 void Driver::set_flags(int argc, char* argv[]) {
@@ -108,9 +99,7 @@ void Driver::parse_simple_import(Import* import) {
     SourceFile* file = nullptr;
     std::string path = build_import_path(import);
 
-    if (source_files.count(path) > 0) {
-        file = source_files[path];
-    }
+    file = program->get_source_file(path);
 
     if (file != nullptr) {
         import->set_source_file(file);
@@ -129,12 +118,12 @@ SourceFile* Driver::parse_file(std::string path) {
 
     std::cout << "Parsing: " << path << std::endl;
 
-    if (source_files.count(path) == 0) {
+    if (!program->has_source_file(path)) {
         Parser parser;
-        source_files[path] = parser.read(path.c_str());
+        program->add_source_file(path, parser.read(path.c_str()));
     }
 
-    return source_files[path];
+    return program->get_source_file(path);
 }
 
 std::string Driver::build_import_path(Import* import) {

@@ -9,12 +9,14 @@ Function::Function() {
     source_file = nullptr;
     template_list = nullptr;
     return_type = nullptr;
+    scope = new Scope();
 }
 
 Function::~Function() {
     delete return_type;
     delete template_list;
     delete statements;
+    delete scope;
 
     for (int i = 0; i < parameters.size(); ++i) {
         delete parameters[i];
@@ -67,6 +69,18 @@ TemplateList* Function::get_template_list() {
 
 CompoundStatement* Function::get_statements() {
     return statements;
+}
+
+Variable* Function::get_parameter(int i) {
+    return parameters[i];
+}
+
+Scope* Function::get_scope() {
+    return scope;
+}
+
+int Function::parameters_count() {
+    return parameters.size();
 }
 
 void Function::add_parameter(Variable* parameter) {

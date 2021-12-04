@@ -3,6 +3,7 @@
 
 #include <map>
 #include "ast/source_file.h"
+#include "ast/program.h"
 
 namespace hdc {
     class Driver {
@@ -41,6 +42,7 @@ namespace hdc {
             std::string env_var;
             std::vector<std::string> search_path;
             std::map<std::string, ast::SourceFile*> source_files;
+            ast::Program* program;
 
             // flags
             bool print_information_flag;

@@ -14,6 +14,7 @@ namespace hdc {
             Symbol* resolve(std::string& name);
             void define(Symbol* symbol);
             Scope* get_enclosing_scope();
+            void set_enclosing_scope(Scope* scope);
             
         private:
             std::map<std::string, Symbol*> symbols;

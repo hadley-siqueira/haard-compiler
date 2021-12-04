@@ -9,6 +9,7 @@
 #include "type.h"
 #include "template_list.h"
 #include "compound_statement.h"
+#include "symtab/scope.h"
 
 namespace hdc {
     namespace ast {
@@ -31,7 +32,10 @@ namespace hdc {
                 Type* get_return_type();
                 TemplateList* get_template_list();
                 CompoundStatement* get_statements();
+                Variable* get_parameter(int i);
+                Scope* get_scope();
 
+                int parameters_count();
                 void add_parameter(Variable* parameter);
 
             private:
@@ -42,6 +46,7 @@ namespace hdc {
                 Type* return_type;
                 TemplateList* template_list;
                 CompoundStatement* statements;
+                Scope* scope;
         };
     }
 }
