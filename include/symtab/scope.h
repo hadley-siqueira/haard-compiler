@@ -9,6 +9,7 @@ namespace hdc {
     class Scope {
         public:
             Scope();
+            ~Scope();
 
         public:
             Symbol* resolve(std::string& name);

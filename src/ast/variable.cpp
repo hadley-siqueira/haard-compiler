@@ -5,10 +5,12 @@ using namespace hdc::ast;
 
 Variable::Variable() {
     set_kind(AST_VARIABLE);
+    type = nullptr;
 }
 
 Variable::Variable(AstKind kind) {
     set_kind(kind);
+    type = nullptr;
 }
 
 Variable::~Variable() {

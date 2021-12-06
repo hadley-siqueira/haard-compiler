@@ -14,6 +14,8 @@ namespace hdc {
 
             public:
                 void add_statement(Statement* stmt);
+                int statements_count();
+                Statement* get_statement(int i);
 
             private:
                 std::vector<Statement*> statements;

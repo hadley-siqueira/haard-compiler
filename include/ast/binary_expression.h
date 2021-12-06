@@ -11,6 +11,9 @@ namespace hdc {
                 BinaryExpression(AstKind kind, Token token, Expression* left, Expression* right);
                 ~BinaryExpression();
 
+                Expression* get_left();
+                Expression* get_right();
+
             private:
                 Token token;
                 Expression* left;

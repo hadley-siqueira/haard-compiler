@@ -6,16 +6,27 @@
 #include "ast/source_file.h"
 #include "ast/class.h"
 #include "ast/function.h"
+#include "ast/expression.h"
+#include "ast/binary_expression.h"
+#include "ast/identifier.h"
 
 namespace hdc {
     class ScopeBuilder {
         public:
             void visit(ast::Program* program);
+
+        private:
             void visit(ast::SourceFile* source_file);
             void visit(ast::Function* function);
+            void visit(ast::CompoundStatement* statements);
+            void visit(ast::Statement* statement);
+            void visit(ast::Expression* expr);
+            void visit(ast::BinaryExpression* bin);
+            void visit(ast::Identifier* id);
 
         private:
             void first_pass(ast::Program* program);
+            void second_pass(ast::Program* program);
             void add_classes(ast::SourceFile* source_file);
             void add_class(ast::Class* klass);
             void add_functions(ast::SourceFile* source_file);
@@ -26,6 +37,7 @@ namespace hdc {
 
         private:
             Scope* current_scope;
+            ast::Function* current_function;
     };
 }
 

@@ -8,6 +8,8 @@ Identifier::Identifier() {
     alias_flag = false;
     global_alias_flag = false;
     template_list = nullptr;
+    symbol = nullptr;
+    scope = nullptr;
 }
 
 Identifier::~Identifier() {
@@ -16,7 +18,6 @@ Identifier::~Identifier() {
 
 void Identifier::set_alias(Token alias) {
     this->alias = alias;
-    this->alias_flag = true;
 }
 
 void Identifier::set_name(Token name) {
@@ -34,6 +35,14 @@ void Identifier::set_global_flag(bool value) {
 void Identifier::set_template_list(TemplateList* value) {
     this->template_list = value;
     value->set_parent_node(this);
+}
+
+void Identifier::set_symbol(Symbol* symbol) {
+    this->symbol = symbol;
+}
+
+void Identifier::set_scope(Scope* scope) {
+    this->scope = scope;
 }
 
 Token Identifier::get_alias() {

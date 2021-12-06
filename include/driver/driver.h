@@ -41,7 +41,6 @@ namespace hdc {
             std::string output_name;
             std::string env_var;
             std::vector<std::string> search_path;
-            std::map<std::string, ast::SourceFile*> source_files;
             ast::Program* program;
 
             // flags

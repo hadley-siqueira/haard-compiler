@@ -37,6 +37,7 @@ namespace hdc {
 
                 int parameters_count();
                 void add_parameter(Variable* parameter);
+                void add_variable(Variable* variable);
 
             private:
                 Token name;

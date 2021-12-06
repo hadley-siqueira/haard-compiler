@@ -88,3 +88,9 @@ void Function::add_parameter(Variable* parameter) {
     parameter->set_parent_node(this);
 }
 
+void Function::add_variable(Variable* variable) {
+    local_variables.push_back(variable);
+    variable->set_parent_node(this);
+}
+
+

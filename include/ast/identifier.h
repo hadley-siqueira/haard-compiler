@@ -6,6 +6,8 @@
 #include "type.h"
 #include "template_list.h"
 #include "expression.h"
+#include "symtab/scope.h"
+#include "symtab/symbol.h"
 
 namespace hdc {
     namespace ast {
@@ -20,6 +22,8 @@ namespace hdc {
                 void set_alias_flag(bool value);
                 void set_global_flag(bool value);
                 void set_template_list(TemplateList* value);
+                void set_symbol(Symbol* symbol);
+                void set_scope(Scope* scope);
 
                 Token get_alias();
                 Token get_name();
@@ -33,6 +37,8 @@ namespace hdc {
                 bool alias_flag;
                 bool global_alias_flag;
                 TemplateList* template_list;
+                Symbol* symbol;
+                Scope* scope;
         };
     }
 }

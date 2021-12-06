@@ -17,3 +17,11 @@ void CompoundStatement::add_statement(Statement* stmt) {
     statements.push_back(stmt);
     stmt->set_parent_node(this);
 }
+
+int CompoundStatement::statements_count() {
+    return statements.size();
+}
+
+Statement* CompoundStatement::get_statement(int i) {
+    return statements[i];
+}

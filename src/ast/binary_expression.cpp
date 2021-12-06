@@ -17,3 +17,12 @@ BinaryExpression::~BinaryExpression() {
     delete left;
     delete right;
 }
+
+
+Expression* BinaryExpression::get_left() {
+    return left;
+}
+
+Expression* BinaryExpression::get_right() {
+    return right;
+}

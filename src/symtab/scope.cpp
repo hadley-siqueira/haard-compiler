@@ -6,6 +6,17 @@ Scope::Scope() {
     enclosing_scope = nullptr;
 }
 
+Scope::~Scope() {
+    std::map<std::string, Symbol*>::iterator it;
+
+    it = symbols.begin();
+
+    while (it != symbols.end()) {
+        delete it->second;
+        ++it;
+    }
+}
+
 Symbol* Scope::resolve(std::string& name) {
     if (symbols.count(name) > 0) {
         return symbols.at(name);
