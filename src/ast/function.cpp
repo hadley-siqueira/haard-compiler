@@ -75,12 +75,20 @@ Variable* Function::get_parameter(int i) {
     return parameters[i];
 }
 
+Variable* Function::get_local_variable(int i) {
+    return local_variables[i];
+}
+
 Scope* Function::get_scope() {
     return scope;
 }
 
 int Function::parameters_count() {
     return parameters.size();
+}
+
+int Function::local_variables_count() {
+    return local_variables.size();
 }
 
 void Function::add_parameter(Variable* parameter) {

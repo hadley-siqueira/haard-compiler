@@ -8,8 +8,18 @@ ElseStatement::ElseStatement(Token token, CompoundStatement* stmts) {
     this->statements = stmts;
     this->token = token;
     stmts->set_parent_node(this);
+    scope = new Scope();
 }
 
 ElseStatement::~ElseStatement() {
     delete statements;
+    delete scope;
+}
+
+Scope* ElseStatement::get_scope() {
+    return scope;
+}
+
+CompoundStatement* ElseStatement::get_statements() {
+    return statements;
 }

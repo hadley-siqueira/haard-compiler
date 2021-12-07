@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "symtab/scope.h"
 
 using namespace hdc;
@@ -39,4 +41,23 @@ Scope* Scope::get_enclosing_scope() {
 
 void Scope::set_enclosing_scope(Scope* scope) {
     enclosing_scope = scope;
+}
+
+void Scope::debug() {
+    std::map<std::string, Symbol*>::iterator it;
+
+    if (get_enclosing_scope() != nullptr) {
+        get_enclosing_scope()->debug();
+    }
+
+    it = symbols.begin();
+    std::cout << "{";
+
+    while (it != symbols.end()) {
+        std::cout << it->first << ", ";
+        ++it;
+    }
+
+    std::cout << "}";
+
 }

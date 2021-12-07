@@ -12,6 +12,7 @@ IfStatement::IfStatement(Token token, Expression* expr, CompoundStatement* stmts
     expr->set_parent_node(this);
     stmts->set_parent_node(this);
     false_statement->set_parent_node(this);
+    scope = new Scope();
 }
 
 IfStatement::IfStatement(Token token, Expression* expr, CompoundStatement* stmts) {
@@ -22,10 +23,28 @@ IfStatement::IfStatement(Token token, Expression* expr, CompoundStatement* stmts
     this->token = token;
     expr->set_parent_node(this);
     stmts->set_parent_node(this);
+    scope = new Scope();
 }
 
 IfStatement::~IfStatement() {
     delete expression;
     delete statements;
     delete false_statement;
+    delete scope;
+}
+
+Scope* IfStatement::get_scope() {
+    return scope;
+}
+
+Expression* IfStatement::get_expression() {
+    return expression;
+}
+
+CompoundStatement* IfStatement::get_true_statements() {
+    return statements;
+}
+
+Statement* IfStatement::get_false_statements() {
+    return false_statement;
 }

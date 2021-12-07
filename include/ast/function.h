@@ -33,9 +33,11 @@ namespace hdc {
                 TemplateList* get_template_list();
                 CompoundStatement* get_statements();
                 Variable* get_parameter(int i);
+                Variable* get_local_variable(int i);
                 Scope* get_scope();
 
                 int parameters_count();
+                int local_variables_count();
                 void add_parameter(Variable* parameter);
                 void add_variable(Variable* variable);
 

@@ -9,6 +9,9 @@
 #include "ast/expression.h"
 #include "ast/binary_expression.h"
 #include "ast/identifier.h"
+#include "ast/if_statement.h"
+#include "ast/elif_statement.h"
+#include "ast/else_statement.h"
 
 namespace hdc {
     class ScopeBuilder {
@@ -23,6 +26,13 @@ namespace hdc {
             void visit(ast::Expression* expr);
             void visit(ast::BinaryExpression* bin);
             void visit(ast::Identifier* id);
+            void visit(ast::IfStatement* stmt);
+            void visit(ast::ElifStatement* stmt);
+            void visit(ast::ElseStatement* stmt);
+
+        private:
+            void handle_assignment(ast::BinaryExpression* bin);
+            void create_new_variable(ast::Identifier* id);
 
         private:
             void first_pass(ast::Program* program);
