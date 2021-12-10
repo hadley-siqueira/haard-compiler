@@ -14,6 +14,9 @@ namespace hdc {
     typedef enum IRKind {
         IR_LABEL,
 
+        /* Memory */
+        IR_SW_FP,
+
         /* Binary operators */
         IR_PLUS,
         IR_MINUS,

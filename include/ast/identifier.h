@@ -30,6 +30,7 @@ namespace hdc {
                 bool has_alias();
                 bool has_global_alias();
                 TemplateList* get_template_list();
+                Symbol* get_symbol();
                 
             private:
                 Token alias;

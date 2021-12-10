@@ -7,6 +7,7 @@ namespace hdc {
     class IR {
         public:
             IR(IRKind kind, int dst, int src1, int src2);
+            IR(IRKind kind, int src1, int src2);
             IR(IRKind kind, const char* label);
             IR(IRKind kind, int dst, const char* literal);
 
@@ -44,6 +45,11 @@ namespace hdc {
                     int dst;
                     const char* literal;
                 } t3;
+
+                struct {
+                    int src1;
+                    int src2;
+                } t4;
             } ops;
     };
 }

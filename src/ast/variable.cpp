@@ -6,11 +6,13 @@ using namespace hdc::ast;
 Variable::Variable() {
     set_kind(AST_VARIABLE);
     type = nullptr;
+    offset = 0;
 }
 
 Variable::Variable(AstKind kind) {
     set_kind(kind);
     type = nullptr;
+    offset = 0;
 }
 
 Variable::~Variable() {
@@ -26,10 +28,18 @@ void Variable::set_type(Type* type) {
     type->set_parent_node(this);
 }
 
+void Variable::set_offset(int offset) {
+    this->offset = offset;
+}
+
 Token Variable::get_name() {
     return name;
 }
 
 Type* Variable::get_type() {
     return type;
+}
+
+int Variable::get_offset() {
+    return offset;
 }

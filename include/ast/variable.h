@@ -18,13 +18,16 @@ namespace hdc {
             public:
                 void set_name(Token token);
                 void set_type(Type* type);
+                void set_offset(int offset);
 
                 Token get_name();
                 Type* get_type();
+                int get_offset();
 
             private:
                 Token name;
                 Type* type;
+                int offset;
         };
     }
 }

@@ -11,9 +11,13 @@
 #include "ast/program.h"
 #include "ast/source_file.h"
 #include "ast/function.h"
+#include "ast/statement.h"
+#include "ast/if_statement.h"
 #include "ast/binary_expression.h"
 #include "ast/unary_expression.h"
 #include "ast/literal_expression.h"
+#include "ast/identifier.h"
+#include "ast/variable.h"
 
 namespace hdc {
     class IRBuilder {
@@ -31,6 +35,7 @@ namespace hdc {
 
             void generate_statement(ast::Statement* stmt);
             void generate_statements(ast::CompoundStatement* stmts);
+            void generate_if(ast::IfStatement* stmt);
 
             IR* generate_expression(ast::Expression* expr);
 
@@ -40,6 +45,7 @@ namespace hdc {
 
         private:
             int new_temporary();
+            void reset_temporary_counter();
             void add_instruction(IR* ir);
 
         private:

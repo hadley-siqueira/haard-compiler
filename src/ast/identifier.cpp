@@ -64,3 +64,7 @@ bool Identifier::has_global_alias() {
 TemplateList* Identifier::get_template_list() {
     return template_list;
 }
+
+Symbol* Identifier::get_symbol() {
+    return symbol;
+}

@@ -27,12 +27,17 @@ void IRBuilder::generate_source_file(ast::SourceFile* source_file) {
 }
 
 void IRBuilder::generate_function(ast::Function* function) {
+    add_instruction(new IR(IR_LABEL, function->get_name().get_value()));
+    reset_temporary_counter();
     generate_statements(function->get_statements());
 }
 
 void IRBuilder::generate_statement(ast::Statement* stmt) {
     switch (stmt->get_kind()) {
     case AST_IF:
+        generate_if((ast::IfStatement*) stmt);
+        break;
+
     case AST_ELIF:
     case AST_ELSE:
         break;
@@ -47,6 +52,10 @@ void IRBuilder::generate_statements(ast::CompoundStatement* stmts) {
     for (int i = 0; i < stmts->statements_count(); ++i) {
         generate_statement(stmts->get_statement(i));
     }
+}
+
+void IRBuilder::generate_if(ast::IfStatement* stmt) {
+    IR* ir = generate_expression(stmt->get_expression());
 }
 
 IR* IRBuilder::generate_expression(ast::Expression* expr) {
@@ -83,10 +92,19 @@ IR* IRBuilder::generate_expression(ast::Expression* expr) {
 }
 
 IR* IRBuilder::generate_assignment(ast::BinaryExpression* expr) {
+    ast::Identifier* id;
+    ast::Variable* var;
+    IR* ir;
     IR* right = generate_expression(expr->get_right());
+    int offset;
 
+    //mem[fp + var.offset] = tmp
     if (expr->get_left()->get_kind() == AST_IDENTIFIER) {
-
+        id = (ast::Identifier*) expr->get_left();
+        var = (ast::Variable*) id->get_symbol()->get_descriptor();
+        offset = var->get_offset();
+        ir = new IR(IR_SW_FP, offset, right->get_dst());
+        add_instruction(ir);
     }
 
     return right;
@@ -114,13 +132,21 @@ int IRBuilder::new_temporary() {
     return temp_counter++;
 }
 
+void IRBuilder::reset_temporary_counter() {
+    temp_counter = 0;
+}
+
 void IRBuilder::add_instruction(IR* ir) {
     instructions.push_back(ir);
 }
 
 void IRBuilder::debug() {
     for (int i = 0; i < instructions.size(); ++i) {
-        std::cout << "    " << instructions[i]->to_str() << std::endl;
+        if (instructions[i]->get_kind() != IR_LABEL) {
+            std::cout << "    ";
+        }
+
+        std::cout << instructions[i]->to_str() << std::endl;
     }
 }
 

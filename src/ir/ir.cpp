@@ -12,6 +12,12 @@ IR::IR(IRKind kind, int dst, int src1, int src2) {
     ops.t1.src2 = src2;
 }
 
+IR::IR(IRKind kind, int src1, int src2) {
+    this->kind = kind;
+    ops.t4.src1 = src1;
+    ops.t4.src2 = src2;
+}
+
 IR::IR(IRKind kind, const char* label) {
     this->kind = kind;
     ops.label = StringPool::add(label);
@@ -52,6 +58,14 @@ std::string IR::to_str() {
     std::stringstream s;
 
     switch (kind) {
+    case IR_LABEL:
+        s << ops.label << ":";
+        break;
+
+    case IR_SW_FP:
+        s << "sw %" << ops.t4.src2 << ", fp(" << ops.t4.src1 << ")";
+        break;
+
     case IR_PLUS:
         return to_bin_str("add");
 
