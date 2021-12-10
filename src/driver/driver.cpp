@@ -11,6 +11,7 @@
 #include "driver/driver.h"
 #include "parser/parser.h"
 #include "symtab/scope_builder.h"
+#include "ir/ir_builder.h"
 
 using namespace hdc;
 using namespace hdc::ast;
@@ -39,11 +40,18 @@ void Driver::run() {
     run_flags();
     parse_program();
     build_scopes();
+    build_ir();
 }
 
 void Driver::build_scopes() {
     ScopeBuilder builder;
     builder.visit(program);
+}
+
+void Driver::build_ir() {
+    IRBuilder builder;
+    builder.generate_program(program);
+    builder.debug();
 }
 
 void Driver::set_flags(int argc, char* argv[]) {

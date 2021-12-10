@@ -28,6 +28,7 @@ namespace hdc {
 
             std::string build_import_path(ast::Import* import);
             void build_scopes();
+            void build_ir();
 
             bool file_exists(std::string path);
 

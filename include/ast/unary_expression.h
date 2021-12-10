@@ -11,6 +11,8 @@ namespace hdc {
                 UnaryExpression(AstKind kind, Token token, Expression* expr);
                 ~UnaryExpression();
 
+                Expression* get_expression();
+
             private:
                 Token token;
                 Expression* expr;

@@ -14,3 +14,7 @@ UnaryExpression::UnaryExpression(AstKind kind, Token token, Expression* expr) {
 UnaryExpression::~UnaryExpression() {
     delete expr;
 }
+
+Expression* UnaryExpression::get_expression() {
+    return expr;
+}

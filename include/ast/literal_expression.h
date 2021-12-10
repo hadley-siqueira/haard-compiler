@@ -10,6 +10,8 @@ namespace hdc {
             public:
                 LiteralExpression(AstKind kind, Token token);
 
+                Token get_token();
+
             private:
                 Token token;
         };

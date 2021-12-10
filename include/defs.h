@@ -11,6 +11,17 @@ namespace hdc {
         SYM_FUNCTION
     } SymbolKind;
 
+    typedef enum IRKind {
+        IR_LABEL,
+
+        /* Binary operators */
+        IR_PLUS,
+        IR_MINUS,
+
+        /* Literals */
+        IR_INTEGER,
+    } IRKind;
+
     typedef enum TokenKind {
         /* Keywords */
         TK_DEF,

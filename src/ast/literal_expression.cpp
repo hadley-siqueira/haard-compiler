@@ -7,3 +7,7 @@ LiteralExpression::LiteralExpression(AstKind kind, Token token) {
     set_kind(kind);
     this->token = token;
 }
+
+Token LiteralExpression::get_token() {
+    return token;
+}

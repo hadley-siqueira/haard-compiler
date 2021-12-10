@@ -57,6 +57,11 @@ set(SYMTAB_SRC
     src/symtab/scope_builder.cpp
 )
 
+set(IR_SRC
+    src/ir/ir.cpp
+    src/ir/ir_builder.cpp
+)
+
 set(DRIVER_SRC
     src/driver/driver.cpp
 )
@@ -69,6 +74,7 @@ set(SOURCES
     ${AST_SRC}
     ${PARSER_SRC}
     ${SYMTAB_SRC}
+    ${IR_SRC}
     ${DRIVER_SRC}
 )
 
