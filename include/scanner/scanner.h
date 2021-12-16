@@ -25,6 +25,7 @@ namespace hdc {
             void advance();
             bool lookahead(char c);
 
+            bool is_symbol();
             bool is_alpha();
             bool is_digit();
             bool is_operator();
@@ -43,6 +44,7 @@ namespace hdc {
             Token get_char_or_string();
             Token get_string();
             Token get_operator();
+            Token get_symbol();
 
             Token create_token(TokenKind kind);
 

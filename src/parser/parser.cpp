@@ -368,9 +368,53 @@ Expression* Parser::parse_postfix_expression() {
     return expr;
 }
 
+Expression* Parser::parse_unary_expression() {
+    Token oper;
+    Expression* expr = nullptr;
+
+    if (match(TK_LOGICAL_NOT) || match(TK_NOT)) {
+        oper = matched_token;
+        expr = new UnaryExpression(AST_LOGICAL_NOT, oper, parse_unary_expression());
+    } else if (match(TK_BITWISE_AND)) {
+        oper = matched_token;
+        expr = new UnaryExpression(AST_ADDRESS_OF, oper, parse_unary_expression());
+    } else if (match(TK_TIMES)) {
+        oper = matched_token;
+        expr = new UnaryExpression(AST_DEREFERENCE, oper, parse_unary_expression());
+    } else if (match(TK_POWER)) {
+        oper = matched_token;
+        expr = new UnaryExpression(AST_DEREFERENCE, oper, parse_unary_expression());
+        expr = new UnaryExpression(AST_DEREFERENCE, oper, expr);
+    } else if (match(TK_BITWISE_NOT)) {
+        oper = matched_token;
+        expr = new UnaryExpression(AST_BITWISE_NOT, oper, parse_unary_expression());
+    } else if (match(TK_MINUS)) {
+        oper = matched_token;
+        expr = new UnaryExpression(AST_UNARY_MINUS, oper, parse_unary_expression());
+    } else if (match(TK_PLUS)) {
+        oper = matched_token;
+        expr = new UnaryExpression(AST_UNARY_PLUS, oper, parse_unary_expression());
+    } else if (match(TK_INC)) {
+        oper = matched_token;
+        expr = new UnaryExpression(AST_PRE_INC, oper, parse_unary_expression());
+    } else if (match(TK_DEC)) {
+        oper = matched_token;
+        expr = new UnaryExpression(AST_PRE_DEC, oper, parse_unary_expression());
+    } else if (match(TK_SIZEOF)) {
+        oper = matched_token;
+        expect(TK_LEFT_PARENTHESIS);
+        expr = new UnaryExpression(AST_SIZEOF, oper, parse_unary_expression());
+        expect(TK_RIGHT_PARENTHESIS);
+    } else {
+        expr = parse_postfix_expression();
+    }
+
+    return expr;
+}
+
 Expression* Parser::parse_arith_expression() {
     Token oper;
-    Expression* expr = parse_postfix_expression();
+    Expression* expr = parse_unary_expression();
 
     while (true) {
         if (match(TK_PLUS)) {

@@ -40,7 +40,7 @@ void Driver::run() {
     run_flags();
     parse_program();
     build_scopes();
-    build_ir();
+    //build_ir();
 }
 
 void Driver::build_scopes() {

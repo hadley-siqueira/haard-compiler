@@ -43,6 +43,8 @@ Token Scanner::get_token() {
             return get_token();
         } else if (state.get_new_line()) {
             return get_indentation();
+        } else if (is_symbol()) {
+            return get_symbol();
         } else if (is_digit()) {
             return get_number();
         } else if (is_alpha()) {
@@ -106,6 +108,20 @@ bool Scanner::lookahead(char c) {
     int index = state.get_buffer_index();
 
     return index < buffer.size() && buffer[index] == c;
+}
+
+bool Scanner::is_symbol() {
+    int index = state.get_buffer_index();
+
+    bool f1 = buffer[index] == ':';
+    index++;
+
+    bool f2 = buffer[index] >= 'a' && buffer[index] <= 'z' ||
+           buffer[index] >= 'A' && buffer[index] <= 'Z' ||
+           buffer[index] >= '0' && buffer[index] <= '9' ||
+           buffer[index] == '_';
+
+    return f1 && f2;
 }
 
 bool Scanner::is_alpha() {
@@ -219,6 +235,21 @@ Token Scanner::get_keyword_or_identifier() {
 
     if (lookahead('<')) {
         state.set_template_flag(true);
+    }
+
+    return create_token(kind);
+}
+
+Token Scanner::get_symbol() {
+    TokenKind kind = TK_LITERAL_SYMBOL;
+
+    state.start_lexeme();
+
+    // grab the : that starts the symbol literal
+    advance();
+
+    while (is_alpha() || is_digit() || lookahead('_')) {
+        advance();
     }
 
     return create_token(kind);
