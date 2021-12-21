@@ -12,6 +12,7 @@
 #include "parser/parser.h"
 #include "symtab/scope_builder.h"
 #include "ir/ir_builder.h"
+#include "cpp/cpp_builder.h"
 
 using namespace hdc;
 using namespace hdc::ast;
@@ -20,7 +21,11 @@ Driver::Driver() {
     path_delimiter = '/';
     output_name = "a.out";
     env_var = "HDC_PATH";
+
+    // flags
     print_information_flag = false;
+    cpp_flag = true;
+
     program = new Program();
 }
 
@@ -40,6 +45,10 @@ void Driver::run() {
     run_flags();
     parse_program();
     build_scopes();
+
+    if (cpp_flag) {
+        build_cpp();
+    }
     //build_ir();
 }
 
@@ -54,6 +63,12 @@ void Driver::build_ir() {
     builder.debug();
 }
 
+void Driver::build_cpp() {
+    CppBuilder builder;
+    builder.build(program);
+    std::cout << builder.get_output() << std::endl;
+}
+
 void Driver::set_flags(int argc, char* argv[]) {
     for (int i = 1; i < argc; ++i) {
         if (strstr(argv[i], ".hd") != nullptr) {
@@ -66,6 +81,8 @@ void Driver::set_flags(int argc, char* argv[]) {
             search_path.push_back(argv[i]);
         } else if (strcmp(argv[i], "-info") == 0) {
             print_information_flag = true;
+        } else if (strcmp(argv[i], "-cpp") == 0) {
+            cpp_flag = true;
         }
     }
 }

@@ -62,6 +62,10 @@ set(IR_SRC
     src/ir/ir_builder.cpp
 )
 
+set(CPP_BUILDER_SRC
+    src/cpp/cpp_builder.cpp
+)
+
 set(DRIVER_SRC
     src/driver/driver.cpp
 )
@@ -75,6 +79,7 @@ set(SOURCES
     ${PARSER_SRC}
     ${SYMTAB_SRC}
     ${IR_SRC}
+    ${CPP_BUILDER_SRC}
     ${DRIVER_SRC}
 )
 

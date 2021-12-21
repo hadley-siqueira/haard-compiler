@@ -29,6 +29,7 @@ namespace hdc {
             std::string build_import_path(ast::Import* import);
             void build_scopes();
             void build_ir();
+            void build_cpp();
 
             bool file_exists(std::string path);
 
@@ -46,6 +47,7 @@ namespace hdc {
 
             // flags
             bool print_information_flag;
+            bool cpp_flag;
     };
 }
 
