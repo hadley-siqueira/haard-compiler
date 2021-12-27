@@ -17,3 +17,12 @@ void ExpressionList::add_expression(Expression* expr) {
     expressions.push_back(expr);
     expr->set_parent_node(this);
 }
+                
+int ExpressionList::expression_count() {
+    return expressions.size();
+}
+
+Expression* ExpressionList::get_expression(int i) {
+    return expressions[i];
+}
+

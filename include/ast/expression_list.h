@@ -14,6 +14,8 @@ namespace hdc {
 
             public:
                 void add_expression(Expression* expr);
+                int expression_count();
+                Expression* get_expression(int i);
 
             private:
                 std::vector<Expression*> expressions;
