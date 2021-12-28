@@ -201,8 +201,11 @@ void CppBuilder::build_expression(ast::Expression* expr) {
     case AST_LITERAL_FLOAT:
     case AST_LITERAL_BOOL:
     case AST_LITERAL_CHAR:
-    case AST_LITERAL_STRING:
         build_literal((ast::LiteralExpression*) expr);
+        break;
+
+    case AST_LITERAL_STRING:
+        build_string((ast::LiteralExpression*) expr);
         break;
     
     case AST_LITERAL_NULL:
@@ -268,6 +271,14 @@ void CppBuilder::build_literal(ast::LiteralExpression* expr) {
     output << expr->get_token().get_value();
 }
 
+void CppBuilder::build_string(ast::LiteralExpression* expr) {
+    std::string tmp = expr->get_token().get_value();
+
+    tmp[0] = '"';
+    tmp[tmp.size() - 1] = '"';
+    output << tmp;
+}
+
 void CppBuilder::build_symbol(ast::LiteralExpression* expr) {
     std::string v = expr->get_token().get_value();
 
@@ -291,6 +302,7 @@ void CppBuilder::indent() {
 
 
 void CppBuilder::build_if(ast::IfStatement* stmt) {
+    indent();
     output << "if (";
     build_expression(stmt->get_expression());
     output << ") {\n";
@@ -298,13 +310,38 @@ void CppBuilder::build_if(ast::IfStatement* stmt) {
     ++indent_count;
     build_statements(stmt->get_true_statements());
     --indent_count;
+    indent();
     output << "}\n";
+
+    if (stmt->get_false_statements()) {
+        build_statement(stmt->get_false_statements());
+    }
 }
 
 void CppBuilder::build_elif(ast::ElifStatement* stmt) {
+    indent();
+    output << "else if (";
+    build_expression(stmt->get_expression());
+    output << ") {\n";
 
+    ++indent_count;
+    build_statements(stmt->get_true_statements());
+    --indent_count;
+    indent();
+    output << "}\n";
+
+    if (stmt->get_false_statements()) {
+        build_statement(stmt->get_false_statements());
+    }
 }
 
 void CppBuilder::build_else(ast::ElseStatement* stmt) {
+    indent();
+    output << "else {\n";
 
+    ++indent_count;
+    build_statements(stmt->get_statements());
+    --indent_count;
+    indent();
+    output << "}\n";
 }

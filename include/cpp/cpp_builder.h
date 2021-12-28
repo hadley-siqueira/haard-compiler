@@ -56,6 +56,7 @@ namespace hdc {
 
             void build_literal(ast::LiteralExpression* expr);
             void build_symbol(ast::LiteralExpression* expr);
+            void build_string(ast::LiteralExpression* expr);
             void build_identifier(ast::Identifier* expr);
 
             void indent();

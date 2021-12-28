@@ -85,7 +85,10 @@ void ScopeBuilder::visit(ast::IfStatement* stmt) {
     visit(stmt->get_true_statements());
 
     current_scope = current_scope->get_enclosing_scope();
-    visit(stmt->get_false_statements());
+
+    if (stmt->get_false_statements()) {
+        visit(stmt->get_false_statements());
+    }
 }
 
 void ScopeBuilder::visit(ast::ElifStatement* stmt) {
@@ -96,7 +99,10 @@ void ScopeBuilder::visit(ast::ElifStatement* stmt) {
     visit(stmt->get_true_statements());
 
     current_scope = current_scope->get_enclosing_scope();
-    visit(stmt->get_false_statements());
+
+    if (stmt->get_false_statements()) {
+        visit(stmt->get_false_statements());
+    }
 }
 
 void ScopeBuilder::visit(ast::ElseStatement* stmt) {

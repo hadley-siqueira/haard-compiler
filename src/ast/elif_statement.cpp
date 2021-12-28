@@ -16,7 +16,7 @@ ElifStatement::ElifStatement(Token token, Expression* expr, CompoundStatement* s
 }
 
 ElifStatement::ElifStatement(Token token, Expression* expr, CompoundStatement* stmts) {
-    set_kind(AST_IF);
+    set_kind(AST_ELIF);
     this->expression = expr;
     this->statements = stmts;
     this->false_statement = nullptr;
