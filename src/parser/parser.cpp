@@ -412,17 +412,42 @@ Expression* Parser::parse_unary_expression() {
     return expr;
 }
 
-Expression* Parser::parse_arith_expression() {
+Expression* Parser::parse_term_expression() {
     Token oper;
     Expression* expr = parse_unary_expression();
 
     while (true) {
+        if (match(TK_TIMES)) {
+            oper = matched_token;
+            expr = new BinaryExpression(AST_TIMES, oper, expr, parse_unary_expression());
+        } else if (match(TK_DIVISION)) {
+            oper = matched_token;
+            expr = new BinaryExpression(AST_DIVISION, oper, expr, parse_unary_expression());
+        } else if (match(TK_INTEGER_DIVISION)) {
+            oper = matched_token;
+            expr = new BinaryExpression(AST_INTEGER_DIVISION, oper, expr, parse_unary_expression());
+        } else if (match(TK_MODULO)) {
+            oper = matched_token;
+            expr = new BinaryExpression(AST_MODULO, oper, expr, parse_unary_expression());
+        } else {
+            break;
+        }
+    }
+
+    return expr;
+}
+
+Expression* Parser::parse_arith_expression() {
+    Token oper;
+    Expression* expr = parse_term_expression();
+
+    while (true) {
         if (match(TK_PLUS)) {
             oper = matched_token;
-            expr = new BinaryExpression(AST_PLUS, oper, expr, parse_postfix_expression());
+            expr = new BinaryExpression(AST_PLUS, oper, expr, parse_term_expression());
         } else if (match(TK_MINUS)) {
             oper = matched_token;
-            expr = new BinaryExpression(AST_MINUS, oper, expr, parse_postfix_expression());
+            expr = new BinaryExpression(AST_MINUS, oper, expr, parse_term_expression());
         } else {
             break;
         }

@@ -147,6 +147,22 @@ void CppBuilder::build_expression(ast::Expression* expr) {
         build_binop("-", (ast::BinaryExpression*) expr);
         break;
 
+    case AST_TIMES:
+        build_binop("*", (ast::BinaryExpression*) expr);
+        break;
+
+    case AST_DIVISION:
+        build_binop("/", (ast::BinaryExpression*) expr);
+        break;
+
+    case AST_INTEGER_DIVISION:
+        build_binop("/", (ast::BinaryExpression*) expr);
+        break;
+
+    case AST_MODULO:
+        build_binop("%", (ast::BinaryExpression*) expr);
+        break;
+
     case AST_IDENTIFIER:
         build_identifier((ast::Identifier*) expr);
         break;

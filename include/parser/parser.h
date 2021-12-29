@@ -48,7 +48,10 @@ namespace hdc {
             Expression* parse_primary_expression();
             Expression* parse_postfix_expression();
             Expression* parse_unary_expression();
+
+            Expression* parse_term_expression();
             Expression* parse_arith_expression();
+
             Expression* parse_assignment_expression();
             Expression* parse_expression();
 
