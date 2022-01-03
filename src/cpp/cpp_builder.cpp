@@ -7,50 +7,60 @@ using namespace hdc::ast;
 
 CppBuilder::CppBuilder() {
     symbol_count = 0;
+    main_function = nullptr;
 }
 
 std::string CppBuilder::get_output() {
-    return output.str();
+    std::stringstream r;
+
+    r << headers_stream.str();
+    r << '\n';
+    r << symbols_stream.str();
+    r << '\n';
+    r << function_proto_stream.str();
+    r << '\n';
+    r << functions_stream.str();
+    r << main_function_stream.str();
+
+    return r.str();
 }
 
-void CppBuilder::generate_prototypes(ast::Program* program) {
-    for (int i = 0; i < program->source_files_count(); ++i) {
-        generate_prototypes(program->get_source_file(i));
-    }
-}
-
-void CppBuilder::generate_prototypes(ast::SourceFile* sf) {
-    for (int i = 0; i < sf->functions_count(); ++i) {
-        generate_prototype(sf->get_function(i));
-    }
-
-    output << "\n";
-}
-
-void CppBuilder::generate_prototype(ast::Function* f) {
-    output << "int " << f->get_name().get_value() << "();\n";
+void CppBuilder::generate_headers() {
+    headers_stream << "#include <iostream>\n";
 }
 
 void CppBuilder::generate_symbols() {
     std::map<std::string, int>::iterator it = symbol_map.begin();
 
     while (it != symbol_map.end()) {
-        output << "char* _symbol" << it->second << " = \"";
-        output << it->first << "\";\n";
+        symbols_stream << "char* _symbol" << it->second << " = \"";
+        symbols_stream << it->first << "\";\n";
         ++it;
     }
+}
+
+void CppBuilder::generate_main_function() {
+    main_function_stream << "int main(int argc, char** argv) {\n";
+
+    if (main_function != nullptr) {
+        main_function_stream << "    ";
+        main_function_stream << main_function->get_name().get_value() << "();\n";
+    }
+
+    main_function_stream << "    return 0;\n}";
 }
 
 void CppBuilder::build(ast::Program* program) {
     indent_count = 0;
 
-    generate_prototypes(program);
+    generate_headers();
 
     for (int i = 0; i < program->source_files_count(); ++i) {
         build_source_file(program->get_source_file(i));
     }
     
     generate_symbols();
+    generate_main_function();
 }
 
 void CppBuilder::build_source_file(ast::SourceFile* sf) {
@@ -60,31 +70,47 @@ void CppBuilder::build_source_file(ast::SourceFile* sf) {
 }
 
 void CppBuilder::build_function(ast::Function* f) {
+    if (!function_visited(f)) {
+        ++indent_count;
+
+        // generate the function signature prototype
+        set_output(function_proto_stream);
+        build_function_signature(f);
+        *output << ";\n";
+
+        set_output(functions_stream);
+        build_function_signature(f);
+        *output << " {\n";
+        build_statements(f->get_statements());
+
+        *output << "\n}\n\n";
+        --indent_count;
+        visit_function(f);
+
+        set_main_function(f);
+    }
+}
+
+void CppBuilder::build_function_signature(ast::Function* f) {
     int i;
 
-    ++indent_count;
-
-    output << "int ";
-    output << f->get_name().get_value();
-    output << "(";
+    build_type(f->get_return_type());
+    *output << ' ';
+    *output << f->get_name().get_value();
+    *output << "(";
 
     if (f->parameters_count() > 0) {
         for (i = 0; i < f->parameters_count() - 1; ++i) {
             build_type(f->get_parameter(i)->get_type());
-            output << ' ' << f->get_parameter(i)->get_name().get_value();
-            output << ", ";
+            *output << ' ' << f->get_parameter(i)->get_name().get_value();
+            *output << ", ";
         }
 
         build_type(f->get_parameter(i)->get_type());
-        output << ' ' << f->get_parameter(i)->get_name().get_value();
+        *output << ' ' << f->get_parameter(i)->get_name().get_value();
     }
 
-    output << ") {\n";
-
-    build_statements(f->get_statements());
-
-    output << "\n}\n\n";
-    --indent_count;
+    *output << ")";
 }
 
 void CppBuilder::build_statements(ast::CompoundStatement* stmts) {
@@ -110,7 +136,7 @@ void CppBuilder::build_statement(ast::Statement* stmt) {
     default:
         indent();
         build_expression((Expression*) stmt);
-        output << ";\n";
+        *output << ";\n";
         break;
     }
 }
@@ -118,17 +144,24 @@ void CppBuilder::build_statement(ast::Statement* stmt) {
 void CppBuilder::build_type(ast::Type* type) {
     switch (type->get_kind()) {
     case AST_INT_TYPE:
-        output << "int";
+        *output << "int";
         break;
 
     case AST_FLOAT_TYPE:
-        output << "float";
+        *output << "float";
         break;
 
     case AST_DOUBLE_TYPE:
-        output << "double";
+        *output << "double";
         break;
-        
+
+    case AST_VOID_TYPE:
+        *output << "void";
+        break;
+
+    case AST_CHAR_TYPE:
+        *output << "char";
+        break;
     }
 }
 
@@ -225,7 +258,7 @@ void CppBuilder::build_expression(ast::Expression* expr) {
         break;
     
     case AST_LITERAL_NULL:
-        output << "nullptr";
+        *output << "nullptr";
         break;
 
     case AST_LITERAL_SYMBOL:
@@ -235,30 +268,30 @@ void CppBuilder::build_expression(ast::Expression* expr) {
 }
 
 void CppBuilder::build_binop(const char* op, ast::BinaryExpression* expr) {
-    output << "(";
+    *output << "(";
     build_expression(expr->get_left());
-    output << ' ' << op << ' ';
+    *output << ' ' << op << ' ';
     build_expression(expr->get_right());
-    output << ")";
+    *output << ")";
 }
 
 void CppBuilder::build_unop(const char* op, ast::UnaryExpression* expr) {
-    output << "(";
-    output << op;
+    *output << "(";
+    *output << op;
 
     build_expression(expr->get_expression());
-    output << ")";
+    *output << ")";
 }
 
 void CppBuilder::build_sizeof(ast::UnaryExpression* expr) {
-    output << "sizeof(";
+    *output << "sizeof(";
     build_expression(expr->get_expression());
-    output << ")";
+    *output << ")";
 }
 
 void CppBuilder::build_dot(ast::BinaryExpression* expr) {
     build_expression(expr->get_left());
-    output << '.';
+    *output << '.';
     build_expression(expr->get_right());
 }
 
@@ -267,12 +300,12 @@ void CppBuilder::build_call(ast::BinaryExpression* expr) {
     ExpressionList* list = (ast::ExpressionList*) expr->get_right();
 
     build_expression(expr->get_left());
-    output << "(";
+    *output << "(";
 
     if (list != nullptr) {
         for (i = 0; i < list->expression_count() - 1; ++i) {
             build_expression(list->get_expression(i));
-            output << ", ";
+            *output << ", ";
         }
 
         if (i > 0) {
@@ -280,11 +313,11 @@ void CppBuilder::build_call(ast::BinaryExpression* expr) {
         }
     }
 
-    output << ")";
+    *output << ")";
 }
 
 void CppBuilder::build_literal(ast::LiteralExpression* expr) {
-    output << expr->get_token().get_value();
+    *output << expr->get_token().get_value();
 }
 
 void CppBuilder::build_string(ast::LiteralExpression* expr) {
@@ -292,7 +325,7 @@ void CppBuilder::build_string(ast::LiteralExpression* expr) {
 
     tmp[0] = '"';
     tmp[tmp.size() - 1] = '"';
-    output << tmp;
+    *output << tmp;
 }
 
 void CppBuilder::build_symbol(ast::LiteralExpression* expr) {
@@ -303,31 +336,31 @@ void CppBuilder::build_symbol(ast::LiteralExpression* expr) {
         symbol_count++;
     }
 
-    output << "_symbol" << symbol_map[v];
+    *output << "_symbol" << symbol_map[v];
 }
 
 void CppBuilder::build_identifier(ast::Identifier* expr) {
-    output << expr->get_name().get_value();
+    *output << expr->get_name().get_value();
 }
 
 void CppBuilder::indent() {
     for (int i = 0; i < indent_count; ++i) {
-        output << "    ";
+        *output << "    ";
     }
 }
 
 
 void CppBuilder::build_if(ast::IfStatement* stmt) {
     indent();
-    output << "if (";
+    *output << "if (";
     build_expression(stmt->get_expression());
-    output << ") {\n";
+    *output << ") {\n";
 
     ++indent_count;
     build_statements(stmt->get_true_statements());
     --indent_count;
     indent();
-    output << "}\n";
+    *output << "}\n";
 
     if (stmt->get_false_statements()) {
         build_statement(stmt->get_false_statements());
@@ -336,15 +369,15 @@ void CppBuilder::build_if(ast::IfStatement* stmt) {
 
 void CppBuilder::build_elif(ast::ElifStatement* stmt) {
     indent();
-    output << "else if (";
+    *output << "else if (";
     build_expression(stmt->get_expression());
-    output << ") {\n";
+    *output << ") {\n";
 
     ++indent_count;
     build_statements(stmt->get_true_statements());
     --indent_count;
     indent();
-    output << "}\n";
+    *output << "}\n";
 
     if (stmt->get_false_statements()) {
         build_statement(stmt->get_false_statements());
@@ -353,11 +386,31 @@ void CppBuilder::build_elif(ast::ElifStatement* stmt) {
 
 void CppBuilder::build_else(ast::ElseStatement* stmt) {
     indent();
-    output << "else {\n";
+    *output << "else {\n";
 
     ++indent_count;
     build_statements(stmt->get_statements());
     --indent_count;
     indent();
-    output << "}\n";
+    *output << "}\n";
+}
+
+void CppBuilder::set_output(std::stringstream& stream) {
+    output = &stream;
+}
+
+bool CppBuilder::function_visited(ast::Function* f) {
+    return visited_functions.count(f) > 0;
+}
+
+void CppBuilder::visit_function(ast::Function* f) {
+    visited_functions.insert(f);
+}
+
+void CppBuilder::set_main_function(ast::Function* f) {
+    std::string name = f->get_name().get_value();
+
+    if (name == "main") {
+        main_function = f;
+    }
 }

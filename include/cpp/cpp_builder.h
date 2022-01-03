@@ -3,6 +3,7 @@
 
 #include <sstream>
 #include <map>
+#include <set>
 
 #include "ast/program.h"
 #include "ast/source_file.h"
@@ -30,14 +31,15 @@ namespace hdc {
             std::string get_output();
 
         private:
-            void generate_prototypes(ast::Program* program);
-            void generate_prototypes(ast::SourceFile* sf);
-
-            void generate_prototype(ast::Function* f);
+            void generate_headers();
             void generate_symbols();
+            void generate_main_function();
 
             void build_source_file(ast::SourceFile* sf);
+
             void build_function(ast::Function* f);
+            void build_function_signature(ast::Function* f);
+
             void build_statements(ast::CompoundStatement* stmts);
             void build_statement(ast::Statement* stmt);
             void build_expression(ast::Expression* expr);
@@ -61,9 +63,21 @@ namespace hdc {
 
             void indent();
 
+            void set_output(std::stringstream& stream);
+            bool function_visited(ast::Function* f);
+            void visit_function(ast::Function* f);
+            void set_main_function(ast::Function* f);
+
         private:
-            std::stringstream output;
+            std::stringstream* output;
             std::map<std::string, int> symbol_map;
+            std::stringstream symbols_stream;
+            std::stringstream headers_stream;
+            std::stringstream function_proto_stream;
+            std::stringstream functions_stream;
+            std::stringstream main_function_stream;
+            std::set<ast::Function*> visited_functions;
+            ast::Function* main_function;
             int indent_count;
             int symbol_count;
     };
