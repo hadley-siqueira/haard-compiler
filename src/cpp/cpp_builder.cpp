@@ -64,13 +64,18 @@ void CppBuilder::build(ast::Program* program) {
 }
 
 void CppBuilder::build_source_file(ast::SourceFile* sf) {
-    for (int i = 0; i < sf->functions_count(); ++i) {
-        build_function(sf->get_function(i));
+    if (!source_file_visited(sf)) {
+        visit_source_file(sf);
+
+        for (int i = 0; i < sf->functions_count(); ++i) {
+            build_function(sf->get_function(i));
+        }
     }
 }
 
 void CppBuilder::build_function(ast::Function* f) {
     if (!function_visited(f)) {
+        visit_function(f);
         ++indent_count;
 
         // generate the function signature prototype
@@ -85,7 +90,6 @@ void CppBuilder::build_function(ast::Function* f) {
 
         *output << "\n}\n\n";
         --indent_count;
-        visit_function(f);
 
         set_main_function(f);
     }
@@ -405,6 +409,14 @@ bool CppBuilder::function_visited(ast::Function* f) {
 
 void CppBuilder::visit_function(ast::Function* f) {
     visited_functions.insert(f);
+}
+
+bool CppBuilder::source_file_visited(ast::SourceFile* sf) {
+    return visited_source_files.count(sf) > 0;
+}
+
+void CppBuilder::visit_source_file(ast::SourceFile* sf) {
+    visited_source_files.insert(sf);
 }
 
 void CppBuilder::set_main_function(ast::Function* f) {

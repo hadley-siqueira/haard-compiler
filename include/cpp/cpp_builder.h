@@ -64,8 +64,13 @@ namespace hdc {
             void indent();
 
             void set_output(std::stringstream& stream);
+
+            bool source_file_visited(ast::SourceFile* sf);
             bool function_visited(ast::Function* f);
+
+            void visit_source_file(ast::SourceFile* sf);
             void visit_function(ast::Function* f);
+
             void set_main_function(ast::Function* f);
 
         private:
@@ -77,6 +82,7 @@ namespace hdc {
             std::stringstream functions_stream;
             std::stringstream main_function_stream;
             std::set<ast::Function*> visited_functions;
+            std::set<ast::SourceFile*> visited_source_files;
             ast::Function* main_function;
             int indent_count;
             int symbol_count;
