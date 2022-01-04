@@ -243,7 +243,7 @@ void ScopeBuilder::add_class(ast::Class* klass) {
 void ScopeBuilder::add_functions(ast::SourceFile* source_file) {
     current_scope = source_file->get_scope();
 
-    for (int i = 0; i < source_file->classes_count(); ++i) {
+    for (int i = 0; i < source_file->functions_count(); ++i) {
         add_function(source_file->get_function(i));
     }
 }

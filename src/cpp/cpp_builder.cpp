@@ -178,6 +178,10 @@ void CppBuilder::build_class_signature(ast::Class* klass) {
 }
 
 void CppBuilder::build_class_variables(ast::Class* klass) {
+    if (klass->variables_count() > 0) {
+        *output << "public:\n";
+    }
+
     for (int i = 0; i < klass->variables_count(); ++i) {
         indent();
         build_variable(klass->get_variable(i));
@@ -189,6 +193,11 @@ void CppBuilder::build_class_methods(ast::Class* klass) {
     int i;
 
     if (klass->methods_count() > 0) {
+        if (klass->variables_count() > 0) {
+            *output << '\n';
+        }
+
+        *output << "public:\n";
         for (i = 0; i < klass->methods_count() - 1; ++i) {
             build_method(klass->get_method(i));
             *output << "\n\n";
