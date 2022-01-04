@@ -14,11 +14,8 @@ std::string CppBuilder::get_output() {
     std::stringstream r;
 
     r << headers_stream.str();
-    r << '\n';
     r << symbols_stream.str();
-    r << '\n';
     r << function_proto_stream.str();
-    r << '\n';
     r << classes_stream.str();
     r << '\n';
     r << functions_stream.str();
@@ -28,16 +25,22 @@ std::string CppBuilder::get_output() {
 }
 
 void CppBuilder::generate_headers() {
-    headers_stream << "#include <iostream>\n";
+    headers_stream << "#include <iostream>\n\n";
 }
 
 void CppBuilder::generate_symbols() {
     std::map<std::string, int>::iterator it = symbol_map.begin();
+    bool flag = false;
 
     while (it != symbol_map.end()) {
         symbols_stream << "char* _symbol" << it->second << " = \"";
         symbols_stream << it->first << "\";\n";
         ++it;
+        flag = true;
+    }
+
+    if (flag) {
+        symbols_stream << '\n';
     }
 }
 
@@ -149,40 +152,50 @@ void CppBuilder::build_class(ast::Class* klass) {
 
     if (!class_visited(klass)) {
         visit_class(klass);
-
         set_output(classes_stream);
-
-        *output << "class ";
-        *output << klass->get_name().get_value();
-
-        if (klass->get_parent() != nullptr) {
-            *output << " : public ";
-            build_type(klass->get_parent());
-        }
-
-        *output << " {\n";
+        build_class_signature(klass);
 
         ++indent_count;
 
-        for (i = 0; i < klass->variables_count(); ++i) {
-            indent();
-            build_variable(klass->get_variable(i));
-            *output << ";\n";
-        }
+        build_class_variables(klass);
+        build_class_methods(klass);
+        *output << "};";
 
-        if (i > 0) {
-            *output << '\n';
-        }
+        --indent_count;
+    }
+}
 
+void CppBuilder::build_class_signature(ast::Class* klass) {
+    *output << "class ";
+    *output << klass->get_name().get_value();
+
+    if (klass->get_parent() != nullptr) {
+        *output << " : public ";
+        build_type(klass->get_parent());
+    }
+
+    *output << " {\n";
+}
+
+void CppBuilder::build_class_variables(ast::Class* klass) {
+    for (int i = 0; i < klass->variables_count(); ++i) {
+        indent();
+        build_variable(klass->get_variable(i));
+        *output << ";\n";
+    }
+}
+
+void CppBuilder::build_class_methods(ast::Class* klass) {
+    int i;
+
+    if (klass->methods_count() > 0) {
         for (i = 0; i < klass->methods_count() - 1; ++i) {
             build_method(klass->get_method(i));
             *output << "\n\n";
         }
 
         build_method(klass->get_method(i));
-        *output << "\n};";
-
-        --indent_count;
+        *output << "\n";
     }
 }
 

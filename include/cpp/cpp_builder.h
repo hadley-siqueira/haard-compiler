@@ -41,6 +41,9 @@ namespace hdc {
             void build_function(ast::Function* f);
             void build_function_signature(ast::Function* f);
             void build_class(ast::Class* klass);
+            void build_class_signature(ast::Class* klass);
+            void build_class_variables(ast::Class* klass);
+            void build_class_methods(ast::Class* klass);
             void build_method(ast::Method* m);
             void build_variable(ast::Variable* v);
             void build_function_variables(ast::Function* f);
