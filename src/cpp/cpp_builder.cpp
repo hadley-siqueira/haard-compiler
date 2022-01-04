@@ -19,6 +19,8 @@ std::string CppBuilder::get_output() {
     r << '\n';
     r << function_proto_stream.str();
     r << '\n';
+    r << classes_stream.str();
+    r << '\n';
     r << functions_stream.str();
     r << main_function_stream.str();
 
@@ -64,10 +66,22 @@ void CppBuilder::build(ast::Program* program) {
 }
 
 void CppBuilder::build_source_file(ast::SourceFile* sf) {
+    int i;
+
     if (!source_file_visited(sf)) {
         visit_source_file(sf);
 
-        for (int i = 0; i < sf->functions_count(); ++i) {
+        if (sf->classes_count() > 0) {
+            for (i = 0; i < sf->classes_count() - 1; ++i) {
+                build_class(sf->get_class(i));
+                *output << "\n\n";
+            }
+
+            build_class(sf->get_class(i));
+            *output << '\n';
+        }
+
+        for (i = 0; i < sf->functions_count(); ++i) {
             build_function(sf->get_function(i));
         }
     }
@@ -86,9 +100,10 @@ void CppBuilder::build_function(ast::Function* f) {
         set_output(functions_stream);
         build_function_signature(f);
         *output << " {\n";
+        build_function_variables(f);
         build_statements(f->get_statements());
 
-        *output << "\n}\n\n";
+        *output << "}\n\n";
         --indent_count;
 
         set_main_function(f);
@@ -115,6 +130,86 @@ void CppBuilder::build_function_signature(ast::Function* f) {
     }
 
     *output << ")";
+}
+
+void CppBuilder::build_function_variables(ast::Function* f) {
+    if (f->local_variables_count() > 0) {
+        for (int i = 0; i < f->local_variables_count(); ++i) {
+            indent();
+            build_variable(f->get_local_variable(i));
+            *output << ";\n";
+        }
+
+        *output << '\n';
+    }
+}
+
+void CppBuilder::build_class(ast::Class* klass) {
+    int i;
+
+    if (!class_visited(klass)) {
+        visit_class(klass);
+
+        set_output(classes_stream);
+
+        *output << "class ";
+        *output << klass->get_name().get_value();
+
+        if (klass->get_parent() != nullptr) {
+            *output << " : public ";
+            build_type(klass->get_parent());
+        }
+
+        *output << " {\n";
+
+        ++indent_count;
+
+        for (i = 0; i < klass->variables_count(); ++i) {
+            indent();
+            build_variable(klass->get_variable(i));
+            *output << ";\n";
+        }
+
+        if (i > 0) {
+            *output << '\n';
+        }
+
+        for (i = 0; i < klass->methods_count() - 1; ++i) {
+            build_method(klass->get_method(i));
+            *output << "\n\n";
+        }
+
+        build_method(klass->get_method(i));
+        *output << "\n};";
+
+        --indent_count;
+    }
+}
+
+void CppBuilder::build_method(ast::Method* f) {
+    if (!function_visited(f)) {
+        visit_function(f);
+
+        indent();
+        build_function_signature(f);
+        *output << " {\n";
+        ++indent_count;
+        build_statements(f->get_statements());
+
+        --indent_count;
+        indent();
+        *output << "}";
+    }
+}
+
+void CppBuilder::build_variable(ast::Variable* v) {
+    if (v->get_type() != nullptr) {
+        build_type(v->get_type());
+    } else {
+        *output << "int";
+    }
+
+    *output << ' ' << v->get_name().get_value();
 }
 
 void CppBuilder::build_statements(ast::CompoundStatement* stmts) {
@@ -146,6 +241,8 @@ void CppBuilder::build_statement(ast::Statement* stmt) {
 }
 
 void CppBuilder::build_type(ast::Type* type) {
+    NamedType* nm;
+
     switch (type->get_kind()) {
     case AST_INT_TYPE:
         *output << "int";
@@ -165,6 +262,11 @@ void CppBuilder::build_type(ast::Type* type) {
 
     case AST_CHAR_TYPE:
         *output << "char";
+        break;
+
+    case AST_NAMED_TYPE:
+        nm = (NamedType*) type;
+        *output << nm->get_id()->get_name().get_value();
         break;
     }
 }
@@ -417,6 +519,14 @@ bool CppBuilder::source_file_visited(ast::SourceFile* sf) {
 
 void CppBuilder::visit_source_file(ast::SourceFile* sf) {
     visited_source_files.insert(sf);
+}
+
+bool CppBuilder::class_visited(ast::Class* klass) {
+    return visited_classes.count(klass) > 0;
+}
+
+void CppBuilder::visit_class(ast::Class* klass) {
+    visited_classes.insert(klass);
 }
 
 void CppBuilder::set_main_function(ast::Function* f) {

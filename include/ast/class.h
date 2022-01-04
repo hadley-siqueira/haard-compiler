@@ -29,9 +29,14 @@ namespace hdc {
                 Type* get_parent();
                 SourceFile* get_source_file();
                 TemplateList* get_template_list();
+                Method* get_method(int i);
+                Variable* get_variable(int i);
 
                 void add_method(Method* method);
                 void add_variable(Variable* variable);
+
+                int variables_count();
+                int methods_count();
 
             private:
                 Token name;

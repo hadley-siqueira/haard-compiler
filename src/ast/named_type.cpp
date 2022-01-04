@@ -12,3 +12,7 @@ NamedType::NamedType(Identifier* id) {
 NamedType::~NamedType() {
     delete id;
 }
+
+Identifier* NamedType::get_id() {
+    return id;
+}

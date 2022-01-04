@@ -16,6 +16,7 @@
 #include "ast/expression_list.h"
 #include "ast/identifier.h"
 #include "ast/type.h"
+#include "ast/named_type.h"
 
 #include "ast/if_statement.h"
 #include "ast/elif_statement.h"
@@ -39,6 +40,10 @@ namespace hdc {
 
             void build_function(ast::Function* f);
             void build_function_signature(ast::Function* f);
+            void build_class(ast::Class* klass);
+            void build_method(ast::Method* m);
+            void build_variable(ast::Variable* v);
+            void build_function_variables(ast::Function* f);
 
             void build_statements(ast::CompoundStatement* stmts);
             void build_statement(ast::Statement* stmt);
@@ -67,9 +72,11 @@ namespace hdc {
 
             bool source_file_visited(ast::SourceFile* sf);
             bool function_visited(ast::Function* f);
+            bool class_visited(ast::Class* klass);
 
             void visit_source_file(ast::SourceFile* sf);
             void visit_function(ast::Function* f);
+            void visit_class(ast::Class* klass);
 
             void set_main_function(ast::Function* f);
 
@@ -80,9 +87,11 @@ namespace hdc {
             std::stringstream headers_stream;
             std::stringstream function_proto_stream;
             std::stringstream functions_stream;
+            std::stringstream classes_stream;
             std::stringstream main_function_stream;
             std::set<ast::Function*> visited_functions;
             std::set<ast::SourceFile*> visited_source_files;
+            std::set<ast::Class*> visited_classes;
             ast::Function* main_function;
             int indent_count;
             int symbol_count;

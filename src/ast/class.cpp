@@ -59,6 +59,14 @@ TemplateList* Class::get_template_list() {
     return template_list;
 }
 
+Method* Class::get_method(int i) {
+    return methods[i];
+}
+
+Variable* Class::get_variable(int i) {
+    return variables[i];
+}
+
 void Class::add_method(Method* method) {
     methods.push_back(method);
     method->set_parent_node(this);
@@ -69,3 +77,10 @@ void Class::add_variable(Variable* variable) {
     variable->set_parent_node(this);
 }
 
+int Class::variables_count() {
+    return variables.size();
+}
+
+int Class::methods_count() {
+    return methods.size();
+}
