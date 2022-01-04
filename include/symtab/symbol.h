@@ -17,6 +17,7 @@ namespace hdc {
             std::string get_name();
             void* get_descriptor();
             SymbolKind get_kind();
+            std::string get_unique_id();
 
         private:
             std::string name;

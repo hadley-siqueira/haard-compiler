@@ -19,15 +19,18 @@ namespace hdc {
                 void set_name(Token token);
                 void set_type(Type* type);
                 void set_offset(int offset);
+                void set_unique_id(std::string uid);
 
                 Token get_name();
                 Type* get_type();
                 int get_offset();
+                std::string get_unique_id();
 
             private:
                 Token name;
                 Type* type;
                 int offset;
+                std::string unique_id;
         };
     }
 }

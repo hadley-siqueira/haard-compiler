@@ -101,4 +101,10 @@ void Function::add_variable(Variable* variable) {
     variable->set_parent_node(this);
 }
 
+void Function::set_unique_id(std::string uid) {
+    unique_id = uid;
+}
 
+std::string Function::get_unique_id() {
+    return unique_id;
+}

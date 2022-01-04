@@ -48,6 +48,8 @@ namespace hdc {
         private:
             Scope* current_scope;
             ast::Function* current_function;
+            int function_id_counter;
+            int class_id_counter;
     };
 }
 

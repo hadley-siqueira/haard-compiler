@@ -24,6 +24,7 @@ namespace hdc {
                 void set_parent(Type* parent);
                 void set_source_file(SourceFile* source_file);
                 void set_template_list(TemplateList* list);
+                void set_unique_id(std::string uid);
 
                 Token get_name();
                 Type* get_parent();
@@ -31,6 +32,7 @@ namespace hdc {
                 TemplateList* get_template_list();
                 Method* get_method(int i);
                 Variable* get_variable(int i);
+                std::string get_unique_id();
 
                 void add_method(Method* method);
                 void add_variable(Variable* variable);
@@ -45,6 +47,7 @@ namespace hdc {
                 std::vector<Method*> methods;
                 std::vector<Variable*> variables;
                 TemplateList* template_list;
+                std::string unique_id;
         };
     }
 }

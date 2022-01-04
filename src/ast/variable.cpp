@@ -32,6 +32,10 @@ void Variable::set_offset(int offset) {
     this->offset = offset;
 }
 
+void Variable::set_unique_id(std::string uid) {
+    unique_id = uid;
+}
+
 Token Variable::get_name() {
     return name;
 }
@@ -42,4 +46,8 @@ Type* Variable::get_type() {
 
 int Variable::get_offset() {
     return offset;
+}
+
+std::string Variable::get_unique_id() {
+    return unique_id;
 }

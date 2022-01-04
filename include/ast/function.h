@@ -26,6 +26,7 @@ namespace hdc {
                 void set_return_type(Type* type);
                 void set_template_list(TemplateList* list);
                 void set_statements(CompoundStatement* stmts);
+                void set_unique_id(std::string uid);
 
                 Token get_name();
                 SourceFile* get_source_file();
@@ -40,6 +41,7 @@ namespace hdc {
                 int local_variables_count();
                 void add_parameter(Variable* parameter);
                 void add_variable(Variable* variable);
+                std::string get_unique_id();
 
             private:
                 Token name;
@@ -50,6 +52,7 @@ namespace hdc {
                 TemplateList* template_list;
                 CompoundStatement* statements;
                 Scope* scope;
+                std::string unique_id;
         };
     }
 }

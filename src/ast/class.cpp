@@ -84,3 +84,13 @@ int Class::variables_count() {
 int Class::methods_count() {
     return methods.size();
 }
+
+std::string Class::get_unique_id() {
+    return unique_id;
+}
+
+void Class::set_unique_id(std::string uid) {
+    unique_id = uid;
+}
+
+

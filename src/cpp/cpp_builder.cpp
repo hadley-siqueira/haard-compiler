@@ -49,7 +49,7 @@ void CppBuilder::generate_main_function() {
 
     if (main_function != nullptr) {
         main_function_stream << "    ";
-        main_function_stream << main_function->get_name().get_value() << "();\n";
+        main_function_stream << main_function->get_unique_id() << "();\n";
     }
 
     main_function_stream << "    return 0;\n}";
@@ -118,18 +118,18 @@ void CppBuilder::build_function_signature(ast::Function* f) {
 
     build_type(f->get_return_type());
     *output << ' ';
-    *output << f->get_name().get_value();
+    *output << f->get_unique_id();
     *output << "(";
 
     if (f->parameters_count() > 0) {
         for (i = 0; i < f->parameters_count() - 1; ++i) {
             build_type(f->get_parameter(i)->get_type());
-            *output << ' ' << f->get_parameter(i)->get_name().get_value();
+            *output << ' ' << f->get_parameter(i)->get_unique_id();
             *output << ", ";
         }
 
         build_type(f->get_parameter(i)->get_type());
-        *output << ' ' << f->get_parameter(i)->get_name().get_value();
+        *output << ' ' << f->get_parameter(i)->get_unique_id();
     }
 
     *output << ")";
@@ -167,7 +167,7 @@ void CppBuilder::build_class(ast::Class* klass) {
 
 void CppBuilder::build_class_signature(ast::Class* klass) {
     *output << "class ";
-    *output << klass->get_name().get_value();
+    *output << klass->get_unique_id();
 
     if (klass->get_parent() != nullptr) {
         *output << " : public ";
@@ -231,7 +231,7 @@ void CppBuilder::build_variable(ast::Variable* v) {
         *output << "int";
     }
 
-    *output << ' ' << v->get_name().get_value();
+    *output << ' ' << v->get_unique_id();
 }
 
 void CppBuilder::build_statements(ast::CompoundStatement* stmts) {
@@ -468,7 +468,11 @@ void CppBuilder::build_symbol(ast::LiteralExpression* expr) {
 }
 
 void CppBuilder::build_identifier(ast::Identifier* expr) {
-    *output << expr->get_name().get_value();
+    if (expr->get_symbol() != nullptr) {
+        *output << expr->get_symbol()->get_unique_id();
+    } else {
+        *output << expr->get_name().get_value();
+    }
 }
 
 void CppBuilder::indent() {

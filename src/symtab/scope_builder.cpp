@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 
 #include "symtab/scope_builder.h"
 
@@ -6,6 +7,9 @@ using namespace hdc;
 using namespace hdc::ast;
 
 void ScopeBuilder::visit(ast::Program* program) {
+    function_id_counter = 0;
+    class_id_counter = 0;
+
     first_pass(program);
     second_pass(program);
 }
@@ -36,13 +40,17 @@ void ScopeBuilder::visit(ast::Function* function) {
     function->get_scope()->set_enclosing_scope(current_scope);
     current_scope = function->get_scope();
     current_function = function;
+    int lvar_counter = 0;
 
     add_parameters(function);
     visit(function->get_statements());
-
    
     for (int i = 0; i < function->local_variables_count(); ++i) {
+        std::stringstream ss;
         Variable* var = function->get_local_variable(i);
+        ss << "lv" << lvar_counter << "_" << var->get_name().get_value();
+        var->set_unique_id(ss.str());
+        ++lvar_counter;
         std::cout << var->get_name().get_value() << '\n';
     }
 
@@ -195,6 +203,8 @@ void ScopeBuilder::visit(ast::BinaryExpression* bin) {
 void ScopeBuilder::add_parameters(ast::Function* function) {
     Symbol* symbol = nullptr;
     Variable* var = nullptr;
+    int param_counter = 0;
+    std::stringstream ss;
 
     for (int i = 0; i < function->parameters_count(); ++i) {
         var = function->get_parameter(i);
@@ -203,6 +213,9 @@ void ScopeBuilder::add_parameters(ast::Function* function) {
 
         if (symbol == nullptr) {
             define_symbol(SYM_PARAM, name, var);
+            ss << "p" << param_counter << "_" << name;
+            var->set_unique_id(ss.str());
+            ++param_counter;
         } else {
             if (symbol->get_kind() == SYM_PARAM) {
                 std::cout << "Error: parameter '" << name << "' already defined\n";
@@ -225,11 +238,15 @@ void ScopeBuilder::add_classes(ast::SourceFile* source_file) {
 void ScopeBuilder::add_class(ast::Class* klass) {
     Symbol* symbol = nullptr;
     std::string name(klass->get_name().get_value());
+    std::stringstream ss;
 
     symbol = current_scope->resolve(name);
 
     if (symbol == nullptr) {
         define_symbol(SYM_CLASS, name, klass);
+        ss << "c" << class_id_counter << "_" << name;
+        klass->set_unique_id(ss.str());
+        ++class_id_counter;
     } else {
         std::string path = klass->get_source_file()->get_path();
         Class* k = (Class*) symbol->get_descriptor();
@@ -251,11 +268,15 @@ void ScopeBuilder::add_functions(ast::SourceFile* source_file) {
 void ScopeBuilder::add_function(ast::Function* function) {
     Symbol* symbol = nullptr;
     std::string name(function->get_name().get_value());
+    std::stringstream ss;
 
     symbol = current_scope->resolve(name);
 
     if (symbol == nullptr) {
         define_symbol(SYM_FUNCTION, name, function);
+        ss << "f" << function_id_counter << "_" << name;
+        function->set_unique_id(ss.str());
+        ++function_id_counter;
     } else {
         std::string path = function->get_source_file()->get_path();
         Function* k = (Function*) symbol->get_descriptor();
