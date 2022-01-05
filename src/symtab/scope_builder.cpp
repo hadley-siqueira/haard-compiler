@@ -46,8 +46,8 @@ void ScopeBuilder::visit(ast::AstNode* node) {
         visit_identifier((ast::Identifier*) node);
         break;
 
-    case AST_ASSIGNMENT:
-        visit_assignment((BinaryExpression*) node);
+    case AST_LITERAL_INTEGER:
+        visit_literal_integer((ast::LiteralExpression*) node);
         break;
 
     // binary operators
@@ -77,6 +77,10 @@ void ScopeBuilder::visit(ast::AstNode* node) {
 
     case AST_MINUS:
         visit_minus((ast::BinaryExpression*) node);
+        break;
+
+    case AST_ASSIGNMENT:
+        visit_assignment((BinaryExpression*) node);
         break;
 
     default:
@@ -197,6 +201,10 @@ void ScopeBuilder::visit_identifier(ast::Identifier* id) {
         id->set_symbol(symbol);
         id->set_scope(current_scope);
     }
+}
+
+void ScopeBuilder::visit_literal_integer(ast::LiteralExpression* literal) {
+    // nothing to yet
 }
 
 void ScopeBuilder::visit_times(ast::BinaryExpression* bin) {

@@ -2,18 +2,23 @@
 #define HDC_SCOPE_BUILDER_H
 
 #include "scope.h"
+
 #include "ast/ast_node.h"
 #include "ast/program.h"
 #include "ast/source_file.h"
 #include "ast/class.h"
 #include "ast/function.h"
-#include "ast/expression.h"
-#include "ast/binary_expression.h"
-#include "ast/identifier.h"
+
 #include "ast/if_statement.h"
 #include "ast/elif_statement.h"
 #include "ast/else_statement.h"
 #include "ast/expression_statement.h"
+
+#include "ast/expression.h"
+#include "ast/identifier.h"
+#include "ast/literal_expression.h"
+#include "ast/unary_expression.h"
+#include "ast/binary_expression.h"
 
 namespace hdc {
     class ScopeBuilder {
@@ -21,8 +26,6 @@ namespace hdc {
             void visit(ast::AstNode* node);
 
         private:
-            void visit(ast::BinaryExpression* bin);
-
             void visit_program(ast::Program* program);
             void visit_source_file(ast::SourceFile* source_file);
 
@@ -37,6 +40,7 @@ namespace hdc {
 
             // expressions
             void visit_identifier(ast::Identifier* id);
+            void visit_literal_integer(ast::LiteralExpression* literal);
 
             void visit_times(ast::BinaryExpression* bin);
             void visit_division(ast::BinaryExpression* bin);
