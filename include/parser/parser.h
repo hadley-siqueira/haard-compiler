@@ -19,6 +19,7 @@
 #include "ast/if_statement.h"
 #include "ast/elif_statement.h"
 #include "ast/else_statement.h"
+#include "ast/expression_statement.h"
 
 #include "ast/identifier.h"
 #include "ast/literal_expression.h"

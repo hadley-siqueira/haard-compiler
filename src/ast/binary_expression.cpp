@@ -18,7 +18,6 @@ BinaryExpression::~BinaryExpression() {
     delete right;
 }
 
-
 Expression* BinaryExpression::get_left() {
     return left;
 }

@@ -489,7 +489,7 @@ Statement* Parser::parse_statement() {
     } else if (lookahead(TK_VAR)) {
         stmt = parse_variable_statement();
     } else {
-        stmt = parse_assignment_expression();
+        stmt = new ExpressionStatement(parse_expression());
         expect(TK_NEWLINE);
     }
 

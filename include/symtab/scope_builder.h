@@ -2,6 +2,7 @@
 #define HDC_SCOPE_BUILDER_H
 
 #include "scope.h"
+#include "ast/ast_node.h"
 #include "ast/program.h"
 #include "ast/source_file.h"
 #include "ast/class.h"
@@ -12,26 +13,44 @@
 #include "ast/if_statement.h"
 #include "ast/elif_statement.h"
 #include "ast/else_statement.h"
+#include "ast/expression_statement.h"
 
 namespace hdc {
     class ScopeBuilder {
         public:
-            void visit(ast::Program* program);
+            void visit(ast::AstNode* node);
 
         private:
-            void visit(ast::SourceFile* source_file);
-            void visit(ast::Function* function);
-            void visit(ast::CompoundStatement* statements);
-            void visit(ast::Statement* statement);
-            void visit(ast::Expression* expr);
             void visit(ast::BinaryExpression* bin);
-            void visit(ast::Identifier* id);
-            void visit(ast::IfStatement* stmt);
-            void visit(ast::ElifStatement* stmt);
-            void visit(ast::ElseStatement* stmt);
+
+            void visit_program(ast::Program* program);
+            void visit_source_file(ast::SourceFile* source_file);
+
+            void visit_function(ast::Function* function);
+
+            // statements
+            void visit_compound_statement(ast::CompoundStatement* statements);
+            void visit_if_statement(ast::IfStatement* stmt);
+            void visit_elif_statement(ast::ElifStatement* stmt);
+            void visit_else_statement(ast::ElseStatement* stmt);
+            void visit_expression_statement(ast::ExpressionStatement* stmt);
+
+            // expressions
+            void visit_identifier(ast::Identifier* id);
+
+            void visit_times(ast::BinaryExpression* bin);
+            void visit_division(ast::BinaryExpression* bin);
+            void visit_integer_division(ast::BinaryExpression* bin);
+            void visit_modulo(ast::BinaryExpression* bin);
+            void visit_power(ast::BinaryExpression* bin);
+
+            void visit_plus(ast::BinaryExpression* bin);
+            void visit_minus(ast::BinaryExpression* bin);
+
+            void visit_assignment(ast::BinaryExpression* bin);
 
         private:
-            void handle_assignment(ast::BinaryExpression* bin);
+            void visit_binop(ast::BinaryExpression* bin);
             void create_new_variable(ast::Identifier* id);
 
         private:

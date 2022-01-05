@@ -254,11 +254,10 @@ void CppBuilder::build_statement(ast::Statement* stmt) {
         build_else((ast::ElseStatement*) stmt);
         break;
 
-    default:
-        indent();
-        build_expression((Expression*) stmt);
-        *output << ";\n";
+    case AST_EXPRESSION_STATEMENT:
+        build_expression_statement((ast::ExpressionStatement*) stmt);
         break;
+
     }
 }
 
@@ -525,6 +524,12 @@ void CppBuilder::build_else(ast::ElseStatement* stmt) {
     --indent_count;
     indent();
     *output << "}\n";
+}
+
+void CppBuilder::build_expression_statement(ast::ExpressionStatement* stmt) {
+    indent();
+    build_expression(stmt->get_expression());
+    *output << ";\n";
 }
 
 void CppBuilder::set_output(std::stringstream& stream) {

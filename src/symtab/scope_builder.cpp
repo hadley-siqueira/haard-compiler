@@ -6,7 +6,87 @@
 using namespace hdc;
 using namespace hdc::ast;
 
-void ScopeBuilder::visit(ast::Program* program) {
+void ScopeBuilder::visit(ast::AstNode* node) {
+    switch (node->get_kind()) {
+    case AST_PROGRAM:
+        visit_program((ast::Program*) node);
+        break;
+
+    case AST_SOURCEFILE:
+        visit_source_file((ast::SourceFile*) node);
+        break;
+
+    case AST_FUNCTION:
+        visit_function((ast::Function*) node);
+        break;
+
+    // statements
+    case AST_COMPOUND_STATEMENT:
+        visit_compound_statement((ast::CompoundStatement*) node);
+        break;
+
+    case AST_IF:
+        visit_if_statement((ast::IfStatement*) node);
+        break;
+
+    case AST_ELIF:
+        visit_elif_statement((ast::ElifStatement*) node);
+        break;
+
+    case AST_ELSE:
+        visit_else_statement((ast::ElseStatement*) node);
+        break;
+
+    case AST_EXPRESSION_STATEMENT:
+        visit_expression_statement((ast::ExpressionStatement*) node);
+        break;
+
+    // expressions
+    case AST_IDENTIFIER:
+        visit_identifier((ast::Identifier*) node);
+        break;
+
+    case AST_ASSIGNMENT:
+        visit_assignment((BinaryExpression*) node);
+        break;
+
+    // binary operators
+    case AST_TIMES:
+        visit_times((ast::BinaryExpression*) node);
+        break;
+
+    case AST_DIVISION:
+        visit_division((ast::BinaryExpression*) node);
+        break;
+
+    case AST_INTEGER_DIVISION:
+        visit_integer_division((ast::BinaryExpression*) node);
+        break;
+
+    case AST_MODULO:
+        visit_modulo((ast::BinaryExpression*) node);
+        break;
+
+    case AST_POWER:
+        visit_power((ast::BinaryExpression*) node);
+        break;
+
+    case AST_PLUS:
+        visit_plus((ast::BinaryExpression*) node);
+        break;
+
+    case AST_MINUS:
+        visit_minus((ast::BinaryExpression*) node);
+        break;
+
+    default:
+        std::cout << "ERROR: invalid node\n";
+        std::cout << hdc_astkind_map.at(node->get_kind()) << std::endl;
+        // exit(0);
+    }
+}
+
+void ScopeBuilder::visit_program(ast::Program* program) {
     function_id_counter = 0;
     class_id_counter = 0;
 
@@ -30,13 +110,13 @@ void ScopeBuilder::second_pass(ast::Program* program) {
     }
 }
 
-void ScopeBuilder::visit(ast::SourceFile* source_file) {
+void ScopeBuilder::visit_source_file(ast::SourceFile* source_file) {
     for (int i = 0; i < source_file->functions_count(); ++i) {
         visit(source_file->get_function(i));
     }
 }
 
-void ScopeBuilder::visit(ast::Function* function) {
+void ScopeBuilder::visit_function(ast::Function* function) {
     function->get_scope()->set_enclosing_scope(current_scope);
     current_scope = function->get_scope();
     current_function = function;
@@ -57,35 +137,13 @@ void ScopeBuilder::visit(ast::Function* function) {
     current_scope = current_scope->get_enclosing_scope();
 }
 
-void ScopeBuilder::visit(ast::CompoundStatement* statements) {
+void ScopeBuilder::visit_compound_statement(ast::CompoundStatement* statements) {
     for (int i = 0; i < statements->statements_count(); ++i) {
         visit(statements->get_statement(i));
     }
 }
 
-void ScopeBuilder::visit(ast::Statement* statement) {
-    std::cout << hdc_astkind_map.at(statement->get_kind()) << std::endl;
-
-    switch (statement->get_kind()) {
-    case AST_IF: 
-        visit((IfStatement*) statement);
-        break;
-
-    case AST_ELIF: 
-        visit((ElifStatement*) statement);
-        break;
-
-    case AST_ELSE:
-        visit((ElseStatement*) statement);
-        break;
-
-    default:
-        visit((Expression*) statement);
-        break;
-    }
-}
-
-void ScopeBuilder::visit(ast::IfStatement* stmt) {
+void ScopeBuilder::visit_if_statement(ast::IfStatement* stmt) {
     stmt->get_scope()->set_enclosing_scope(current_scope);
     current_scope = stmt->get_scope();
 
@@ -99,7 +157,7 @@ void ScopeBuilder::visit(ast::IfStatement* stmt) {
     }
 }
 
-void ScopeBuilder::visit(ast::ElifStatement* stmt) {
+void ScopeBuilder::visit_elif_statement(ast::ElifStatement* stmt) {
     stmt->get_scope()->set_enclosing_scope(current_scope);
     current_scope = stmt->get_scope();
 
@@ -113,7 +171,7 @@ void ScopeBuilder::visit(ast::ElifStatement* stmt) {
     }
 }
 
-void ScopeBuilder::visit(ast::ElseStatement* stmt) {
+void ScopeBuilder::visit_else_statement(ast::ElseStatement* stmt) {
     stmt->get_scope()->set_enclosing_scope(current_scope);
     current_scope = stmt->get_scope();
 
@@ -121,26 +179,11 @@ void ScopeBuilder::visit(ast::ElseStatement* stmt) {
     current_scope = current_scope->get_enclosing_scope();
 }
 
-void ScopeBuilder::visit(ast::Expression* expr) {
-    std::cout << hdc_astkind_map.at(expr->get_kind()) << std::endl;
-
-    switch (expr->get_kind()) {
-    case AST_IDENTIFIER:
-        visit((Identifier*) expr);
-        break;
-
-    case AST_ASSIGNMENT:
-        handle_assignment((BinaryExpression*) expr);
-        break;
-
-    case AST_PLUS:
-    case AST_MINUS:
-        visit((BinaryExpression*) expr);
-        break;
-    }
+void ScopeBuilder::visit_expression_statement(ast::ExpressionStatement* stmt) {
+    visit(stmt->get_expression());
 }
 
-void ScopeBuilder::visit(ast::Identifier* id) {
+void ScopeBuilder::visit_identifier(ast::Identifier* id) {
     Symbol* symbol = nullptr;
     std::string name = id->get_name().get_value();
     std::string alias = id->get_alias().get_value();
@@ -156,7 +199,35 @@ void ScopeBuilder::visit(ast::Identifier* id) {
     }
 }
 
-void ScopeBuilder::handle_assignment(ast::BinaryExpression* bin) {
+void ScopeBuilder::visit_times(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_division(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_integer_division(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_modulo(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_power(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_plus(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_minus(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_assignment(ast::BinaryExpression* bin) {
     Expression* left = bin->get_left();
     Expression* right = bin->get_right();
 
@@ -186,18 +257,9 @@ void ScopeBuilder::create_new_variable(ast::Identifier* id) {
     id->set_scope(current_scope);
 }
 
-void ScopeBuilder::visit(ast::BinaryExpression* bin) {
-    Expression* left = bin->get_left();
-    Expression* right = bin->get_right();
-
-    switch (bin->get_kind()) {
-    case AST_ASSIGNMENT:
-    case AST_PLUS:
-    case AST_MINUS:
-        visit(left);
-        visit(right);
-        break;
-    }
+void ScopeBuilder::visit_binop(ast::BinaryExpression* bin) {
+    visit(bin->get_left());
+    visit(bin->get_right());
 }
 
 void ScopeBuilder::add_parameters(ast::Function* function) {
