@@ -16,6 +16,7 @@
 #include "ast/expression_list.h"
 #include "ast/identifier.h"
 #include "ast/type.h"
+#include "ast/indirection_type.h"
 #include "ast/named_type.h"
 
 #include "ast/if_statement.h"
@@ -70,6 +71,7 @@ namespace hdc {
             void build_symbol(ast::LiteralExpression* expr);
             void build_string(ast::LiteralExpression* expr);
             void build_identifier(ast::Identifier* expr);
+            void build_dolar(ast::UnaryExpression* expr);
 
             void indent();
 

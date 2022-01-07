@@ -10,6 +10,8 @@ namespace hdc {
                 IndirectionType(AstKind kind, Token token, Type* subtype);
                 ~IndirectionType();
 
+                Type* get_subtype();
+
             private:
                 Type* subtype;
                 Token token;

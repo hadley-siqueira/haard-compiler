@@ -285,6 +285,11 @@ void CppBuilder::build_type(ast::Type* type) {
         *output << "char";
         break;
 
+    case AST_POINTER_TYPE:
+        build_type(((ast::IndirectionType*) type)->get_subtype());
+        *output << '*';
+        break;
+
     case AST_NAMED_TYPE:
         nm = (NamedType*) type;
         *output << nm->get_id()->get_name().get_value();
@@ -391,7 +396,19 @@ void CppBuilder::build_expression(ast::Expression* expr) {
     case AST_LITERAL_SYMBOL:
         build_symbol((ast::LiteralExpression*) expr);
         break;
+
+    case AST_DOLAR:
+        build_dolar((ast::UnaryExpression*) expr);
+        break;
     }
+}
+
+void CppBuilder::build_dolar(ast::UnaryExpression* dolar) {
+    ast::LiteralExpression* l = (ast::LiteralExpression*) dolar->get_expression();
+    std::string s = l->get_token().get_value();
+    s[0] = ' ';
+    s[s.size() - 1] = ' ';
+    *output << s;
 }
 
 void CppBuilder::build_binop(const char* op, ast::BinaryExpression* expr) {
@@ -435,9 +452,7 @@ void CppBuilder::build_call(ast::BinaryExpression* expr) {
             *output << ", ";
         }
 
-        if (i > 0) {
-            build_expression(list->get_expression(i));
-        }
+        build_expression(list->get_expression(i));
     }
 
     *output << ")";
@@ -448,7 +463,7 @@ void CppBuilder::build_literal(ast::LiteralExpression* expr) {
 }
 
 void CppBuilder::build_string(ast::LiteralExpression* expr) {
-    std::string tmp = expr->get_token().get_value();
+    std::string tmp = expr->get_token().get_value(); 
 
     tmp[0] = '"';
     tmp[tmp.size() - 1] = '"';

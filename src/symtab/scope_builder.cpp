@@ -50,6 +50,15 @@ void ScopeBuilder::visit(ast::AstNode* node) {
         visit_literal_integer((ast::LiteralExpression*) node);
         break;
 
+    case AST_EXPRESSION_LIST:
+        visit_expression_list((ast::ExpressionList*) node);
+        break;
+
+    // special operations
+    case AST_CALL:
+        visit_call((ast::BinaryExpression*) node);
+        break;
+
     // binary operators
     case AST_TIMES:
         visit_times((ast::BinaryExpression*) node);
@@ -207,6 +216,23 @@ void ScopeBuilder::visit_literal_integer(ast::LiteralExpression* literal) {
     // nothing to yet
 }
 
+void ScopeBuilder::visit_expression_list(ast::ExpressionList* list) {
+    for (int i = 0; i < list->expression_count(); ++i) {
+        visit(list->get_expression(i));
+    }
+}
+
+void ScopeBuilder::visit_call(ast::BinaryExpression* call) {
+    ast::Expression* left = call->get_left();
+    ast::Expression* right = call->get_right();
+
+    if (left->get_kind() == AST_IDENTIFIER) {
+        visit(left);
+    }
+
+    visit(right);
+}
+
 void ScopeBuilder::visit_times(ast::BinaryExpression* bin) {
     visit_binop(bin);
 }
@@ -274,12 +300,12 @@ void ScopeBuilder::add_parameters(ast::Function* function) {
     Symbol* symbol = nullptr;
     Variable* var = nullptr;
     int param_counter = 0;
-    std::stringstream ss;
 
     for (int i = 0; i < function->parameters_count(); ++i) {
         var = function->get_parameter(i);
         std::string name = var->get_name().get_value();
         symbol = current_scope->resolve(name);
+        std::stringstream ss;
 
         if (symbol == nullptr) {
             define_symbol(SYM_PARAM, name, var);

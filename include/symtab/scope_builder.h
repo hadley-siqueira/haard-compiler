@@ -17,6 +17,7 @@
 #include "ast/expression.h"
 #include "ast/identifier.h"
 #include "ast/literal_expression.h"
+#include "ast/expression_list.h"
 #include "ast/unary_expression.h"
 #include "ast/binary_expression.h"
 
@@ -41,6 +42,9 @@ namespace hdc {
             // expressions
             void visit_identifier(ast::Identifier* id);
             void visit_literal_integer(ast::LiteralExpression* literal);
+            void visit_expression_list(ast::ExpressionList* list);
+
+            void visit_call(ast::BinaryExpression* call);
 
             void visit_times(ast::BinaryExpression* bin);
             void visit_division(ast::BinaryExpression* bin);

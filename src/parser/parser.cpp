@@ -335,6 +335,8 @@ Expression* Parser::parse_primary_expression() {
         expr = new LiteralExpression(AST_LITERAL_BOOL, matched_token);
     } else if (match(TK_FALSE)) {
         expr = new LiteralExpression(AST_LITERAL_BOOL, matched_token);
+    } else if (match(TK_DOLAR)) {
+        expr = new UnaryExpression(AST_DOLAR, matched_token, parse_primary_expression());
     } else {
         expr = parse_identifier();
     }
