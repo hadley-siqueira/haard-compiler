@@ -95,6 +95,7 @@ namespace hdc {
             std::stringstream symbols_stream;
             std::stringstream headers_stream;
             std::stringstream function_proto_stream;
+            std::stringstream classes_proto_stream;
             std::stringstream functions_stream;
             std::stringstream classes_stream;
             std::stringstream main_function_stream;

@@ -8,7 +8,8 @@ namespace hdc {
         SYM_VAR,
         SYM_PARAM,
         SYM_CLASS,
-        SYM_FUNCTION
+        SYM_FUNCTION,
+        SYM_METHOD,
     } SymbolKind;
 
     typedef enum IRKind {

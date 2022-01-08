@@ -1,0 +1,14 @@
+class Rect:
+    x : int
+    y : int
+
+    def set_x : void
+        @x0 : int
+
+        x = x0
+
+def foo : Rect
+    pass
+
+def main : void
+    pass

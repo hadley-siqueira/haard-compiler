@@ -16,8 +16,16 @@ void ScopeBuilder::visit(ast::AstNode* node) {
         visit_source_file((ast::SourceFile*) node);
         break;
 
+    case AST_CLASS:
+        visit_class((ast::Class*) node);
+        break;
+
     case AST_FUNCTION:
         visit_function((ast::Function*) node);
+        break;
+
+    case AST_METHOD:
+        visit_method((ast::Method*) node);
         break;
 
     // statements
@@ -100,6 +108,11 @@ void ScopeBuilder::visit(ast::AstNode* node) {
         visit_assignment((BinaryExpression*) node);
         break;
 
+    // types
+    case AST_NAMED_TYPE:
+        visit_named_type((ast::NamedType*) node);
+        break;
+
     default:
         std::cout << "ERROR: invalid node\n";
         std::cout << hdc_astkind_map.at(node->get_kind()) << std::endl;
@@ -132,9 +145,36 @@ void ScopeBuilder::second_pass(ast::Program* program) {
 }
 
 void ScopeBuilder::visit_source_file(ast::SourceFile* source_file) {
+    current_scope = source_file->get_scope();
+
+    for (int i = 0; i < source_file->classes_count(); ++i) {
+        visit(source_file->get_class(i));
+    }
+
     for (int i = 0; i < source_file->functions_count(); ++i) {
         visit(source_file->get_function(i));
     }
+}
+
+void ScopeBuilder::visit_class(ast::Class* klass) {
+    int var_counter = 0;
+
+    klass->get_scope()->set_enclosing_scope(current_scope);
+    current_scope = klass->get_scope();
+
+    for (int i = 0; i < klass->variables_count(); ++i) {
+        std::stringstream ss;
+        Variable* var = klass->get_variable(i);
+        ss << "cv" << var_counter << "_" << var->get_name().get_value();
+        var->set_unique_id(ss.str());
+        ++var_counter;
+    }
+
+    for (int i = 0; i < klass->methods_count(); ++i) {
+        visit(klass->get_method(i));
+    }
+    
+    current_scope = current_scope->get_enclosing_scope();
 }
 
 void ScopeBuilder::visit_function(ast::Function* function) {
@@ -144,6 +184,7 @@ void ScopeBuilder::visit_function(ast::Function* function) {
     int lvar_counter = 0;
 
     add_parameters(function);
+    visit(function->get_return_type());
     visit(function->get_statements());
    
     for (int i = 0; i < function->local_variables_count(); ++i) {
@@ -156,6 +197,10 @@ void ScopeBuilder::visit_function(ast::Function* function) {
     }
 
     current_scope = current_scope->get_enclosing_scope();
+}
+
+void ScopeBuilder::visit_method(ast::Method* method) {
+    visit_function(method);
 }
 
 void ScopeBuilder::visit_compound_statement(ast::CompoundStatement* statements) {
@@ -222,11 +267,13 @@ void ScopeBuilder::visit_identifier(ast::Identifier* id) {
     symbol = current_scope->resolve(name);
 
     if (symbol == nullptr) {
-        std::cout << "Error: symbol not defined\n"; 
+        std::cout << "Error: symbol '" << name << "' not defined\n";
+        current_scope->debug();
         exit(0);
     } else {
         id->set_symbol(symbol);
         id->set_scope(current_scope);
+        symbol->set_scope(current_scope);
     }
 }
 
@@ -294,6 +341,10 @@ void ScopeBuilder::visit_assignment(ast::BinaryExpression* bin) {
     }
 }
 
+void ScopeBuilder::visit_named_type(ast::NamedType* type) {
+    visit(type->get_id());
+}
+
 void ScopeBuilder::create_new_variable(ast::Identifier* id) {
     Symbol* symbol = nullptr;
     std::string name = id->get_name().get_value();
@@ -328,6 +379,8 @@ void ScopeBuilder::add_parameters(ast::Function* function) {
         std::string name = var->get_name().get_value();
         symbol = current_scope->resolve(name);
         std::stringstream ss;
+
+        visit(var->get_type());
 
         if (symbol == nullptr) {
             define_symbol(SYM_PARAM, name, var);
@@ -365,6 +418,8 @@ void ScopeBuilder::add_class(ast::Class* klass) {
         ss << "c" << class_id_counter << "_" << name;
         klass->set_unique_id(ss.str());
         ++class_id_counter;
+
+        add_methods(klass);
     } else {
         std::string path = klass->get_source_file()->get_path();
         Class* k = (Class*) symbol->get_descriptor();
@@ -380,6 +435,14 @@ void ScopeBuilder::add_functions(ast::SourceFile* source_file) {
 
     for (int i = 0; i < source_file->functions_count(); ++i) {
         add_function(source_file->get_function(i));
+    }
+}
+
+void ScopeBuilder::add_methods(ast::Class* klass) {
+    current_scope = klass->get_scope();
+
+    for (int i = 0; i < klass->methods_count(); ++i) {
+        add_method(klass->get_method(i), i);
     }
 }
 
@@ -409,7 +472,33 @@ void ScopeBuilder::add_function(ast::Function* function) {
     }
 }
 
+void ScopeBuilder::add_method(ast::Method* method, int idx) {
+    Symbol* symbol = nullptr;
+    std::string name(method->get_name().get_value());
+    std::stringstream ss;
+
+    symbol = current_scope->resolve(name);
+
+    if (symbol == nullptr) {
+        define_symbol(SYM_METHOD, name, method);
+        ss << "m" << idx << "_" << name;
+        method->set_unique_id(ss.str());
+    } else {
+        if (false) { // check for overload
+
+        } else {
+            std::string path = method->get_source_file()->get_path();
+            Function* k = (Function*) symbol->get_descriptor();
+            int line = k->get_name().get_line();
+            std::cout << "\033[1;31mError\033[0m";
+            std::cout << ": method '" << name << "' already defined\n";
+            std::cout << "    First occurence on line " << line << " of file '" << path << "'\n";
+        }
+    }
+}
+
 void ScopeBuilder::define_symbol(SymbolKind kind, std::string name, void* descriptor) {
     Symbol* symbol = new Symbol(kind, name, descriptor);
     current_scope->define(symbol);
+    symbol->set_scope(current_scope);
 }

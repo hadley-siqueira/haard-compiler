@@ -2,6 +2,7 @@
 #include "ast/variable.h"
 #include "ast/class.h"
 #include "ast/function.h"
+#include "symtab/scope.h"
 
 using namespace hdc;
 
@@ -39,6 +40,14 @@ SymbolKind Symbol::get_kind() {
     return kind;
 }
 
+Scope* Symbol::get_scope() {
+    return scope;
+}
+
+void Symbol::set_scope(Scope* scope) {
+    this->scope = scope;
+}
+
 std::string Symbol::get_unique_id() {
     ast::Variable* var;
     ast::Class* klass;
@@ -55,6 +64,7 @@ std::string Symbol::get_unique_id() {
         return klass->get_unique_id();
 
     case SYM_FUNCTION:
+    case SYM_METHOD:
         func = (ast::Function*) descriptor;
         return func->get_unique_id();
     }

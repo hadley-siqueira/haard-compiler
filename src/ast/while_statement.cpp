@@ -16,6 +16,7 @@ WhileStatement::WhileStatement(Token token, Expression* expr, CompoundStatement*
 WhileStatement::~WhileStatement() {
     delete expression;
     delete statements;
+    delete scope;
 }
 
 Expression* WhileStatement::get_expression() {

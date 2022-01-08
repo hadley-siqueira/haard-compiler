@@ -9,6 +9,7 @@ Class::Class() {
     parent = nullptr;
     source_file = nullptr;
     template_list = nullptr;
+    scope = new Scope();
 }
 
 Class::~Class() {
@@ -22,6 +23,7 @@ Class::~Class() {
 
     delete template_list;
     delete parent;
+    delete scope;
 }
 
 void Class::set_name(Token token) {
@@ -65,6 +67,10 @@ Method* Class::get_method(int i) {
 
 Variable* Class::get_variable(int i) {
     return variables[i];
+}
+
+Scope* Class::get_scope() {
+    return scope;
 }
 
 void Class::add_method(Method* method) {

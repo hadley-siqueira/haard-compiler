@@ -15,7 +15,10 @@ std::string CppBuilder::get_output() {
 
     r << headers_stream.str();
     r << symbols_stream.str();
+    r << classes_proto_stream.str();
+    r << '\n';
     r << function_proto_stream.str();
+    r << '\n';
     r << classes_stream.str();
     r << '\n';
     r << functions_stream.str();
@@ -168,6 +171,7 @@ void CppBuilder::build_class(ast::Class* klass) {
 void CppBuilder::build_class_signature(ast::Class* klass) {
     *output << "class ";
     *output << klass->get_unique_id();
+    classes_proto_stream << "class " << klass->get_unique_id() << ";\n";
 
     if (klass->get_parent() != nullptr) {
         *output << " : public ";
@@ -296,7 +300,7 @@ void CppBuilder::build_type(ast::Type* type) {
 
     case AST_NAMED_TYPE:
         nm = (NamedType*) type;
-        *output << nm->get_id()->get_name().get_value();
+        *output << nm->get_id()->get_symbol()->get_unique_id();
         break;
     }
 }

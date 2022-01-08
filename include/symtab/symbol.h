@@ -18,11 +18,14 @@ namespace hdc {
             void* get_descriptor();
             SymbolKind get_kind();
             std::string get_unique_id();
+            class Scope* get_scope();
+            void set_scope(class Scope* scope);
 
         private:
             std::string name;
             SymbolKind kind;
             void* descriptor;
+            class Scope* scope;
     };
 }
 

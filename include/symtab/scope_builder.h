@@ -22,6 +22,9 @@
 #include "ast/unary_expression.h"
 #include "ast/binary_expression.h"
 
+#include "ast/type.h"
+#include "ast/named_type.h"
+
 namespace hdc {
     class ScopeBuilder {
         public:
@@ -31,7 +34,9 @@ namespace hdc {
             void visit_program(ast::Program* program);
             void visit_source_file(ast::SourceFile* source_file);
 
+            void visit_class(ast::Class* klass);
             void visit_function(ast::Function* function);
+            void visit_method(ast::Method* method);
 
             // statements
             void visit_compound_statement(ast::CompoundStatement* statements);
@@ -61,6 +66,9 @@ namespace hdc {
 
             void visit_assignment(ast::BinaryExpression* bin);
 
+            // types
+            void visit_named_type(ast::NamedType* type);
+
         private:
             void visit_binop(ast::BinaryExpression* bin);
             void create_new_variable(ast::Identifier* id);
@@ -72,6 +80,8 @@ namespace hdc {
             void add_class(ast::Class* klass);
             void add_functions(ast::SourceFile* source_file);
             void add_function(ast::Function* function);
+            void add_methods(ast::Class* klass);
+            void add_method(ast::Method* method, int idx);
             void add_parameters(ast::Function* function);
 
             void define_symbol(SymbolKind kind, std::string name, void* descriptor);
