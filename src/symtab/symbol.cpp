@@ -56,6 +56,7 @@ std::string Symbol::get_unique_id() {
     switch (kind) {
     case SYM_VAR:
     case SYM_PARAM:
+    case SYM_CLASS_VAR:
         var = (ast::Variable*) descriptor;
         return var->get_unique_id();
 

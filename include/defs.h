@@ -7,6 +7,7 @@ namespace hdc {
     typedef enum SymbolKind {
         SYM_VAR,
         SYM_PARAM,
+        SYM_CLASS_VAR,
         SYM_CLASS,
         SYM_FUNCTION,
         SYM_METHOD,

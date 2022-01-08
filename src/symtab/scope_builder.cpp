@@ -168,6 +168,8 @@ void ScopeBuilder::visit_class(ast::Class* klass) {
         ss << "cv" << var_counter << "_" << var->get_name().get_value();
         var->set_unique_id(ss.str());
         ++var_counter;
+        std::string name = var->get_name().get_value();
+        current_scope->define(new Symbol(SYM_CLASS_VAR, name, var));
     }
 
     for (int i = 0; i < klass->methods_count(); ++i) {
@@ -393,6 +395,9 @@ void ScopeBuilder::add_parameters(ast::Function* function) {
                 exit(0);
             } else {
                 define_symbol(SYM_PARAM, name, var);
+                ss << "p" << param_counter << "_" << name;
+                var->set_unique_id(ss.str());
+                ++param_counter;
             }
         }
     }
@@ -500,5 +505,4 @@ void ScopeBuilder::add_method(ast::Method* method, int idx) {
 void ScopeBuilder::define_symbol(SymbolKind kind, std::string name, void* descriptor) {
     Symbol* symbol = new Symbol(kind, name, descriptor);
     current_scope->define(symbol);
-    symbol->set_scope(current_scope);
 }

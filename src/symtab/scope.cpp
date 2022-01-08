@@ -33,6 +33,7 @@ Symbol* Scope::resolve(std::string& name) {
 
 void Scope::define(Symbol* symbol) {
     symbols.emplace(symbol->get_name(), symbol);
+    symbol->set_scope(this);
 }
 
 Scope* Scope::get_enclosing_scope() {
