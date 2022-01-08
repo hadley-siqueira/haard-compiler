@@ -1,0 +1,10 @@
+import std.io
+
+def main : void
+    print('P3\n800 600\n255')
+
+    i = 0
+
+    while i < 480000:
+        print('255 0 0\n')
+        i = i + 1
