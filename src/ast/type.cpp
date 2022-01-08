@@ -12,6 +12,10 @@ Type::Type(AstKind kind, Token token) {
     this->token = token;
 }
 
+Type::Type(AstKind kind) {
+    set_kind(kind);
+}
+
 Type::~Type() {
 
 }
@@ -22,4 +26,8 @@ void Type::set_token(Token token) {
 
 Token Type::get_token() {
     return token;
+}
+                
+Type* Type::clone() {
+    return new Type(get_kind(), token);
 }

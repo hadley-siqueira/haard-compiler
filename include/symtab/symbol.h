@@ -2,6 +2,7 @@
 #define HDC_SYMBOL_H
 
 #include "defs.h"
+#include "ast/type.h"
 
 namespace hdc {
     class Symbol {
@@ -19,6 +20,7 @@ namespace hdc {
             SymbolKind get_kind();
             std::string get_unique_id();
             class Scope* get_scope();
+            ast::Type* get_type();
             void set_scope(class Scope* scope);
 
         private:

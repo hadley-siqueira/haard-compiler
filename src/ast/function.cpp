@@ -59,7 +59,7 @@ SourceFile* Function::get_source_file() {
     return source_file;
 }
 
-Type* Function::get_return_type() {
+ast::Type* Function::get_return_type() {
     return return_type;
 }
 

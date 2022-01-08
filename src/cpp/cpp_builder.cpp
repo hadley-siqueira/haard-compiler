@@ -220,6 +220,7 @@ void CppBuilder::build_method(ast::Method* f) {
         build_function_signature(f);
         *output << " {\n";
         ++indent_count;
+        build_function_variables(f);
         build_statements(f->get_statements());
 
         --indent_count;
@@ -291,6 +292,22 @@ void CppBuilder::build_type(ast::Type* type) {
 
     case AST_CHAR_TYPE:
         *output << "char";
+        break;
+
+    case AST_SYMBOL_TYPE:
+        *output << "char*";
+        break;
+
+    case AST_BOOL_TYPE:
+        *output << "bool";
+        break;
+
+    case AST_STRING_TYPE:
+        *output << "char*";
+        break;
+
+    case AST_NULL_TYPE:
+        *output << "void*";
         break;
 
     case AST_POINTER_TYPE:

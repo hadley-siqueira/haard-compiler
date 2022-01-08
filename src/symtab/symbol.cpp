@@ -3,6 +3,7 @@
 #include "ast/class.h"
 #include "ast/function.h"
 #include "symtab/scope.h"
+#include "ast/type.h"
 
 using namespace hdc;
 
@@ -71,4 +72,27 @@ std::string Symbol::get_unique_id() {
     }
 
     return "INVALID_UID";
+}
+
+ast::Type* Symbol::get_type() {
+    ast::Variable* var;
+    ast::Class* klass;
+    ast::Function* func;
+
+    switch (kind) {
+    case SYM_VAR:
+    case SYM_PARAM:
+    case SYM_CLASS_VAR:
+        var = (ast::Variable*) descriptor;
+        return var->get_type();
+
+    case SYM_CLASS:
+        return nullptr;
+
+    case SYM_FUNCTION:
+    case SYM_METHOD:
+        return nullptr;
+    }
+
+    return nullptr;
 }

@@ -49,7 +49,7 @@ Token Class::get_name() {
     return name;
 }
 
-Type* Class::get_parent() {
+ast::Type* Class::get_parent() {
     return parent;
 }
 

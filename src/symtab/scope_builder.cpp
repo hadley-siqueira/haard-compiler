@@ -58,8 +58,36 @@ void ScopeBuilder::visit(ast::AstNode* node) {
         visit_identifier((ast::Identifier*) node);
         break;
 
+    case AST_LITERAL_CHAR:
+        visit_literal_char((ast::LiteralExpression*) node);
+        break;
+
+    case AST_LITERAL_STRING:
+        visit_literal_string((ast::LiteralExpression*) node);
+        break;
+
+    case AST_LITERAL_SYMBOL:
+        visit_literal_symbol((ast::LiteralExpression*) node);
+        break;
+
+    case AST_LITERAL_NULL:
+        visit_literal_null((ast::LiteralExpression*) node);
+        break;
+
+    case AST_LITERAL_BOOL:
+        visit_literal_bool((ast::LiteralExpression*) node);
+        break;
+
     case AST_LITERAL_INTEGER:
         visit_literal_integer((ast::LiteralExpression*) node);
+        break;
+
+    case AST_LITERAL_FLOAT:
+        visit_literal_float((ast::LiteralExpression*) node);
+        break;
+
+    case AST_LITERAL_DOUBLE:
+        visit_literal_double((ast::LiteralExpression*) node);
         break;
 
     case AST_EXPRESSION_LIST:
@@ -102,6 +130,18 @@ void ScopeBuilder::visit(ast::AstNode* node) {
 
     case AST_LT:
         visit_lt((ast::BinaryExpression*) node);
+        break;
+
+    case AST_GT:
+        visit_gt((ast::BinaryExpression*) node);
+        break;
+
+    case AST_LE:
+        visit_le((ast::BinaryExpression*) node);
+        break;
+
+    case AST_GE:
+        visit_ge((ast::BinaryExpression*) node);
         break;
 
     case AST_ASSIGNMENT:
@@ -275,12 +315,40 @@ void ScopeBuilder::visit_identifier(ast::Identifier* id) {
     } else {
         id->set_symbol(symbol);
         id->set_scope(current_scope);
-        symbol->set_scope(current_scope);
+        //id->set_type(symbol->get_type()->clone());
     }
 }
 
+void ScopeBuilder::visit_literal_char(ast::LiteralExpression* literal) {
+    literal->set_type(new Type(AST_CHAR_TYPE));
+}
+
+void ScopeBuilder::visit_literal_string(ast::LiteralExpression* literal) {
+    literal->set_type(new Type(AST_STRING_TYPE));
+}
+
+void ScopeBuilder::visit_literal_symbol(ast::LiteralExpression* literal) {
+    literal->set_type(new Type(AST_SYMBOL_TYPE));
+}
+
+void ScopeBuilder::visit_literal_null(ast::LiteralExpression* literal) {
+    literal->set_type(new Type(AST_NULL_TYPE));
+}
+
+void ScopeBuilder::visit_literal_bool(ast::LiteralExpression* literal) {
+    literal->set_type(new Type(AST_BOOL_TYPE));
+}
+
 void ScopeBuilder::visit_literal_integer(ast::LiteralExpression* literal) {
-    // nothing to yet
+    literal->set_type(new Type(AST_INT_TYPE));
+}
+
+void ScopeBuilder::visit_literal_float(ast::LiteralExpression* literal) {
+    literal->set_type(new Type(AST_FLOAT_TYPE));
+}
+
+void ScopeBuilder::visit_literal_double(ast::LiteralExpression* literal) {
+    literal->set_type(new Type(AST_DOUBLE_TYPE));
 }
 
 void ScopeBuilder::visit_expression_list(ast::ExpressionList* list) {
@@ -332,6 +400,18 @@ void ScopeBuilder::visit_lt(ast::BinaryExpression* bin) {
     visit_binop(bin);
 }
 
+void ScopeBuilder::visit_gt(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_le(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_ge(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
 void ScopeBuilder::visit_assignment(ast::BinaryExpression* bin) {
     Expression* left = bin->get_left();
     Expression* right = bin->get_right();
@@ -339,7 +419,7 @@ void ScopeBuilder::visit_assignment(ast::BinaryExpression* bin) {
     visit(right);
 
     if (left->get_kind() == AST_IDENTIFIER) {
-        create_new_variable((Identifier*) left);
+        create_new_variable((Identifier*) left, right->get_type());
     }
 }
 
@@ -347,16 +427,23 @@ void ScopeBuilder::visit_named_type(ast::NamedType* type) {
     visit(type->get_id());
 }
 
-void ScopeBuilder::create_new_variable(ast::Identifier* id) {
+void ScopeBuilder::create_new_variable(ast::Identifier* id, ast::Type* type) {
     Symbol* symbol = nullptr;
     std::string name = id->get_name().get_value();
     std::string alias = id->get_alias().get_value();
+    bool flag = false;
 
     symbol = current_scope->resolve(name);
+
+    if (type == nullptr) {
+        type = new Type(AST_INT_TYPE);
+        flag = true;
+    }
 
     if (symbol == nullptr) {
         Variable* var = new Variable(AST_LOCAL_VARIABLE);
         var->set_name(id->get_name());
+        var->set_type(type->clone());
         symbol = new Symbol(SYM_VAR, name, var);
         current_scope->define(symbol);
         current_function->add_variable(var);
@@ -364,11 +451,17 @@ void ScopeBuilder::create_new_variable(ast::Identifier* id) {
 
     id->set_symbol(symbol);
     id->set_scope(current_scope);
+    id->set_type(type->clone());
+
+    if (flag) {
+        delete type;
+    }
 }
 
 void ScopeBuilder::visit_binop(ast::BinaryExpression* bin) {
     visit(bin->get_left());
     visit(bin->get_right());
+    bin->set_type(bin->get_left()->get_type()->clone());
 }
 
 void ScopeBuilder::add_parameters(ast::Function* function) {

@@ -3,6 +3,7 @@
 
 #include "ast_node.h"
 #include "statement.h"
+#include "type.h"
 
 namespace hdc {
     namespace ast {
@@ -11,8 +12,11 @@ namespace hdc {
                 Expression();
                 virtual ~Expression();
 
+                void set_type(Type* type);
+                Type* get_type();
+
             private:
-                
+                Type* type;
         };
     }
 }

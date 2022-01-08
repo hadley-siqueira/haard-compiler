@@ -48,7 +48,14 @@ namespace hdc {
 
             // expressions
             void visit_identifier(ast::Identifier* id);
+            void visit_literal_char(ast::LiteralExpression* literal);
+            void visit_literal_string(ast::LiteralExpression* literal);
+            void visit_literal_symbol(ast::LiteralExpression* literal);
+            void visit_literal_null(ast::LiteralExpression* literal);
+            void visit_literal_bool(ast::LiteralExpression* literal);
             void visit_literal_integer(ast::LiteralExpression* literal);
+            void visit_literal_float(ast::LiteralExpression* literal);
+            void visit_literal_double(ast::LiteralExpression* literal);
             void visit_expression_list(ast::ExpressionList* list);
 
             void visit_call(ast::BinaryExpression* call);
@@ -63,6 +70,9 @@ namespace hdc {
             void visit_minus(ast::BinaryExpression* bin);
 
             void visit_lt(ast::BinaryExpression* bin);
+            void visit_gt(ast::BinaryExpression* bin);
+            void visit_le(ast::BinaryExpression* bin);
+            void visit_ge(ast::BinaryExpression* bin);
 
             void visit_assignment(ast::BinaryExpression* bin);
 
@@ -71,7 +81,7 @@ namespace hdc {
 
         private:
             void visit_binop(ast::BinaryExpression* bin);
-            void create_new_variable(ast::Identifier* id);
+            void create_new_variable(ast::Identifier* id, ast::Type* type);
 
         private:
             void first_pass(ast::Program* program);

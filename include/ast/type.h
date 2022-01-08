@@ -12,7 +12,9 @@ namespace hdc {
             public:
                 Type();
                 Type(AstKind kind, Token token);
+                Type(AstKind kind);
                 virtual ~Type();
+                virtual Type* clone();
 
             public:
                 void set_token(Token token);
