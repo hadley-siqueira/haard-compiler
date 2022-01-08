@@ -37,6 +37,10 @@ void ScopeBuilder::visit(ast::AstNode* node) {
         visit_else_statement((ast::ElseStatement*) node);
         break;
 
+    case AST_WHILE:
+        visit_while_statement((ast::WhileStatement*) node);
+        break;
+
     case AST_EXPRESSION_STATEMENT:
         visit_expression_statement((ast::ExpressionStatement*) node);
         break;
@@ -86,6 +90,10 @@ void ScopeBuilder::visit(ast::AstNode* node) {
 
     case AST_MINUS:
         visit_minus((ast::BinaryExpression*) node);
+        break;
+
+    case AST_LT:
+        visit_lt((ast::BinaryExpression*) node);
         break;
 
     case AST_ASSIGNMENT:
@@ -192,6 +200,16 @@ void ScopeBuilder::visit_else_statement(ast::ElseStatement* stmt) {
     current_scope = current_scope->get_enclosing_scope();
 }
 
+void ScopeBuilder::visit_while_statement(ast::WhileStatement* stmt) {
+    stmt->get_scope()->set_enclosing_scope(current_scope);
+    current_scope = stmt->get_scope();
+
+    visit(stmt->get_expression());
+    visit(stmt->get_statements());
+
+    current_scope = current_scope->get_enclosing_scope();
+}
+
 void ScopeBuilder::visit_expression_statement(ast::ExpressionStatement* stmt) {
     visit(stmt->get_expression());
 }
@@ -258,6 +276,10 @@ void ScopeBuilder::visit_plus(ast::BinaryExpression* bin) {
 }
 
 void ScopeBuilder::visit_minus(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_lt(ast::BinaryExpression* bin) {
     visit_binop(bin);
 }
 
@@ -374,12 +396,16 @@ void ScopeBuilder::add_function(ast::Function* function) {
         function->set_unique_id(ss.str());
         ++function_id_counter;
     } else {
-        std::string path = function->get_source_file()->get_path();
-        Function* k = (Function*) symbol->get_descriptor();
-        int line = k->get_name().get_line();
-        std::cout << "\033[1;31mError\033[0m";
-        std::cout << ": function '" << name << "' already defined\n";
-        std::cout << "    First occurence on line " << line << " of file '" << path << "'\n";
+        if (false) { // check for overload
+
+        } else {
+            std::string path = function->get_source_file()->get_path();
+            Function* k = (Function*) symbol->get_descriptor();
+            int line = k->get_name().get_line();
+            std::cout << "\033[1;31mError\033[0m";
+            std::cout << ": function '" << name << "' already defined\n";
+            std::cout << "    First occurence on line " << line << " of file '" << path << "'\n";
+        }
     }
 }
 

@@ -1,0 +1,8 @@
+import std.io
+
+def main : void
+    i = 0
+
+    while i < 10:
+        print_int(i)
+        i = i + 1

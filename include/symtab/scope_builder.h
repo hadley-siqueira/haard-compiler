@@ -12,6 +12,7 @@
 #include "ast/if_statement.h"
 #include "ast/elif_statement.h"
 #include "ast/else_statement.h"
+#include "ast/while_statement.h"
 #include "ast/expression_statement.h"
 
 #include "ast/expression.h"
@@ -37,6 +38,7 @@ namespace hdc {
             void visit_if_statement(ast::IfStatement* stmt);
             void visit_elif_statement(ast::ElifStatement* stmt);
             void visit_else_statement(ast::ElseStatement* stmt);
+            void visit_while_statement(ast::WhileStatement* stmt);
             void visit_expression_statement(ast::ExpressionStatement* stmt);
 
             // expressions
@@ -54,6 +56,8 @@ namespace hdc {
 
             void visit_plus(ast::BinaryExpression* bin);
             void visit_minus(ast::BinaryExpression* bin);
+
+            void visit_lt(ast::BinaryExpression* bin);
 
             void visit_assignment(ast::BinaryExpression* bin);
 

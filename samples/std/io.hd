@@ -1,0 +1,10 @@
+def print : void
+    @s : char* 
+
+    $ "std::cout << p0_s << std::endl"
+
+
+def print_int : void
+    @i : int
+
+    $ "std::cout << p0_i << std::endl"

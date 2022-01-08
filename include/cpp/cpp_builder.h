@@ -22,6 +22,7 @@
 #include "ast/if_statement.h"
 #include "ast/elif_statement.h"
 #include "ast/else_statement.h"
+#include "ast/while_statement.h"
 #include "ast/expression_statement.h"
 
 namespace hdc {
@@ -62,6 +63,7 @@ namespace hdc {
             void build_if(ast::IfStatement* stmt);
             void build_elif(ast::ElifStatement* stmt);
             void build_else(ast::ElseStatement* stmt);
+            void build_while(ast::WhileStatement* stmt);
             void build_expression_statement(ast::ExpressionStatement* stmt);
 
             void build_dot(ast::BinaryExpression* expr);

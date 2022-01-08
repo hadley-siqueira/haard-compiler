@@ -5,6 +5,7 @@
 #include "statement.h"
 #include "expression.h"
 #include "compound_statement.h"
+#include "symtab/scope.h"
 
 namespace hdc {
     namespace ast {
@@ -13,10 +14,15 @@ namespace hdc {
                 WhileStatement(Token token, Expression* expr, CompoundStatement* stmts);
                 ~WhileStatement();
 
+                Expression* get_expression();
+                CompoundStatement* get_statements();
+                Scope* get_scope();
+
             private:
                 Expression* expression;
                 CompoundStatement* statements;
                 Token token;
+                Scope* scope;
         };
     }
 }

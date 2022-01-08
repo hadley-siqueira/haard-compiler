@@ -254,6 +254,10 @@ void CppBuilder::build_statement(ast::Statement* stmt) {
         build_else((ast::ElseStatement*) stmt);
         break;
 
+    case AST_WHILE:
+        build_while((ast::WhileStatement*) stmt);
+        break;
+
     case AST_EXPRESSION_STATEMENT:
         build_expression_statement((ast::ExpressionStatement*) stmt);
         break;
@@ -326,6 +330,10 @@ void CppBuilder::build_expression(ast::Expression* expr) {
 
     case AST_MODULO:
         build_binop("%", (ast::BinaryExpression*) expr);
+        break;
+
+    case AST_LT:
+        build_binop("<", (ast::BinaryExpression*) expr);
         break;
 
     case AST_IDENTIFIER:
@@ -537,6 +545,19 @@ void CppBuilder::build_else(ast::ElseStatement* stmt) {
     ++indent_count;
     build_statements(stmt->get_statements());
     --indent_count;
+    indent();
+    *output << "}\n";
+}
+
+void CppBuilder::build_while(ast::WhileStatement* stmt) {
+    indent();
+    *output << "while (";
+    build_expression(stmt->get_expression());
+    *output << ") {\n";
+
+    indent_count++;
+    build_statements(stmt->get_statements());
+    indent_count--;
     indent();
     *output << "}\n";
 }

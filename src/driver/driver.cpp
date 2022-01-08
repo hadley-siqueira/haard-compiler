@@ -64,9 +64,10 @@ void Driver::build_ir() {
 }
 
 void Driver::build_cpp() {
+    std::ofstream f("out.cpp");
     CppBuilder builder;
     builder.build(program);
-    std::cout << builder.get_output() << std::endl;
+    f << builder.get_output() << std::endl;
 }
 
 void Driver::set_flags(int argc, char* argv[]) {
@@ -216,8 +217,13 @@ void Driver::set_root_path_from_main_file() {
         if (main_file_path[c] == path_delimiter) break;
     }
 
-    for (int i = 0; i < c; ++i) {
-        root_path += main_file_path[i];
+    // name.hd
+    if (c == -1) {
+        root_path = ".";
+    } else {
+        for (int i = 0; i < c; ++i) {
+            root_path += main_file_path[i];
+        }
     }
 }
 
