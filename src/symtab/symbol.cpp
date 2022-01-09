@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "symtab/symbol.h"
 #include "ast/variable.h"
 #include "ast/class.h"
@@ -86,8 +88,9 @@ ast::Type* Symbol::get_type() {
         var = (ast::Variable*) descriptor;
         return var->get_type();
 
-    case SYM_CLASS:
-        return nullptr;
+    case SYM_CLASS: 
+        klass = (ast::Class*) descriptor;
+        return klass->get_as_type();
 
     case SYM_FUNCTION:
     case SYM_METHOD:

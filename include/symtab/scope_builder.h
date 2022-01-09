@@ -81,6 +81,7 @@ namespace hdc {
 
         private:
             void visit_binop(ast::BinaryExpression* bin);
+            void visit_identifier_call(ast::Identifier* id);
             void create_new_variable(ast::Identifier* id, ast::Type* type);
 
         private:

@@ -10,6 +10,8 @@
 #include "method.h"
 #include "template_list.h"
 #include "symtab/scope.h"
+#include "named_type.h"
+#include "identifier.h"
 
 namespace hdc {
     namespace ast {
@@ -35,6 +37,7 @@ namespace hdc {
                 Variable* get_variable(int i);
                 std::string get_unique_id();
                 Scope* get_scope();
+                Type* get_as_type();
 
                 void add_method(Method* method);
                 void add_variable(Variable* variable);
@@ -51,6 +54,7 @@ namespace hdc {
                 TemplateList* template_list;
                 std::string unique_id;
                 Scope* scope;
+                Type* type;
         };
     }
 }

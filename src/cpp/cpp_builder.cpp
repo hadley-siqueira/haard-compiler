@@ -476,12 +476,14 @@ void CppBuilder::build_call(ast::BinaryExpression* expr) {
     *output << "(";
 
     if (list != nullptr) {
-        for (i = 0; i < list->expression_count() - 1; ++i) {
-            build_expression(list->get_expression(i));
-            *output << ", ";
-        }
+        if (list->expression_count() > 0) {
+            for (i = 0; i < list->expression_count() - 1; ++i) {
+                build_expression(list->get_expression(i));
+                *output << ", ";
+            }
 
-        build_expression(list->get_expression(i));
+            build_expression(list->get_expression(i));
+        }
     }
 
     *output << ")";

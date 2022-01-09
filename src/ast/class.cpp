@@ -10,6 +10,7 @@ Class::Class() {
     source_file = nullptr;
     template_list = nullptr;
     scope = new Scope();
+    type = nullptr;
 }
 
 Class::~Class() {
@@ -24,6 +25,7 @@ Class::~Class() {
     delete template_list;
     delete parent;
     delete scope;
+    delete type;
 }
 
 void Class::set_name(Token token) {
@@ -71,6 +73,16 @@ Variable* Class::get_variable(int i) {
 
 Scope* Class::get_scope() {
     return scope;
+}
+
+Type* Class::get_as_type() {
+    if (type == nullptr) {
+        Identifier* id = new Identifier();
+        id->set_name(name);
+        type = new NamedType(id);
+    }
+
+    return type;
 }
 
 void Class::add_method(Method* method) {

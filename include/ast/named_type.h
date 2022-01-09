@@ -15,6 +15,8 @@ namespace hdc {
                 NamedType(Identifier* id);
                 ~NamedType();
 
+                Type* clone();
+
             public:
                 Identifier* get_id();
 

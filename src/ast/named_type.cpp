@@ -10,9 +10,14 @@ NamedType::NamedType(Identifier* id) {
 }
 
 NamedType::~NamedType() {
-    delete id;
+    //delete id;
 }
 
 Identifier* NamedType::get_id() {
     return id;
+}
+
+Type* NamedType::clone() {
+    NamedType* tmp = new NamedType(id);
+    return tmp;
 }

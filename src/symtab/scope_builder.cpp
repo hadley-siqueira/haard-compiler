@@ -201,6 +201,7 @@ void ScopeBuilder::visit_class(ast::Class* klass) {
 
     klass->get_scope()->set_enclosing_scope(current_scope);
     current_scope = klass->get_scope();
+    visit(klass->get_as_type());
 
     for (int i = 0; i < klass->variables_count(); ++i) {
         std::stringstream ss;
@@ -315,7 +316,7 @@ void ScopeBuilder::visit_identifier(ast::Identifier* id) {
     } else {
         id->set_symbol(symbol);
         id->set_scope(current_scope);
-        //id->set_type(symbol->get_type()->clone());
+        id->set_type(symbol->get_type()->clone());
     }
 }
 
@@ -362,7 +363,8 @@ void ScopeBuilder::visit_call(ast::BinaryExpression* call) {
     ast::Expression* right = call->get_right();
 
     if (left->get_kind() == AST_IDENTIFIER) {
-        visit(left);
+        visit_identifier_call((ast::Identifier*) left);
+        call->set_type(left->get_type()->clone());
     }
 
     visit(right);
@@ -455,6 +457,38 @@ void ScopeBuilder::create_new_variable(ast::Identifier* id, ast::Type* type) {
 
     if (flag) {
         delete type;
+    }
+}
+
+void ScopeBuilder::visit_identifier_call(ast::Identifier* id) {
+    Symbol* symbol = nullptr;
+    std::string name = id->get_name().get_value();
+    std::string alias = id->get_alias().get_value();
+    ast::Function* f;
+    ast::Class* klass;
+
+    symbol = current_scope->resolve(name);
+
+    if (symbol == nullptr) {
+        std::cout << "Error: symbol '" << name << "' not defined\n";
+        current_scope->debug();
+        exit(0);
+    } else {
+        if (symbol->get_kind() == SYM_FUNCTION) {
+            id->set_symbol(symbol);
+            id->set_scope(current_scope);
+            f = (ast::Function*) symbol->get_descriptor();
+            id->set_type(f->get_return_type()->clone());
+        } else if (symbol->get_kind() == SYM_CLASS) {
+            id->set_symbol(symbol);
+            id->set_scope(current_scope);
+            klass = (ast::Class*) symbol->get_descriptor();
+            Token tk = klass->get_name();
+            ast::Identifier* idd = new Identifier();
+            idd->set_name(tk);
+            id->set_type(new NamedType(idd));
+            visit_named_type((ast::NamedType*) id->get_type());
+        }
     }
 }
 

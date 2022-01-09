@@ -10,6 +10,10 @@ set(UTILS_SRC
     src/utils/string_pool.cpp
 )
 
+set(POOL_SRC
+    src/pool/type_pool.cpp
+)
+
 set(TOKEN_SRC
     src/token/token.cpp
 )
@@ -74,6 +78,7 @@ set(DRIVER_SRC
 set(SOURCES
     src/main.cpp
     ${UTILS_SRC}
+    ${POOL_SRC}
     ${TOKEN_SRC}
     ${SCANNER_SRC}
     ${AST_SRC}
