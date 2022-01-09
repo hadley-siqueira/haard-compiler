@@ -187,6 +187,10 @@ void ScopeBuilder::second_pass(ast::Program* program) {
 void ScopeBuilder::visit_source_file(ast::SourceFile* source_file) {
     current_scope = source_file->get_scope();
 
+    for (int i = 0; i < source_file->imports_count(); ++i) {
+        current_scope->add_sibling(source_file->get_import(i)->get_source_file()->get_scope());
+    }
+
     for (int i = 0; i < source_file->classes_count(); ++i) {
         visit(source_file->get_class(i));
     }
@@ -316,7 +320,7 @@ void ScopeBuilder::visit_identifier(ast::Identifier* id) {
     } else {
         id->set_symbol(symbol);
         id->set_scope(current_scope);
-        id->set_type(symbol->get_type()->clone());
+        id->set_type(symbol->get_type());
     }
 }
 
@@ -364,7 +368,7 @@ void ScopeBuilder::visit_call(ast::BinaryExpression* call) {
 
     if (left->get_kind() == AST_IDENTIFIER) {
         visit_identifier_call((ast::Identifier*) left);
-        call->set_type(left->get_type()->clone());
+        call->set_type(left->get_type());
     }
 
     visit(right);
@@ -433,19 +437,17 @@ void ScopeBuilder::create_new_variable(ast::Identifier* id, ast::Type* type) {
     Symbol* symbol = nullptr;
     std::string name = id->get_name().get_value();
     std::string alias = id->get_alias().get_value();
-    bool flag = false;
 
     symbol = current_scope->resolve(name);
 
     if (type == nullptr) {
         type = new Type(AST_INT_TYPE);
-        flag = true;
     }
 
     if (symbol == nullptr) {
         Variable* var = new Variable(AST_LOCAL_VARIABLE);
         var->set_name(id->get_name());
-        var->set_type(type->clone());
+        var->set_type(type);
         symbol = new Symbol(SYM_VAR, name, var);
         current_scope->define(symbol);
         current_function->add_variable(var);
@@ -453,11 +455,7 @@ void ScopeBuilder::create_new_variable(ast::Identifier* id, ast::Type* type) {
 
     id->set_symbol(symbol);
     id->set_scope(current_scope);
-    id->set_type(type->clone());
-
-    if (flag) {
-        delete type;
-    }
+    id->set_type(type);
 }
 
 void ScopeBuilder::visit_identifier_call(ast::Identifier* id) {
@@ -478,7 +476,7 @@ void ScopeBuilder::visit_identifier_call(ast::Identifier* id) {
             id->set_symbol(symbol);
             id->set_scope(current_scope);
             f = (ast::Function*) symbol->get_descriptor();
-            id->set_type(f->get_return_type()->clone());
+            id->set_type(f->get_return_type());
         } else if (symbol->get_kind() == SYM_CLASS) {
             id->set_symbol(symbol);
             id->set_scope(current_scope);
@@ -495,7 +493,7 @@ void ScopeBuilder::visit_identifier_call(ast::Identifier* id) {
 void ScopeBuilder::visit_binop(ast::BinaryExpression* bin) {
     visit(bin->get_left());
     visit(bin->get_right());
-    bin->set_type(bin->get_left()->get_type()->clone());
+    bin->set_type(bin->get_left()->get_type());
 }
 
 void ScopeBuilder::add_parameters(ast::Function* function) {

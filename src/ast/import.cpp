@@ -33,6 +33,10 @@ Token Import::get_path(int i) {
     return path[i];
 }
 
+SourceFile* Import::get_source_file() {
+    return source_file;
+}
+
 bool Import::has_alias() {
     return alias_flag;
 }

@@ -22,6 +22,7 @@ namespace hdc {
                 Token get_token();
                 Token get_alias();
                 Token get_path(int i);
+                SourceFile* get_source_file();
 
                 bool has_alias();
 

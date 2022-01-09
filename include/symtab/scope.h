@@ -12,15 +12,17 @@ namespace hdc {
             ~Scope();
 
         public:
-            Symbol* resolve(std::string& name);
+            Symbol* resolve(std::string& name, bool recursive=true);
             void define(Symbol* symbol);
             Scope* get_enclosing_scope();
             void set_enclosing_scope(Scope* scope);
             void debug();
+            void add_sibling(Scope* scope);
             
         private:
             std::map<std::string, Symbol*> symbols;
             Scope* enclosing_scope;
+            std::vector<Scope*>* siblings;
     };
 }
 
