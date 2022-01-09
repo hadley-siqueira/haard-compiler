@@ -30,7 +30,6 @@ Driver::Driver() {
 }
 
 Driver::~Driver() {
-    delete program;
     AstPool::destroy();
 }
 
