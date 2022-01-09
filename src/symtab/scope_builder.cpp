@@ -204,8 +204,7 @@ void ScopeBuilder::visit_source_file(ast::SourceFile* source_file) {
 void ScopeBuilder::visit_class(ast::Class* klass) {
     int var_counter = 0;
 
-    klass->get_scope()->set_enclosing_scope(current_scope);
-    current_scope = klass->get_scope();
+    set_new_scope(klass->get_scope());
     current_scope->set_name(klass->get_name().get_value());
 
     std::cout << "as type\n";
@@ -225,12 +224,11 @@ void ScopeBuilder::visit_class(ast::Class* klass) {
         visit(klass->get_method(i));
     }
     
-    current_scope = current_scope->get_enclosing_scope();
+    restore_scope();
 }
 
 void ScopeBuilder::visit_function(ast::Function* function) {
-    function->get_scope()->set_enclosing_scope(current_scope);
-    current_scope = function->get_scope();
+    set_new_scope(function->get_scope());
     current_function = function;
     int lvar_counter = 0;
 
@@ -247,7 +245,7 @@ void ScopeBuilder::visit_function(ast::Function* function) {
         std::cout << var->get_name().get_value() << '\n';
     }
 
-    current_scope = current_scope->get_enclosing_scope();
+    restore_scope();
 }
 
 void ScopeBuilder::visit_method(ast::Method* method) {
@@ -261,13 +259,12 @@ void ScopeBuilder::visit_compound_statement(ast::CompoundStatement* statements) 
 }
 
 void ScopeBuilder::visit_if_statement(ast::IfStatement* stmt) {
-    stmt->get_scope()->set_enclosing_scope(current_scope);
-    current_scope = stmt->get_scope();
+    set_new_scope(stmt->get_scope());
 
     visit(stmt->get_expression());
     visit(stmt->get_true_statements());
 
-    current_scope = current_scope->get_enclosing_scope();
+    restore_scope();
 
     if (stmt->get_false_statements()) {
         visit(stmt->get_false_statements());
@@ -275,13 +272,12 @@ void ScopeBuilder::visit_if_statement(ast::IfStatement* stmt) {
 }
 
 void ScopeBuilder::visit_elif_statement(ast::ElifStatement* stmt) {
-    stmt->get_scope()->set_enclosing_scope(current_scope);
-    current_scope = stmt->get_scope();
+    set_new_scope(stmt->get_scope());
 
     visit(stmt->get_expression());
     visit(stmt->get_true_statements());
 
-    current_scope = current_scope->get_enclosing_scope();
+    restore_scope();
 
     if (stmt->get_false_statements()) {
         visit(stmt->get_false_statements());
@@ -289,21 +285,19 @@ void ScopeBuilder::visit_elif_statement(ast::ElifStatement* stmt) {
 }
 
 void ScopeBuilder::visit_else_statement(ast::ElseStatement* stmt) {
-    stmt->get_scope()->set_enclosing_scope(current_scope);
-    current_scope = stmt->get_scope();
+    set_new_scope(stmt->get_scope());
 
     visit(stmt->get_statements());
-    current_scope = current_scope->get_enclosing_scope();
+    restore_scope();
 }
 
 void ScopeBuilder::visit_while_statement(ast::WhileStatement* stmt) {
-    stmt->get_scope()->set_enclosing_scope(current_scope);
-    current_scope = stmt->get_scope();
+    set_new_scope(stmt->get_scope());
 
     visit(stmt->get_expression());
     visit(stmt->get_statements());
 
-    current_scope = current_scope->get_enclosing_scope();
+    restore_scope();
 }
 
 void ScopeBuilder::visit_expression_statement(ast::ExpressionStatement* stmt) {
@@ -552,9 +546,6 @@ void ScopeBuilder::add_class(ast::Class* klass) {
         ss << "c" << class_id_counter << "_" << name;
         klass->set_unique_id(ss.str());
         ++class_id_counter;
-std::cout << "Adding class " << ss.str();
-current_scope->debug();
-std::cout << '\n';
         add_methods(klass);
     } else {
         std::string path = klass->get_source_file()->get_path();
@@ -636,4 +627,13 @@ void ScopeBuilder::add_method(ast::Method* method, int idx) {
 void ScopeBuilder::define_symbol(SymbolKind kind, std::string name, void* descriptor) {
     Symbol* symbol = new Symbol(kind, name, descriptor);
     current_scope->define(symbol);
+}
+
+void ScopeBuilder::set_new_scope(Scope* scope) {
+    scope->set_enclosing_scope(current_scope);
+    current_scope = scope;
+}
+
+void ScopeBuilder::restore_scope() {
+    current_scope = current_scope->get_enclosing_scope();
 }

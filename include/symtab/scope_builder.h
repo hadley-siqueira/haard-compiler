@@ -96,6 +96,8 @@ namespace hdc {
             void add_parameters(ast::Function* function);
 
             void define_symbol(SymbolKind kind, std::string name, void* descriptor);
+            void set_new_scope(Scope* scope);
+            void restore_scope();
 
         private:
             Scope* current_scope;
