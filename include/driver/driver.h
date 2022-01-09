@@ -4,6 +4,7 @@
 #include <map>
 #include "ast/source_file.h"
 #include "ast/program.h"
+#include "pool/ast_pool.h"
 
 namespace hdc {
     class Driver {

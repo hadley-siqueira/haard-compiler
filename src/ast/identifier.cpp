@@ -13,7 +13,7 @@ Identifier::Identifier() {
 }
 
 Identifier::~Identifier() {
-    delete template_list;
+    /* Empty */
 }
 
 void Identifier::set_alias(Token alias) {

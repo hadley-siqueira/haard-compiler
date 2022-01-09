@@ -8,9 +8,7 @@ Program::Program() {
 }
 
 Program::~Program() {
-    for (int i = 0; i < source_files.size(); ++i) {
-        delete source_files[i];
-    }
+    /* Empty */
 }
 
 void Program::add_source_file(std::string path, SourceFile* source_file) {

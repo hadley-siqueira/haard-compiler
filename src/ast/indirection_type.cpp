@@ -11,7 +11,7 @@ IndirectionType::IndirectionType(AstKind kind, Token token, Type* subtype) {
 }
 
 IndirectionType::~IndirectionType() {
-    delete subtype;
+    /* Empty */
 }
                 
 Type* IndirectionType::get_subtype() {

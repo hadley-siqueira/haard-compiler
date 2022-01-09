@@ -15,7 +15,7 @@ ExpressionStatement::ExpressionStatement(Expression* expr) {
 }
 
 ExpressionStatement::~ExpressionStatement() {
-    delete expression;
+    /* Empty */
 }
 
 void ExpressionStatement::set_expression(Expression* expr) {

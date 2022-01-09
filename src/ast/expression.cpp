@@ -11,7 +11,7 @@ Expression::Expression() {
 }
 
 Expression::~Expression() {
-    delete type;
+    /* Empty */
 };
                 
 void Expression::set_type(Type* type) {

@@ -14,8 +14,7 @@ BinaryExpression::BinaryExpression(AstKind kind, Token token, Expression* left, 
 }
 
 BinaryExpression::~BinaryExpression() {
-    delete left;
-    delete right;
+    /* Empty */
 }
 
 Expression* BinaryExpression::get_left() {

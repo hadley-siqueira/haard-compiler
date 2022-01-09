@@ -27,9 +27,6 @@ ElifStatement::ElifStatement(Token token, Expression* expr, CompoundStatement* s
 }
 
 ElifStatement::~ElifStatement() {
-    delete expression;
-    delete statements;
-    delete false_statement;
     delete scope;
 }
 

@@ -16,7 +16,7 @@ Variable::Variable(AstKind kind) {
 }
 
 Variable::~Variable() {
-    delete type;
+    /* Empty */
 }
 
 void Variable::set_name(Token name) {

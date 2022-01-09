@@ -8,9 +8,7 @@ TemplateList::TemplateList() {
 }
 
 TemplateList::~TemplateList() {
-    for (int i = 0; i < types.size(); ++i) {
-        delete types[i];
-    }
+    /* Empty */
 }
 
 void TemplateList::add_type(Type* type) {

@@ -8,9 +8,7 @@ CompoundStatement::CompoundStatement() {
 }
 
 CompoundStatement::~CompoundStatement() {
-    for (int i = 0; i < statements.size(); ++i) {
-        delete statements[i];
-    }
+    /* Empty */
 };
 
 void CompoundStatement::add_statement(Statement* stmt) {

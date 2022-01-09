@@ -12,7 +12,7 @@ UnaryExpression::UnaryExpression(AstKind kind, Token token, Expression* expr) {
 }
 
 UnaryExpression::~UnaryExpression() {
-    delete expr;
+    /* Empty */
 }
 
 Expression* UnaryExpression::get_expression() {

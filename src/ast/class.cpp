@@ -14,18 +14,7 @@ Class::Class() {
 }
 
 Class::~Class() {
-    for (int i = 0; i < methods.size(); ++i) {
-        delete methods[i];
-    }
-
-    for (int i = 0; i < variables.size(); ++i) {
-        delete variables[i];
-    }
-
-    delete template_list;
-    delete parent;
     delete scope;
-    delete type;
 }
 
 void Class::set_name(Token token) {

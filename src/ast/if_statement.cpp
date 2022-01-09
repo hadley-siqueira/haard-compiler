@@ -27,9 +27,6 @@ IfStatement::IfStatement(Token token, Expression* expr, CompoundStatement* stmts
 }
 
 IfStatement::~IfStatement() {
-    delete expression;
-    delete statements;
-    delete false_statement;
     delete scope;
 }
 

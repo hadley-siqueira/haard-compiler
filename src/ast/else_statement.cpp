@@ -12,7 +12,6 @@ ElseStatement::ElseStatement(Token token, CompoundStatement* stmts) {
 }
 
 ElseStatement::~ElseStatement() {
-    delete statements;
     delete scope;
 }
 

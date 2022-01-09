@@ -1,7 +1,6 @@
 #include <iostream>
 
 #include "scanner/scanner.h"
-#include "ast/ast.h"
 
 #include "ast/ast_node.h"
 #include "ast/source_file.h"

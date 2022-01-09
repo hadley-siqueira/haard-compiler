@@ -11,7 +11,7 @@ set(UTILS_SRC
 )
 
 set(POOL_SRC
-    src/pool/type_pool.cpp
+    src/pool/ast_pool.cpp
 )
 
 set(TOKEN_SRC
@@ -24,7 +24,6 @@ set(SCANNER_SRC
 )
 
 set(AST_SRC
-    src/ast/ast.cpp
     src/ast/ast_node.cpp
     src/ast/program.cpp
     src/ast/source_file.cpp

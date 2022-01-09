@@ -1,12 +1,14 @@
 #include <iostream>
 
 #include "ast/ast_node.h"
+#include "pool/ast_pool.h"
 
 using namespace hdc;
 using namespace hdc::ast;
 
 AstNode::AstNode() {
     parent_node = nullptr;
+    AstPool::add(this);
 }
 
 AstNode::~AstNode() {

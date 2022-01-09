@@ -13,18 +13,7 @@ Function::Function() {
 }
 
 Function::~Function() {
-    delete return_type;
-    delete template_list;
-    delete statements;
     delete scope;
-
-    for (int i = 0; i < parameters.size(); ++i) {
-        delete parameters[i];
-    }
-
-    for (int i = 0; i < local_variables.size(); ++i) {
-        delete local_variables[i];
-    }
 }
 
 void Function::set_name(Token name) {

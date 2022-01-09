@@ -31,6 +31,7 @@ Driver::Driver() {
 
 Driver::~Driver() {
     delete program;
+    AstPool::destroy();
 }
 
 void Driver::run_flags() {

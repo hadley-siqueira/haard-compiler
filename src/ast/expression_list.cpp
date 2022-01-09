@@ -8,9 +8,7 @@ ExpressionList::ExpressionList() {
 }
 
 ExpressionList::~ExpressionList() {
-    for (int i = 0; i < expressions.size(); ++i) {
-        delete expressions[i];
-    }
+    /* Empty */
 }
 
 void ExpressionList::add_expression(Expression* expr) {

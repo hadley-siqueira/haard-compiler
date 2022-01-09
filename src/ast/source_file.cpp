@@ -9,18 +9,6 @@ SourceFile::SourceFile() {
 }
 
 SourceFile::~SourceFile() {
-    for (int i = 0; i < imports.size(); ++i) {
-        delete imports[i];
-    }
-
-    for (int i = 0; i < functions.size(); ++i) {
-        delete functions[i];
-    }
-
-    for (int i = 0; i < classes.size(); ++i) {
-        delete classes[i];
-    }
-
     delete scope;
 }
 
