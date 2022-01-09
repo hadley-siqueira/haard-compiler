@@ -2,6 +2,10 @@ class Rect:
     x : int
     y : int
 
+class Point:
+    x : double
+    y : double
+
 def sum : double
     @a : int
     @b : int
@@ -18,4 +22,5 @@ def main : void
     g = 0.0f
     h = 'h'
     i = Rect()
+    p = Point()
     j = sum(2, 3)

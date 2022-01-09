@@ -58,6 +58,14 @@ Scope* Scope::get_enclosing_scope() {
     return enclosing_scope;
 }
 
+void Scope::set_name(std::string name) {
+    this->name = name;
+}
+
+std::string Scope::get_name() {
+    return name;
+}
+
 void Scope::set_enclosing_scope(Scope* scope) {
     enclosing_scope = scope;
 }
@@ -78,7 +86,7 @@ void Scope::debug() {
     }
 
     it = symbols.begin();
-    std::cout << "{";
+    std::cout << name <<" {";
 
     while (it != symbols.end()) {
         std::cout << it->first << ", ";

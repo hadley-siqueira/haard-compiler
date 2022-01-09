@@ -18,11 +18,14 @@ namespace hdc {
             void set_enclosing_scope(Scope* scope);
             void debug();
             void add_sibling(Scope* scope);
+            void set_name(std::string name);
+            std::string get_name();
             
         private:
             std::map<std::string, Symbol*> symbols;
             Scope* enclosing_scope;
             std::vector<Scope*>* siblings;
+            std::string name;
     };
 }
 

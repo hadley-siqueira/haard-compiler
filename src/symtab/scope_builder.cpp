@@ -186,6 +186,7 @@ void ScopeBuilder::second_pass(ast::Program* program) {
 
 void ScopeBuilder::visit_source_file(ast::SourceFile* source_file) {
     current_scope = source_file->get_scope();
+    current_scope->set_name("source");
 
     for (int i = 0; i < source_file->imports_count(); ++i) {
         current_scope->add_sibling(source_file->get_import(i)->get_source_file()->get_scope());
@@ -205,6 +206,9 @@ void ScopeBuilder::visit_class(ast::Class* klass) {
 
     klass->get_scope()->set_enclosing_scope(current_scope);
     current_scope = klass->get_scope();
+    current_scope->set_name(klass->get_name().get_value());
+
+    std::cout << "as type\n";
     visit(klass->get_as_type());
 
     for (int i = 0; i < klass->variables_count(); ++i) {
@@ -316,6 +320,7 @@ void ScopeBuilder::visit_identifier(ast::Identifier* id) {
     if (symbol == nullptr) {
         std::cout << "Error: symbol '" << name << "' not defined\n";
         current_scope->debug();
+        std::cout << hdc_astkind_map.at(id->get_parent_node()->get_kind()) << std::endl;
         exit(0);
     } else {
         id->set_symbol(symbol);
@@ -529,9 +534,8 @@ void ScopeBuilder::add_parameters(ast::Function* function) {
 }
 
 void ScopeBuilder::add_classes(ast::SourceFile* source_file) {
-    current_scope = source_file->get_scope();
-
     for (int i = 0; i < source_file->classes_count(); ++i) {
+        current_scope = source_file->get_scope();
         add_class(source_file->get_class(i));
     }
 }
@@ -548,7 +552,9 @@ void ScopeBuilder::add_class(ast::Class* klass) {
         ss << "c" << class_id_counter << "_" << name;
         klass->set_unique_id(ss.str());
         ++class_id_counter;
-
+std::cout << "Adding class " << ss.str();
+current_scope->debug();
+std::cout << '\n';
         add_methods(klass);
     } else {
         std::string path = klass->get_source_file()->get_path();
