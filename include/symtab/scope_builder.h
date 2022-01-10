@@ -60,6 +60,14 @@ namespace hdc {
 
             void visit_call(ast::BinaryExpression* call);
 
+            void visit_sll(ast::BinaryExpression* bin);
+            void visit_sra(ast::BinaryExpression* bin);
+            void visit_srl(ast::BinaryExpression* bin);
+
+            void visit_bitwise_and(ast::BinaryExpression* bin);
+            void visit_bitwise_xor(ast::BinaryExpression* bin);
+            void visit_bitwise_or(ast::BinaryExpression* bin);
+
             void visit_times(ast::BinaryExpression* bin);
             void visit_division(ast::BinaryExpression* bin);
             void visit_integer_division(ast::BinaryExpression* bin);
@@ -73,6 +81,12 @@ namespace hdc {
             void visit_gt(ast::BinaryExpression* bin);
             void visit_le(ast::BinaryExpression* bin);
             void visit_ge(ast::BinaryExpression* bin);
+
+            void visit_eq(ast::BinaryExpression* bin);
+            void visit_ne(ast::BinaryExpression* bin);
+
+            void visit_logical_and(ast::BinaryExpression* bin);
+            void visit_logical_or(ast::BinaryExpression* bin);
 
             void visit_assignment(ast::BinaryExpression* bin);
 

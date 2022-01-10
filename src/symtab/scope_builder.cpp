@@ -100,6 +100,30 @@ void ScopeBuilder::visit(ast::AstNode* node) {
         break;
 
     // binary operators
+    case AST_SLL:
+        visit_sll((ast::BinaryExpression*) node);
+        break;
+
+    case AST_SRL:
+        visit_srl((ast::BinaryExpression*) node);
+        break;
+
+    case AST_SRA:
+        visit_sra((ast::BinaryExpression*) node);
+        break;
+
+    case AST_BITWISE_AND:
+        visit_bitwise_and((ast::BinaryExpression*) node);
+        break;
+
+    case AST_BITWISE_XOR:
+        visit_bitwise_xor((ast::BinaryExpression*) node);
+        break;
+
+    case AST_BITWISE_OR:
+        visit_bitwise_or((ast::BinaryExpression*) node);
+        break;
+
     case AST_TIMES:
         visit_times((ast::BinaryExpression*) node);
         break;
@@ -142,6 +166,22 @@ void ScopeBuilder::visit(ast::AstNode* node) {
 
     case AST_GE:
         visit_ge((ast::BinaryExpression*) node);
+        break;
+
+    case AST_EQ:
+        visit_eq((ast::BinaryExpression*) node);
+        break;
+
+    case AST_NE:
+        visit_ne((ast::BinaryExpression*) node);
+        break;
+
+    case AST_LOGICAL_AND:
+        visit_logical_and((ast::BinaryExpression*) node);
+        break;
+
+    case AST_LOGICAL_OR:
+        visit_logical_or((ast::BinaryExpression*) node);
         break;
 
     case AST_ASSIGNMENT:
@@ -373,6 +413,30 @@ void ScopeBuilder::visit_call(ast::BinaryExpression* call) {
     visit(right);
 }
 
+void ScopeBuilder::visit_sll(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_sra(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_srl(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_bitwise_and(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_bitwise_xor(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_bitwise_or(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
 void ScopeBuilder::visit_times(ast::BinaryExpression* bin) {
     visit_binop(bin);
 }
@@ -414,6 +478,22 @@ void ScopeBuilder::visit_le(ast::BinaryExpression* bin) {
 }
 
 void ScopeBuilder::visit_ge(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_eq(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_ne(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_logical_and(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_logical_or(ast::BinaryExpression* bin) {
     visit_binop(bin);
 }
 

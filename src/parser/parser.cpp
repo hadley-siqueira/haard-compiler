@@ -602,10 +602,10 @@ Expression* Parser::parse_logical_or_expression() {
     while (true) {
         if (match(TK_OR)) {
             oper = matched_token;
-            expr = new BinaryExpression(AST_EQ, oper, expr, parse_logical_and_expression());
+            expr = new BinaryExpression(AST_LOGICAL_OR, oper, expr, parse_logical_and_expression());
         } else if (match(TK_LOGICAL_OR)) {
             oper = matched_token;
-            expr = new BinaryExpression(AST_NE, oper, expr, parse_logical_and_expression());
+            expr = new BinaryExpression(AST_LOGICAL_OR, oper, expr, parse_logical_and_expression());
         } else {
             break;
         }
