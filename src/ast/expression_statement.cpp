@@ -14,6 +14,16 @@ ExpressionStatement::ExpressionStatement(Expression* expr) {
     expr->set_parent_node(this);
 }
 
+ExpressionStatement::ExpressionStatement(AstKind kind, Token token, Expression* expr) {
+    set_kind(kind);
+    expression = expr;
+    this->token = token;
+
+    if (expr != nullptr) {
+        expr->set_parent_node(this);
+    }
+}
+
 ExpressionStatement::~ExpressionStatement() {
     /* Empty */
 }

@@ -44,6 +44,7 @@ namespace hdc {
             void visit_elif_statement(ast::ElifStatement* stmt);
             void visit_else_statement(ast::ElseStatement* stmt);
             void visit_while_statement(ast::WhileStatement* stmt);
+            void visit_return_statement(ast::ExpressionStatement* stmt);
             void visit_expression_statement(ast::ExpressionStatement* stmt);
 
             // expressions

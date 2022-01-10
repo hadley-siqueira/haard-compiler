@@ -3,8 +3,16 @@ def print : void
 
     $ "std::cout << p0_s << std::endl"
 
-
 def print_int : void
     @i : int
 
     $ "std::cout << p0_i << std::endl"
+
+def read_int : int
+    @msg : char*
+
+    v = 0
+    $ "std::cout << p0_msg"
+    $ "std::cin >> lv0_v"
+
+    return v

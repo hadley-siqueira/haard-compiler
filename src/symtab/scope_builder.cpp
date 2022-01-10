@@ -49,6 +49,10 @@ void ScopeBuilder::visit(ast::AstNode* node) {
         visit_while_statement((ast::WhileStatement*) node);
         break;
 
+    case AST_RETURN:
+        visit_return_statement((ast::ExpressionStatement*) node);
+        break;
+
     case AST_EXPRESSION_STATEMENT:
         visit_expression_statement((ast::ExpressionStatement*) node);
         break;
@@ -338,6 +342,12 @@ void ScopeBuilder::visit_while_statement(ast::WhileStatement* stmt) {
     visit(stmt->get_statements());
 
     restore_scope();
+}
+
+void ScopeBuilder::visit_return_statement(ast::ExpressionStatement* stmt) {
+    if (stmt->get_expression() != nullptr) {
+        visit(stmt->get_expression());
+    }
 }
 
 void ScopeBuilder::visit_expression_statement(ast::ExpressionStatement* stmt) {

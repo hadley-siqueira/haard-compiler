@@ -11,6 +11,7 @@ namespace hdc {
             public:
                 ExpressionStatement();
                 ExpressionStatement(Expression* expr);
+                ExpressionStatement(AstKind kind, Token token, Expression* expr);
                 virtual ~ExpressionStatement();
 
             public:
@@ -19,6 +20,7 @@ namespace hdc {
 
             private:
                 Expression* expression;
+                Token token;
         };
     }
 }

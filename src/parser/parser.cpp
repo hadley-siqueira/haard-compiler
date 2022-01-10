@@ -774,7 +774,18 @@ Statement* Parser::parse_else_statement() {
 }
 
 Statement* Parser::parse_return_statement() {
-    return nullptr;
+    Token token;
+    Expression* expr = nullptr;
+
+    expect(TK_RETURN);
+    token = matched_token;
+
+    if (!lookahead(TK_NEWLINE)) {
+        expr = parse_expression();
+    }
+
+    expect(TK_NEWLINE);
+    return new ExpressionStatement(AST_RETURN, token, expr);;
 }
 
 Statement* Parser::parse_variable_statement() {

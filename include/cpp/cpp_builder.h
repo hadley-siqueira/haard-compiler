@@ -5,6 +5,7 @@
 #include <map>
 #include <set>
 
+#include "ast/ast_node.h"
 #include "ast/program.h"
 #include "ast/source_file.h"
 #include "ast/function.h"
@@ -31,10 +32,15 @@ namespace hdc {
             CppBuilder();
 
         public:
+            void visit(ast::AstNode* node);
+
             void build(ast::Program* program);
             std::string get_output();
 
         private:
+            void visit_eq(ast::BinaryExpression* bin);
+            void visit_return_statement(ast::ExpressionStatement* stmt);
+
             void generate_headers();
             void generate_symbols();
             void generate_main_function();

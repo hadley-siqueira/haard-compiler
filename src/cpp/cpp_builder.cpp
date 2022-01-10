@@ -27,6 +27,22 @@ std::string CppBuilder::get_output() {
     return r.str();
 }
 
+void CppBuilder::visit_eq(ast::BinaryExpression* bin) {
+    build_binop("==", bin);
+}
+
+void CppBuilder::visit_return_statement(ast::ExpressionStatement* stmt) {
+    indent();
+
+    if (stmt->get_expression() != nullptr) {
+        *output << "return ";
+        build_expression(stmt->get_expression());
+        *output << ";\n";
+    } else {
+        *output << "return;\n";
+    }
+}
+
 void CppBuilder::generate_headers() {
     headers_stream << "#include <iostream>\n\n";
 }
@@ -263,6 +279,10 @@ void CppBuilder::build_statement(ast::Statement* stmt) {
         build_while((ast::WhileStatement*) stmt);
         break;
 
+    case AST_RETURN:
+        visit_return_statement((ast::ExpressionStatement*) stmt);
+        break;
+
     case AST_EXPRESSION_STATEMENT:
         build_expression_statement((ast::ExpressionStatement*) stmt);
         break;
@@ -355,6 +375,10 @@ void CppBuilder::build_expression(ast::Expression* expr) {
 
     case AST_LT:
         build_binop("<", (ast::BinaryExpression*) expr);
+        break;
+
+    case AST_EQ:
+        visit_eq((ast::BinaryExpression*) expr);
         break;
 
     case AST_IDENTIFIER:
