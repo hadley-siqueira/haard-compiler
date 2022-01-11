@@ -834,6 +834,8 @@ void ScopeBuilder::visit_assignment(ast::BinaryExpression* bin) {
 
     if (left->get_kind() == AST_IDENTIFIER) {
         create_new_variable((Identifier*) left, right->get_type());
+    } else {
+        visit(left);
     }
 }
 
