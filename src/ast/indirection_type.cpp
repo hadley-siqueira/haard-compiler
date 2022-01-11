@@ -10,6 +10,12 @@ IndirectionType::IndirectionType(AstKind kind, Token token, Type* subtype) {
     subtype->set_parent_node(this);
 }
 
+IndirectionType::IndirectionType(AstKind kind, Type* subtype) {
+    set_kind(kind);
+    this->subtype = subtype;
+    subtype->set_parent_node(this);
+}
+
 IndirectionType::~IndirectionType() {
     /* Empty */
 }

@@ -686,10 +686,16 @@ void ScopeBuilder::visit_call(ast::BinaryExpression* call) {
 
 void ScopeBuilder::visit_address_of(ast::UnaryExpression* node) {
     visit(node->get_expression());
+    node->set_type(new ast::IndirectionType(AST_POINTER_TYPE, node->get_expression()->get_type()));
 }
 
 void ScopeBuilder::visit_dereference(ast::UnaryExpression* node) {
+    ast::IndirectionType* p;
+
     visit(node->get_expression());
+
+    p = (ast::IndirectionType*) node->get_expression()->get_type();
+    node->set_type(p->get_subtype());
 }
 
 void ScopeBuilder::visit_unary_minus(ast::UnaryExpression* node) {

@@ -8,6 +8,7 @@ namespace hdc {
         class IndirectionType : public Type {
             public:
                 IndirectionType(AstKind kind, Token token, Type* subtype);
+                IndirectionType(AstKind kind, Type* subtype);
                 ~IndirectionType();
 
                 Type* get_subtype();

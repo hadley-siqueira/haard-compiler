@@ -1,0 +1,10 @@
+def main : void
+    a = 0
+    b = &a
+    c = &b
+    d = 3.1415
+    e = &d
+    f = *e
+    a = **c
+
+
