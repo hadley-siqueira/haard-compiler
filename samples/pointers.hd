@@ -7,4 +7,10 @@ def main : void
     f = *e
     a = **c
 
+def swap : void
+    @t1 : int*
+    @t2 : int*
 
+    tmp = *t1
+    *t1 = *t2
+    *t2 = tmp
