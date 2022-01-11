@@ -16,6 +16,10 @@ void ScopeBuilder::visit(ast::AstNode* node) {
         visit_source_file((ast::SourceFile*) node);
         break;
 
+    case AST_IMPORT:
+        visit_import((ast::Import*) node);
+        break;
+
     case AST_CLASS:
         visit_class((ast::Class*) node);
         break;
@@ -193,6 +197,106 @@ void ScopeBuilder::visit(ast::AstNode* node) {
         break;
 
     // types
+    case AST_VOID_TYPE:
+        visit_void_type((ast::Type*) node);
+        break;
+
+    case AST_INT_TYPE:
+        visit_int_type((ast::Type*) node);
+        break;
+
+    case AST_UINT_TYPE:
+        visit_uint_type((ast::Type*) node);
+        break;
+
+    case AST_FLOAT_TYPE:
+        visit_float_type((ast::Type*) node);
+        break;
+
+    case AST_DOUBLE_TYPE:
+        visit_double_type((ast::Type*) node);
+        break;
+
+    case AST_SHORT_TYPE:
+        visit_short_type((ast::Type*) node);
+        break;
+
+    case AST_USHORT_TYPE:
+        visit_ushort_type((ast::Type*) node);
+        break;
+
+    case AST_LONG_TYPE:
+        visit_long_type((ast::Type*) node);
+        break;
+
+    case AST_ULONG_TYPE:
+        visit_ulong_type((ast::Type*) node);
+        break;
+
+    case AST_CHAR_TYPE:
+        visit_char_type((ast::Type*) node);
+        break;
+
+    case AST_UCHAR_TYPE:
+        visit_uchar_type((ast::Type*) node);
+        break;
+
+    case AST_SYMBOL_TYPE:
+        visit_symbol_type((ast::Type*) node);
+        break;
+
+    case AST_BOOL_TYPE:
+        visit_bool_type((ast::Type*) node);
+        break;
+
+    case AST_STRING_TYPE:
+        visit_string_type((ast::Type*) node);
+        break;
+
+    case AST_NULL_TYPE:
+        visit_null_type((ast::Type*) node);
+        break;
+
+    case AST_I8_TYPE:
+        visit_i8_type((ast::Type*) node);
+        break;
+
+    case AST_I16_TYPE:
+        visit_i16_type((ast::Type*) node);
+        break;
+
+    case AST_I32_TYPE:
+        visit_i32_type((ast::Type*) node);
+        break;
+
+    case AST_I64_TYPE:
+        visit_i64_type((ast::Type*) node);
+        break;
+
+    case AST_U8_TYPE:
+        visit_u8_type((ast::Type*) node);
+        break;
+
+    case AST_U16_TYPE:
+        visit_u16_type((ast::Type*) node);
+        break;
+
+    case AST_U32_TYPE:
+        visit_u32_type((ast::Type*) node);
+        break;
+
+    case AST_U64_TYPE:
+        visit_u64_type((ast::Type*) node);
+        break;
+
+    case AST_POINTER_TYPE:
+        visit_pointer_type((ast::IndirectionType*) node);
+        break;
+
+    case AST_REFERENCE_TYPE:
+        visit_reference_type((ast::IndirectionType*) node);
+        break;
+
     case AST_NAMED_TYPE:
         visit_named_type((ast::NamedType*) node);
         break;
@@ -233,7 +337,7 @@ void ScopeBuilder::visit_source_file(ast::SourceFile* source_file) {
     current_scope->set_name("source");
 
     for (int i = 0; i < source_file->imports_count(); ++i) {
-        current_scope->add_sibling(source_file->get_import(i)->get_source_file()->get_scope());
+        visit(source_file->get_import(i));
     }
 
     for (int i = 0; i < source_file->classes_count(); ++i) {
@@ -243,6 +347,10 @@ void ScopeBuilder::visit_source_file(ast::SourceFile* source_file) {
     for (int i = 0; i < source_file->functions_count(); ++i) {
         visit(source_file->get_function(i));
     }
+}
+
+void ScopeBuilder::visit_import(ast::Import* import) {
+    current_scope->add_sibling(import->get_source_file()->get_scope());
 }
 
 void ScopeBuilder::visit_class(ast::Class* klass) {
@@ -516,6 +624,106 @@ void ScopeBuilder::visit_assignment(ast::BinaryExpression* bin) {
     if (left->get_kind() == AST_IDENTIFIER) {
         create_new_variable((Identifier*) left, right->get_type());
     }
+}
+
+void ScopeBuilder::visit_void_type(ast::Type* type) {
+
+}
+
+void ScopeBuilder::visit_int_type(ast::Type* type) {
+
+}
+
+void ScopeBuilder::visit_uint_type(ast::Type* type) {
+
+}
+
+void ScopeBuilder::visit_float_type(ast::Type* type) {
+
+}
+
+void ScopeBuilder::visit_double_type(ast::Type* type) {
+
+}
+
+void ScopeBuilder::visit_short_type(ast::Type* type) {
+
+}
+
+void ScopeBuilder::visit_ushort_type(ast::Type* type) {
+
+}
+
+void ScopeBuilder::visit_long_type(ast::Type* type) {
+
+}
+
+void ScopeBuilder::visit_ulong_type(ast::Type* type) {
+
+}
+
+void ScopeBuilder::visit_char_type(ast::Type* type) {
+
+}
+
+void ScopeBuilder::visit_uchar_type(ast::Type* type) {
+
+}
+
+void ScopeBuilder::visit_symbol_type(ast::Type* type) {
+
+}
+
+void ScopeBuilder::visit_bool_type(ast::Type* type) {
+
+}
+
+void ScopeBuilder::visit_string_type(ast::Type* type) {
+
+}
+
+void ScopeBuilder::visit_null_type(ast::Type* type) {
+
+}
+
+void ScopeBuilder::visit_i8_type(ast::Type* type) {
+
+}
+
+void ScopeBuilder::visit_i16_type(ast::Type* type) {
+
+}
+
+void ScopeBuilder::visit_i32_type(ast::Type* type) {
+
+}
+
+void ScopeBuilder::visit_i64_type(ast::Type* type) {
+
+}
+
+void ScopeBuilder::visit_u8_type(ast::Type* type) {
+
+}
+
+void ScopeBuilder::visit_u16_type(ast::Type* type) {
+
+}
+
+void ScopeBuilder::visit_u32_type(ast::Type* type) {
+
+}
+
+void ScopeBuilder::visit_u64_type(ast::Type* type) {
+
+}
+
+void ScopeBuilder::visit_pointer_type(ast::IndirectionType* type) {
+    visit(type->get_subtype());
+}
+
+void ScopeBuilder::visit_reference_type(ast::IndirectionType* type) {
+    visit(type->get_subtype());
 }
 
 void ScopeBuilder::visit_named_type(ast::NamedType* type) {

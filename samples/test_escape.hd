@@ -1,0 +1,6 @@
+import std.io
+
+def main : void
+    print('Hello, world!\n')
+    print('\t\tStatus: ...\n')
+    print('A new line is \\n\n')

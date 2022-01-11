@@ -6,6 +6,7 @@
 #include "ast/ast_node.h"
 #include "ast/program.h"
 #include "ast/source_file.h"
+#include "ast/import.h"
 #include "ast/class.h"
 #include "ast/function.h"
 
@@ -23,6 +24,7 @@
 #include "ast/binary_expression.h"
 
 #include "ast/type.h"
+#include "ast/indirection_type.h"
 #include "ast/named_type.h"
 
 namespace hdc {
@@ -33,6 +35,7 @@ namespace hdc {
         private:
             void visit_program(ast::Program* program);
             void visit_source_file(ast::SourceFile* source_file);
+            void visit_import(ast::Import* import);
 
             void visit_class(ast::Class* klass);
             void visit_function(ast::Function* function);
@@ -92,6 +95,31 @@ namespace hdc {
             void visit_assignment(ast::BinaryExpression* bin);
 
             // types
+            void visit_void_type(ast::Type* type);
+            void visit_int_type(ast::Type* type);
+            void visit_uint_type(ast::Type* type);
+            void visit_float_type(ast::Type* type);
+            void visit_double_type(ast::Type* type);
+            void visit_short_type(ast::Type* type);
+            void visit_ushort_type(ast::Type* type);
+            void visit_long_type(ast::Type* type);
+            void visit_ulong_type(ast::Type* type);
+            void visit_char_type(ast::Type* type);
+            void visit_uchar_type(ast::Type* type);
+            void visit_symbol_type(ast::Type* type);
+            void visit_bool_type(ast::Type* type);
+            void visit_string_type(ast::Type* type);
+            void visit_null_type(ast::Type* type);
+            void visit_i8_type(ast::Type* type);
+            void visit_i16_type(ast::Type* type);
+            void visit_i32_type(ast::Type* type);
+            void visit_i64_type(ast::Type* type);
+            void visit_u8_type(ast::Type* type);
+            void visit_u16_type(ast::Type* type);
+            void visit_u32_type(ast::Type* type);
+            void visit_u64_type(ast::Type* type);
+            void visit_pointer_type(ast::IndirectionType* type);
+            void visit_reference_type(ast::IndirectionType* type);
             void visit_named_type(ast::NamedType* type);
 
         private:
