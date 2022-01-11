@@ -62,7 +62,24 @@ namespace hdc {
             void visit_literal_double(ast::LiteralExpression* literal);
             void visit_expression_list(ast::ExpressionList* list);
 
+            void visit_parenthesis(ast::UnaryExpression* node);
+            void visit_dolar(ast::UnaryExpression* node);
+            void visit_dot(ast::BinaryExpression* node);
+            void visit_arrow(ast::BinaryExpression* node);
+            void visit_index(ast::BinaryExpression* node);
             void visit_call(ast::BinaryExpression* call);
+
+            void visit_address_of(ast::UnaryExpression* node);
+            void visit_dereference(ast::UnaryExpression* node);
+            void visit_unary_minus(ast::UnaryExpression* node);
+            void visit_unary_plus(ast::UnaryExpression* node);
+            void visit_pre_inc(ast::UnaryExpression* node);
+            void visit_pre_dec(ast::UnaryExpression* node);
+            void visit_pos_inc(ast::UnaryExpression* node);
+            void visit_pos_dec(ast::UnaryExpression* node);
+            void visit_logical_not(ast::UnaryExpression* node);
+            void visit_bitwise_not(ast::UnaryExpression* node);
+            void visit_sizeof(ast::UnaryExpression* node);
 
             void visit_sll(ast::BinaryExpression* bin);
             void visit_sra(ast::BinaryExpression* bin);
@@ -92,7 +109,24 @@ namespace hdc {
             void visit_logical_and(ast::BinaryExpression* bin);
             void visit_logical_or(ast::BinaryExpression* bin);
 
+            void visit_inclusive_range(ast::BinaryExpression* bin);
+            void visit_exclusive_range(ast::BinaryExpression* bin);
+
             void visit_assignment(ast::BinaryExpression* bin);
+            void visit_bitwise_and_assignment(ast::BinaryExpression* bin);
+            void visit_bitwise_xor_assignment(ast::BinaryExpression* bin);
+            void visit_bitwise_or_assignment(ast::BinaryExpression* bin);
+            void visit_bitwise_not_assignment(ast::BinaryExpression* bin);
+            void visit_division_assignment(ast::BinaryExpression* bin);
+            void visit_integer_division_assignment(ast::BinaryExpression* bin);
+            void visit_minus_assignment(ast::BinaryExpression* bin);
+            void visit_modulo_assignment(ast::BinaryExpression* bin);
+            void visit_plus_assignment(ast::BinaryExpression* bin);
+            void visit_times_assignment(ast::BinaryExpression* bin);
+            void visit_sll_assignment(ast::BinaryExpression* bin);
+            void visit_sra_assignment(ast::BinaryExpression* bin);
+            void visit_srl_assignment(ast::BinaryExpression* bin);
+            void visit_special_assignment(ast::BinaryExpression* bin);
 
             // types
             void visit_void_type(ast::Type* type);

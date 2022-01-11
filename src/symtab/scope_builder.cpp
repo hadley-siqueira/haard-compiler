@@ -98,13 +98,78 @@ void ScopeBuilder::visit(ast::AstNode* node) {
         visit_literal_double((ast::LiteralExpression*) node);
         break;
 
+    // special operations
+    case AST_PARENTHESIS:
+        visit_parenthesis((ast::UnaryExpression*) node);
+        break;
+
+    case AST_DOLAR:
+        visit_dolar((ast::UnaryExpression*) node);
+        break;
+
+    case AST_DOT:
+        visit_dot((ast::BinaryExpression*) node);
+        break;
+
+    case AST_ARROW:
+        visit_arrow((ast::BinaryExpression*) node);
+        break;
+
+    case AST_INDEX:
+        visit_index((ast::BinaryExpression*) node);
+        break;
+
+    case AST_CALL:
+        visit_call((ast::BinaryExpression*) node);
+        break;
+
     case AST_EXPRESSION_LIST:
         visit_expression_list((ast::ExpressionList*) node);
         break;
 
-    // special operations
-    case AST_CALL:
-        visit_call((ast::BinaryExpression*) node);
+    // Unary Operators
+    case AST_ADDRESS_OF:
+        visit_address_of((ast::UnaryExpression*) node);
+        break;
+
+    case AST_DEREFERENCE:
+        visit_dereference((ast::UnaryExpression*) node);
+        break;
+
+    case AST_UNARY_MINUS:
+        visit_unary_minus((ast::UnaryExpression*) node);
+        break;
+
+    case AST_UNARY_PLUS:
+        visit_unary_plus((ast::UnaryExpression*) node);
+        break;
+
+    case AST_PRE_INC:
+        visit_pre_inc((ast::UnaryExpression*) node);
+        break;
+
+    case AST_PRE_DEC:
+        visit_pre_dec((ast::UnaryExpression*) node);
+        break;
+
+    case AST_POS_INC:
+        visit_pos_inc((ast::UnaryExpression*) node);
+        break;
+
+    case AST_POS_DEC:
+        visit_pos_dec((ast::UnaryExpression*) node);
+        break;
+
+    case AST_LOGICAL_NOT:
+        visit_logical_not((ast::UnaryExpression*) node);
+        break;
+
+    case AST_BITWISE_NOT:
+        visit_bitwise_not((ast::UnaryExpression*) node);
+        break;
+
+    case AST_SIZEOF:
+        visit_sizeof((ast::UnaryExpression*) node);
         break;
 
     // binary operators
@@ -160,6 +225,7 @@ void ScopeBuilder::visit(ast::AstNode* node) {
         visit_minus((ast::BinaryExpression*) node);
         break;
 
+    // relational operators
     case AST_LT:
         visit_lt((ast::BinaryExpression*) node);
         break;
@@ -176,6 +242,7 @@ void ScopeBuilder::visit(ast::AstNode* node) {
         visit_ge((ast::BinaryExpression*) node);
         break;
 
+    // equality operators
     case AST_EQ:
         visit_eq((ast::BinaryExpression*) node);
         break;
@@ -184,6 +251,7 @@ void ScopeBuilder::visit(ast::AstNode* node) {
         visit_ne((ast::BinaryExpression*) node);
         break;
 
+    // logical operators
     case AST_LOGICAL_AND:
         visit_logical_and((ast::BinaryExpression*) node);
         break;
@@ -192,8 +260,73 @@ void ScopeBuilder::visit(ast::AstNode* node) {
         visit_logical_or((ast::BinaryExpression*) node);
         break;
 
+    // range operators
+    case AST_INCLUSIVE_RANGE:
+        visit_inclusive_range((ast::BinaryExpression*) node);
+        break;
+
+    case AST_EXCLUSIVE_RANGE:
+        visit_exclusive_range((ast::BinaryExpression*) node);
+        break;
+
     case AST_ASSIGNMENT:
         visit_assignment((BinaryExpression*) node);
+        break;
+
+    case AST_BITWISE_AND_ASSIGNMENT:
+        visit_bitwise_and_assignment((BinaryExpression*) node);
+        break;
+
+    case AST_BITWISE_XOR_ASSIGNMENT:
+        visit_bitwise_xor_assignment((BinaryExpression*) node);
+        break;
+
+    case AST_BITWISE_OR_ASSIGNMENT:
+        visit_bitwise_or_assignment((ast::BinaryExpression*) node);
+        break;
+
+    case AST_BITWISE_NOT_ASSIGNMENT:
+        visit_bitwise_not_assignment((ast::BinaryExpression*) node);
+        break;
+
+    case AST_DIVISION_ASSIGNMENT:
+        visit_division_assignment((ast::BinaryExpression*) node);
+        break;
+
+    case AST_INTEGER_DIVISION_ASSIGNMENT:
+        visit_integer_division_assignment((ast::BinaryExpression*) node);
+        break;
+
+    case AST_MINUS_ASSIGNMENT:
+        visit_minus_assignment((ast::BinaryExpression*) node);
+        break;
+
+    case AST_MODULO_ASSIGNMENT:
+        visit_modulo_assignment((ast::BinaryExpression*) node);
+        break;
+
+    case AST_PLUS_ASSIGNMENT:
+        visit_plus_assignment((ast::BinaryExpression*) node);
+        break;
+
+    case AST_TIMES_ASSIGNMENT:
+        visit_times_assignment((ast::BinaryExpression*) node);
+        break;
+
+    case AST_SLL_ASSIGNMENT:
+        visit_sll_assignment((ast::BinaryExpression*) node);
+        break;
+
+    case AST_SRA_ASSIGNMENT:
+        visit_sra_assignment((ast::BinaryExpression*) node);
+        break;
+
+    case AST_SRL_ASSIGNMENT:
+        visit_srl_assignment((ast::BinaryExpression*) node);
+        break;
+
+    case AST_SPECIAL_ASSIGNMENT:
+        visit_special_assignment((ast::BinaryExpression*) node);
         break;
 
     // types
@@ -519,6 +652,26 @@ void ScopeBuilder::visit_expression_list(ast::ExpressionList* list) {
     }
 }
 
+void ScopeBuilder::visit_parenthesis(ast::UnaryExpression* node) {
+    visit(node->get_expression());
+}
+
+void ScopeBuilder::visit_dolar(ast::UnaryExpression* node) {
+    /* Empty */
+}
+
+void ScopeBuilder::visit_dot(ast::BinaryExpression* node) {
+    visit_binop(node);
+}
+
+void ScopeBuilder::visit_arrow(ast::BinaryExpression* node) {
+    visit_binop(node);
+}
+
+void ScopeBuilder::visit_index(ast::BinaryExpression* node) {
+    visit_binop(node);
+}
+
 void ScopeBuilder::visit_call(ast::BinaryExpression* call) {
     ast::Expression* left = call->get_left();
     ast::Expression* right = call->get_right();
@@ -529,6 +682,50 @@ void ScopeBuilder::visit_call(ast::BinaryExpression* call) {
     }
 
     visit(right);
+}
+
+void ScopeBuilder::visit_address_of(ast::UnaryExpression* node) {
+    visit(node->get_expression());
+}
+
+void ScopeBuilder::visit_dereference(ast::UnaryExpression* node) {
+    visit(node->get_expression());
+}
+
+void ScopeBuilder::visit_unary_minus(ast::UnaryExpression* node) {
+    visit(node->get_expression());
+}
+
+void ScopeBuilder::visit_unary_plus(ast::UnaryExpression* node) {
+    visit(node->get_expression());
+}
+
+void ScopeBuilder::visit_pre_inc(ast::UnaryExpression* node) {
+    visit(node->get_expression());
+}
+
+void ScopeBuilder::visit_pre_dec(ast::UnaryExpression* node) {
+    visit(node->get_expression());
+}
+
+void ScopeBuilder::visit_pos_inc(ast::UnaryExpression* node) {
+    visit(node->get_expression());
+}
+
+void ScopeBuilder::visit_pos_dec(ast::UnaryExpression* node) {
+    visit(node->get_expression());
+}
+
+void ScopeBuilder::visit_logical_not(ast::UnaryExpression* node) {
+    visit(node->get_expression());
+}
+
+void ScopeBuilder::visit_bitwise_not(ast::UnaryExpression* node) {
+    visit(node->get_expression());
+}
+
+void ScopeBuilder::visit_sizeof(ast::UnaryExpression* node) {
+    visit(node->get_expression());
 }
 
 void ScopeBuilder::visit_sll(ast::BinaryExpression* bin) {
@@ -615,6 +812,14 @@ void ScopeBuilder::visit_logical_or(ast::BinaryExpression* bin) {
     visit_binop(bin);
 }
 
+void ScopeBuilder::visit_inclusive_range(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_exclusive_range(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
 void ScopeBuilder::visit_assignment(ast::BinaryExpression* bin) {
     Expression* left = bin->get_left();
     Expression* right = bin->get_right();
@@ -626,6 +831,64 @@ void ScopeBuilder::visit_assignment(ast::BinaryExpression* bin) {
     }
 }
 
+void ScopeBuilder::visit_bitwise_and_assignment(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_bitwise_xor_assignment(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_bitwise_or_assignment(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_bitwise_not_assignment(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_division_assignment(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_integer_division_assignment(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_minus_assignment(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_modulo_assignment(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_plus_assignment(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_times_assignment(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_sll_assignment(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_sra_assignment(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_srl_assignment(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+void ScopeBuilder::visit_special_assignment(ast::BinaryExpression* bin) {
+    visit_binop(bin);
+}
+
+
+// Types
 void ScopeBuilder::visit_void_type(ast::Type* type) {
 
 }
