@@ -369,6 +369,7 @@ Expression* Parser::parse_postfix_expression() {
         } else if (match(TK_LEFT_SQUARE_BRACKET)) {
             oper = matched_token;
             expr = new BinaryExpression(AST_INDEX, oper, expr, parse_expression());
+            expect(TK_RIGHT_SQUARE_BRACKET);
         } else if (match(TK_LEFT_PARENTHESIS)) {
             oper = matched_token;
             expr = new BinaryExpression(AST_CALL, oper, expr, parse_argument_list());

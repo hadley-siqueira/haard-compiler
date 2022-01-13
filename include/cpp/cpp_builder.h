@@ -96,6 +96,7 @@ namespace hdc {
 
             void set_main_function(ast::Function* f);
 
+            void visit_index(ast::BinaryExpression* expr);
             void visit_array_type(ast::ArrayType* type);
 
         private:

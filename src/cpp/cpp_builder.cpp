@@ -422,6 +422,10 @@ void CppBuilder::build_expression(ast::Expression* expr) {
         build_dot((ast::BinaryExpression*) expr);
         break;
 
+    case AST_INDEX:
+        visit_index((ast::BinaryExpression*) expr);
+        break;
+
     case AST_CALL:
         build_call((ast::BinaryExpression*) expr);
         break;
@@ -487,6 +491,13 @@ void CppBuilder::build_expression(ast::Expression* expr) {
         build_dolar((ast::UnaryExpression*) expr);
         break;
     }
+}
+
+void CppBuilder::visit_index(ast::BinaryExpression* expr) {
+    build_expression(expr->get_left());
+    *output << '[';
+    build_expression(expr->get_right());
+    *output << ']';
 }
 
 void CppBuilder::build_dolar(ast::UnaryExpression* dolar) {

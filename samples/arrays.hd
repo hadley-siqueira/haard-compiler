@@ -5,8 +5,11 @@ def foo : void
     @a4 : double[10]
     @a5 : double[10][10][11]
     @a7 : int[]*
+    @a8 : double[][]
 
-    pass
+    a1[0] = 0
+    a1[1] = 2 + 3
+    a1[0] = a1[0] + a1[1 + a1[0]]
 
 def main : void
     pass
