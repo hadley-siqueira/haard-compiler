@@ -1,0 +1,28 @@
+class Vector:
+    size_  : int
+    cap    : int
+    elems : int*
+
+    def size : int
+        return size_
+
+    def add : void
+        @e : int
+
+        if size_ == cap:
+            resize()
+
+        size_ = size_ + 1
+        elems[size_] = e
+
+    def resize : void
+        tmp = new int[2 * size_]
+        cap = 2 * size_
+
+        i = 0
+        while i < size_:
+            tmp[i] = elems[i]
+            i = i + 1
+
+        # delete elems
+        elems = tmp

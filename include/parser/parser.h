@@ -25,6 +25,7 @@
 #include "ast/literal_expression.h"
 #include "ast/binary_expression.h"
 #include "ast/unary_expression.h"
+#include "ast/new_expression.h"
 #include "ast/expression_list.h"
 
 namespace hdc {

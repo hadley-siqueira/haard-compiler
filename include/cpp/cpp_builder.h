@@ -18,6 +18,7 @@
 #include "ast/identifier.h"
 #include "ast/type.h"
 #include "ast/indirection_type.h"
+#include "ast/new_expression.h"
 #include "ast/array_type.h"
 #include "ast/named_type.h"
 
@@ -96,6 +97,7 @@ namespace hdc {
 
             void set_main_function(ast::Function* f);
 
+            void visit_new(ast::NewExpression* expr);
             void visit_index(ast::BinaryExpression* expr);
             void visit_array_type(ast::ArrayType* type);
 

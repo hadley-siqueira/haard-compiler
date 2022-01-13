@@ -323,6 +323,7 @@ ExpressionList* Parser::parse_argument_list() {
 Expression* Parser::parse_primary_expression() {
     Expression* expr = nullptr;
     Token oper;
+    Type* type;
 
     if (match(TK_LEFT_PARENTHESIS)) {
         oper = matched_token;
@@ -348,6 +349,8 @@ Expression* Parser::parse_primary_expression() {
         expr = new LiteralExpression(AST_LITERAL_BOOL, matched_token);
     } else if (match(TK_DOLAR)) {
         expr = new UnaryExpression(AST_DOLAR, matched_token, parse_primary_expression());
+    } else if (match(TK_NEW)) {
+        expr = new NewExpression(matched_token, parse_type());
     } else {
         expr = parse_identifier();
     }

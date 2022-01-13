@@ -50,6 +50,7 @@ set(AST_SRC
     src/ast/unary_expression.cpp
     src/ast/expression_list.cpp
     src/ast/expression_statement.cpp
+    src/ast/new_expression.cpp
 )
 
 set(PARSER_SRC

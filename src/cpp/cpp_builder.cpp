@@ -490,7 +490,16 @@ void CppBuilder::build_expression(ast::Expression* expr) {
     case AST_DOLAR:
         build_dolar((ast::UnaryExpression*) expr);
         break;
+
+    case AST_NEW:
+        visit_new((ast::NewExpression*) expr);
+        break;
     }
+}
+
+void CppBuilder::visit_new(ast::NewExpression* expr) {
+    *output << "new ";
+    build_type(expr->get_build_type());
 }
 
 void CppBuilder::visit_index(ast::BinaryExpression* expr) {
