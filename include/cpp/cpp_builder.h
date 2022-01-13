@@ -18,6 +18,7 @@
 #include "ast/identifier.h"
 #include "ast/type.h"
 #include "ast/indirection_type.h"
+#include "ast/array_type.h"
 #include "ast/named_type.h"
 
 #include "ast/if_statement.h"
@@ -95,6 +96,8 @@ namespace hdc {
 
             void set_main_function(ast::Function* f);
 
+            void visit_array_type(ast::ArrayType* type);
+
         private:
             std::stringstream* output;
             std::map<std::string, int> symbol_map;
@@ -105,6 +108,7 @@ namespace hdc {
             std::stringstream functions_stream;
             std::stringstream classes_stream;
             std::stringstream main_function_stream;
+            std::stringstream tail_stream;
             std::set<ast::Function*> visited_functions;
             std::set<ast::SourceFile*> visited_source_files;
             std::set<ast::Class*> visited_classes;

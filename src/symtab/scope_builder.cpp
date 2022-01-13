@@ -430,6 +430,10 @@ void ScopeBuilder::visit(ast::AstNode* node) {
         visit_reference_type((ast::IndirectionType*) node);
         break;
 
+    case AST_ARRAY_TYPE:
+        visit_array_type((ast::ArrayType*) node);
+        break;
+
     case AST_NAMED_TYPE:
         visit_named_type((ast::NamedType*) node);
         break;
@@ -995,6 +999,14 @@ void ScopeBuilder::visit_pointer_type(ast::IndirectionType* type) {
 
 void ScopeBuilder::visit_reference_type(ast::IndirectionType* type) {
     visit(type->get_subtype());
+}
+
+void ScopeBuilder::visit_array_type(ast::ArrayType* type) {
+    visit(type->get_subtype());
+
+    if (type->get_expression()) {
+        visit(type->get_expression());
+    }
 }
 
 void ScopeBuilder::visit_named_type(ast::NamedType* type) {

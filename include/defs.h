@@ -369,6 +369,8 @@ namespace hdc {
         AST_RETURN,
         AST_BREAK,
         AST_YIELD,
+        AST_NEW,
+        AST_DELETE,
         AST_EXPRESSION,
         AST_IDENTIFIER,
         AST_LITERAL_INTEGER,
@@ -461,6 +463,10 @@ namespace hdc {
         AST_NAMED_TYPE,
         AST_POINTER_TYPE,
         AST_REFERENCE_TYPE,
+        AST_ARRAY_TYPE,
+        AST_LIST_TYPE,
+        AST_HASH_TYPE,
+        AST_FUNCTION_TYPE,
         AST_TEMPLATE_LIST,
     } AstKind;
 
@@ -489,6 +495,8 @@ namespace hdc {
         {AST_RETURN, "AST_RETURN"},
         {AST_BREAK, "AST_BREAK"},
         {AST_YIELD, "AST_YIELD"},
+        {AST_NEW, "AST_NEW"},
+        {AST_DELETE, "AST_DELETE"},
         {AST_EXPRESSION, "AST_EXPRESSION"},
         {AST_IDENTIFIER, "AST_IDENTIFIER"},
         {AST_LITERAL_INTEGER, "AST_LITERAL_INTEGER"},
@@ -581,6 +589,10 @@ namespace hdc {
         {AST_NAMED_TYPE, "AST_NAMED_TYPE"},
         {AST_POINTER_TYPE, "AST_POINTER_TYPE"},
         {AST_REFERENCE_TYPE, "AST_REFERENCE_TYPE"},
+        {AST_ARRAY_TYPE, "AST_ARRAY_TYPE"},
+        {AST_LIST_TYPE, "AST_LIST_TYPE"},
+        {AST_HASH_TYPE, "AST_HASH_TYPE"},
+        {AST_FUNCTION_TYPE, "AST_FUNCTION_TYPE"},
         {AST_TEMPLATE_LIST, "AST_TEMPLATE_LIST"},
     };
 }

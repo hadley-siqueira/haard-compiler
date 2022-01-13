@@ -35,6 +35,7 @@ set(AST_SRC
     src/ast/type.cpp
     src/ast/named_type.cpp
     src/ast/indirection_type.cpp
+    src/ast/array_type.cpp
     src/ast/template_list.cpp
     src/ast/identifier.cpp
     src/ast/expression.cpp

@@ -1,0 +1,12 @@
+def foo : void
+    @a1 : int[]
+    @a2 : int[4]
+    @a3 : double[]
+    @a4 : double[10]
+    @a5 : double[10][10][11]
+    @a7 : int[]*
+
+    pass
+
+def main : void
+    pass

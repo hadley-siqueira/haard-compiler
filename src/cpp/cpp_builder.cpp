@@ -44,7 +44,10 @@ void CppBuilder::visit_return_statement(ast::ExpressionStatement* stmt) {
 }
 
 void CppBuilder::generate_headers() {
-    headers_stream << "#include <iostream>\n\n";
+    headers_stream << "#include <iostream>\n";
+    headers_stream << "#include <vector>\n";
+
+    headers_stream << '\n';
 }
 
 void CppBuilder::generate_symbols() {
@@ -144,11 +147,15 @@ void CppBuilder::build_function_signature(ast::Function* f) {
         for (i = 0; i < f->parameters_count() - 1; ++i) {
             build_type(f->get_parameter(i)->get_type());
             *output << ' ' << f->get_parameter(i)->get_unique_id();
+            *output << tail_stream.str();
+            tail_stream.str("");
             *output << ", ";
         }
 
         build_type(f->get_parameter(i)->get_type());
         *output << ' ' << f->get_parameter(i)->get_unique_id();
+        *output << tail_stream.str();
+        tail_stream.str("");
     }
 
     *output << ")";
@@ -335,10 +342,36 @@ void CppBuilder::build_type(ast::Type* type) {
         *output << '*';
         break;
 
+    case AST_REFERENCE_TYPE:
+        build_type(((ast::IndirectionType*) type)->get_subtype());
+        *output << '&';
+        break;
+
+    case AST_ARRAY_TYPE:
+        visit_array_type((ast::ArrayType*) type);
+        break;
+
     case AST_NAMED_TYPE:
         nm = (NamedType*) type;
         *output << nm->get_id()->get_symbol()->get_unique_id();
         break;
+    }
+}
+
+void CppBuilder::visit_array_type(ast::ArrayType* type) {
+    std::stringstream* old = &(*output);
+
+    if (type->get_expression()) {
+        build_type(type->get_subtype());
+        set_output(tail_stream);
+        *output << '[';
+        build_expression(type->get_expression());
+        *output << ']';
+        set_output(*old);
+    } else {
+        *output << "std::vector< ";
+        build_type(type->get_subtype());
+        *output << " >";
     }
 }
 

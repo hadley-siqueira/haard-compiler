@@ -25,6 +25,7 @@
 
 #include "ast/type.h"
 #include "ast/indirection_type.h"
+#include "ast/array_type.h"
 #include "ast/named_type.h"
 
 namespace hdc {
@@ -154,6 +155,7 @@ namespace hdc {
             void visit_u64_type(ast::Type* type);
             void visit_pointer_type(ast::IndirectionType* type);
             void visit_reference_type(ast::IndirectionType* type);
+            void visit_array_type(ast::ArrayType* type);
             void visit_named_type(ast::NamedType* type);
 
         private:

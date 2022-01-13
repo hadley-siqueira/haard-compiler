@@ -10,6 +10,7 @@
 #include "ast/type.h"
 #include "ast/named_type.h"
 #include "ast/indirection_type.h"
+#include "ast/array_type.h"
 #include "ast/template_list.h"
 
 #include "ast/statement.h"

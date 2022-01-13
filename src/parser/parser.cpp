@@ -189,6 +189,8 @@ void Parser::parse_parameters(Function* function) {
 
 Type* Parser::parse_type() {
     Type* type = nullptr;
+    Expression* expr = nullptr;
+    Token token;
 
     if (match(TK_INT)) {
         type = new Type(AST_INT_TYPE, matched_token);
@@ -244,6 +246,15 @@ Type* Parser::parse_type() {
             type = new IndirectionType(AST_POINTER_TYPE, matched_token, type);
         } else if (match(TK_BITWISE_AND)) {
             type = new IndirectionType(AST_REFERENCE_TYPE, matched_token, type);
+        } else if (match(TK_LEFT_SQUARE_BRACKET)) {
+            token = matched_token;
+
+            if (!lookahead(TK_RIGHT_SQUARE_BRACKET)) {
+                expr = parse_expression();
+            }
+
+            expect(TK_RIGHT_SQUARE_BRACKET);
+            type = new ArrayType(matched_token, type, expr);
         } else {
             break;
         }
