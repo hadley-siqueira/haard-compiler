@@ -1,0 +1,7 @@
+import std.io
+import std.vector
+
+def main : void
+    v = Vector()
+    v.add(2)
+    v.resize()

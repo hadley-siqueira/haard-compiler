@@ -27,6 +27,3 @@ class Vector:
         # delete elems
         elems = tmp
 
-def main : void
-    v = Vector()
-    v.add(2)
