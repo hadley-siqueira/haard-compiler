@@ -22,6 +22,7 @@
 #include "ast/expression_list.h"
 #include "ast/unary_expression.h"
 #include "ast/binary_expression.h"
+#include "ast/new_expression.h"
 
 #include "ast/type.h"
 #include "ast/indirection_type.h"
@@ -69,6 +70,7 @@ namespace hdc {
             void visit_arrow(ast::BinaryExpression* node);
             void visit_index(ast::BinaryExpression* node);
             void visit_call(ast::BinaryExpression* call);
+            void visit_new(ast::NewExpression* node);
 
             void visit_address_of(ast::UnaryExpression* node);
             void visit_dereference(ast::UnaryExpression* node);

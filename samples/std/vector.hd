@@ -1,7 +1,7 @@
 class Vector:
     size_  : int
     cap    : int
-    elems : int*
+    elems  : int*
 
     def size : int
         return size_
@@ -26,3 +26,7 @@ class Vector:
 
         # delete elems
         elems = tmp
+
+def main : void
+    v = Vector()
+    v.add(2)

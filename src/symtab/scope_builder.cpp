@@ -123,6 +123,10 @@ void ScopeBuilder::visit(ast::AstNode* node) {
         visit_call((ast::BinaryExpression*) node);
         break;
 
+    case AST_NEW:
+        visit_new((ast::NewExpression*) node);
+        break;
+
     case AST_EXPRESSION_LIST:
         visit_expression_list((ast::ExpressionList*) node);
         break;
@@ -665,7 +669,39 @@ void ScopeBuilder::visit_dolar(ast::UnaryExpression* node) {
 }
 
 void ScopeBuilder::visit_dot(ast::BinaryExpression* node) {
-    visit_binop(node);
+    ast::Type* type;
+    ast::NamedType* ntype;
+    ast::Class* klass;
+    ast::Identifier* id;
+    Symbol* symbol;
+
+    visit(node->get_left());
+    type = node->get_left()->get_type();
+
+    if (type->get_kind() == AST_NAMED_TYPE) {
+        ntype = (ast::NamedType*) type;
+
+        klass = (ast::Class*) ntype->get_id()->get_symbol()->get_descriptor();
+        std::cout << (klass->get_name().get_value()) << std::endl;
+        klass->get_scope()->debug();
+
+        id = (ast::Identifier*) node->get_right();
+        std::string name = id->get_name().get_value();
+        symbol = klass->get_scope()->resolve(name);
+
+        if (symbol == nullptr) {
+            //std::cout << "Error: symbol '" << name << "' not defined\n";
+            current_scope->debug();
+            std::cout << hdc_astkind_map.at(id->get_parent_node()->get_kind()) << std::endl;
+            exit(0);
+        } else {
+            id->set_symbol(symbol);
+            id->set_scope(current_scope);
+            id->set_type(symbol->get_type());
+        }
+
+        //exit(0);
+    }
 }
 
 void ScopeBuilder::visit_arrow(ast::BinaryExpression* node) {
@@ -683,9 +719,17 @@ void ScopeBuilder::visit_call(ast::BinaryExpression* call) {
     if (left->get_kind() == AST_IDENTIFIER) {
         visit_identifier_call((ast::Identifier*) left);
         call->set_type(left->get_type());
+    } else if (left->get_kind() == AST_DOT) {
+        visit_dot((ast::BinaryExpression*) left);
     }
 
     visit(right);
+}
+
+void ScopeBuilder::visit_new(ast::NewExpression* node) {
+    visit(node->get_build_type());
+
+    node->set_type(new IndirectionType(AST_POINTER_TYPE, node->get_build_type()));
 }
 
 void ScopeBuilder::visit_address_of(ast::UnaryExpression* node) {
@@ -1066,6 +1110,11 @@ void ScopeBuilder::visit_identifier_call(ast::Identifier* id) {
             idd->set_name(tk);
             id->set_type(new NamedType(idd));
             visit_named_type((ast::NamedType*) id->get_type());
+        } else if (symbol->get_kind() == SYM_METHOD) {
+            id->set_symbol(symbol);
+            id->set_scope(current_scope);
+            f = (ast::Method*) symbol->get_descriptor();
+            id->set_type(f->get_return_type());
         }
     }
 }

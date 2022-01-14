@@ -498,8 +498,11 @@ void CppBuilder::build_expression(ast::Expression* expr) {
 }
 
 void CppBuilder::visit_new(ast::NewExpression* expr) {
+    tail_stream.str("");
     *output << "new ";
     build_type(expr->get_build_type());
+    *output << tail_stream.str();
+    tail_stream.str("");
 }
 
 void CppBuilder::visit_index(ast::BinaryExpression* expr) {
