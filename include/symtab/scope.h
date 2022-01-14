@@ -13,6 +13,7 @@ namespace hdc {
 
         public:
             Symbol* resolve(std::string& name, bool recursive=true);
+            Symbol* resolve_member(std::string& name);
             void define(Symbol* symbol);
             Scope* get_enclosing_scope();
             void set_enclosing_scope(Scope* scope);
@@ -24,6 +25,7 @@ namespace hdc {
         private:
             std::map<std::string, Symbol*> symbols;
             Scope* enclosing_scope;
+            Scope* parent_class_scope;
             std::vector<Scope*>* siblings;
             std::string name;
     };

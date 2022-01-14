@@ -127,6 +127,10 @@ void ScopeBuilder::visit(ast::AstNode* node) {
         visit_new((ast::NewExpression*) node);
         break;
 
+    case AST_AT:
+        visit_at((ast::UnaryExpression*) node);
+        break;
+
     case AST_EXPRESSION_LIST:
         visit_expression_list((ast::ExpressionList*) node);
         break;
@@ -730,6 +734,25 @@ void ScopeBuilder::visit_new(ast::NewExpression* node) {
     visit(node->get_build_type());
 
     node->set_type(new IndirectionType(AST_POINTER_TYPE, node->get_build_type()));
+}
+
+void ScopeBuilder::visit_at(ast::UnaryExpression* node) {
+    ast::Identifier* id;
+    Symbol* symbol;
+
+    id = (ast::Identifier*) node->get_expression();
+    std::string name = id->get_name().get_value();
+    symbol = current_scope->resolve_member(name);
+
+    if (symbol == nullptr) {
+        std::cout << "Error: no member named '" << name << "'\n";
+        exit(0);
+    } else {
+        id->set_symbol(symbol);
+        id->set_scope(current_scope);
+        id->set_type(symbol->get_type());
+        node->set_type(symbol->get_type());
+    }
 }
 
 void ScopeBuilder::visit_address_of(ast::UnaryExpression* node) {

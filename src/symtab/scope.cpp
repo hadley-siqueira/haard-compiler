@@ -49,6 +49,26 @@ Symbol* Scope::resolve(std::string& name, bool recursive) {
     return nullptr;
 }
 
+Symbol* Scope::resolve_member(std::string& name) {
+    Symbol* sym = nullptr;
+    SymbolKind kind;
+
+    if (symbols.count(name) > 0) {
+        sym = symbols.at(name);
+        kind = sym->get_kind();
+
+        if (kind == SYM_CLASS_VAR || kind == SYM_METHOD) {
+            return sym;
+        }
+    }
+
+    if (enclosing_scope != nullptr) {
+        return enclosing_scope->resolve_member(name);
+    }
+
+    return nullptr;
+}
+
 void Scope::define(Symbol* symbol) {
     symbols.emplace(symbol->get_name(), symbol);
     symbol->set_scope(this);

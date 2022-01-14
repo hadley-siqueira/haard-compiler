@@ -1,0 +1,20 @@
+class Pixel:
+    r : int
+    g : int
+    b : int
+
+class PPMImage:
+    width  : int
+    height : int
+    pixels : Pixel*
+
+    def init : void
+        @width  : int
+        @height : int
+
+        pass
+        #@width = width
+        #@height = height
+        #@pixels = new Pixel[width * height]
+
+

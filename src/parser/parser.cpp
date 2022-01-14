@@ -351,6 +351,8 @@ Expression* Parser::parse_primary_expression() {
         expr = new UnaryExpression(AST_DOLAR, matched_token, parse_primary_expression());
     } else if (match(TK_NEW)) {
         expr = new NewExpression(matched_token, parse_type());
+    } else if (match(TK_AT)) {
+        expr = new UnaryExpression(AST_AT, matched_token, parse_identifier());
     } else {
         expr = parse_identifier();
     }
