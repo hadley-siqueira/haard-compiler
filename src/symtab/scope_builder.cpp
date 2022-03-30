@@ -504,13 +504,13 @@ void ScopeBuilder::visit_class(ast::Class* klass) {
     set_new_scope(klass->get_scope());
     current_scope->set_name(klass->get_name().get_value());
 
-    std::cout << "as type\n";
     visit(klass->get_as_type());
 
     for (int i = 0; i < klass->variables_count(); ++i) {
         std::stringstream ss;
         Variable* var = klass->get_variable(i);
         ss << "cv" << var_counter << "_" << var->get_name().get_value();
+        visit(var->get_type());
         var->set_unique_id(ss.str());
         ++var_counter;
         std::string name = var->get_name().get_value();
@@ -540,9 +540,21 @@ void ScopeBuilder::visit_function(ast::Function* function) {
         var->set_unique_id(ss.str());
         ++lvar_counter;
         std::cout << var->get_name().get_value() << '\n';
+
+        // build_variable(var. "lv", counter, SYM_CLASS_VAR);
     }
 
     restore_scope();
+}
+
+void ScopeBuilder::build_variable(ast::Variable* var, char* prefix, int& counter, SymbolKind kind) {
+    std::stringstream ss;
+    ss << prefix << counter << "_" << var->get_name().get_value();
+    visit(var->get_type());
+    var->set_unique_id(ss.str());
+    ++counter;
+    std::string name = var->get_name().get_value();
+    current_scope->define(new Symbol(kind, name, var));
 }
 
 void ScopeBuilder::visit_method(ast::Method* method) {
