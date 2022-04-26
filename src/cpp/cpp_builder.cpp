@@ -494,6 +494,12 @@ void CppBuilder::build_expression(ast::Expression* expr) {
     case AST_NEW:
         visit_new((ast::NewExpression*) expr);
         break;
+
+    case AST_PARENTHESIS:
+        *output << "(";
+        build_expression(((ast::UnaryExpression*) expr)->get_expression());
+        *output << ")";
+        break;
     }
 }
 

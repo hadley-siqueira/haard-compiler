@@ -178,6 +178,7 @@ namespace hdc {
             void add_parameters(ast::Function* function);
 
             void define_symbol(SymbolKind kind, std::string name, void* descriptor);
+            void build_variable(ast::Variable* var, const char* prefix, int& counter, SymbolKind kind);
             void set_new_scope(Scope* scope);
             void restore_scope();
 

@@ -507,14 +507,7 @@ void ScopeBuilder::visit_class(ast::Class* klass) {
     visit(klass->get_as_type());
 
     for (int i = 0; i < klass->variables_count(); ++i) {
-        std::stringstream ss;
-        Variable* var = klass->get_variable(i);
-        ss << "cv" << var_counter << "_" << var->get_name().get_value();
-        visit(var->get_type());
-        var->set_unique_id(ss.str());
-        ++var_counter;
-        std::string name = var->get_name().get_value();
-        current_scope->define(new Symbol(SYM_CLASS_VAR, name, var));
+        build_variable(klass->get_variable(i), "cv", var_counter, SYM_CLASS_VAR);
     }
 
     for (int i = 0; i < klass->methods_count(); ++i) {
@@ -547,14 +540,14 @@ void ScopeBuilder::visit_function(ast::Function* function) {
     restore_scope();
 }
 
-void ScopeBuilder::build_variable(ast::Variable* var, char* prefix, int& counter, SymbolKind kind) {
+void ScopeBuilder::build_variable(ast::Variable* var, const char* prefix, int& counter, SymbolKind kind) {
     std::stringstream ss;
     ss << prefix << counter << "_" << var->get_name().get_value();
     visit(var->get_type());
     var->set_unique_id(ss.str());
     ++counter;
     std::string name = var->get_name().get_value();
-    current_scope->define(new Symbol(kind, name, var));
+    define_symbol(kind, name, var);
 }
 
 void ScopeBuilder::visit_method(ast::Method* method) {
@@ -678,6 +671,7 @@ void ScopeBuilder::visit_expression_list(ast::ExpressionList* list) {
 
 void ScopeBuilder::visit_parenthesis(ast::UnaryExpression* node) {
     visit(node->get_expression());
+    node->set_type(node->get_expression()->get_type());
 }
 
 void ScopeBuilder::visit_dolar(ast::UnaryExpression* node) {
@@ -774,10 +768,17 @@ void ScopeBuilder::visit_address_of(ast::UnaryExpression* node) {
 
 void ScopeBuilder::visit_dereference(ast::UnaryExpression* node) {
     ast::IndirectionType* p;
+    ast::Type* type;
 
     visit(node->get_expression());
+    type = node->get_expression()->get_type();
 
-    p = (ast::IndirectionType*) node->get_expression()->get_type();
+    if (type->get_kind() != AST_POINTER_TYPE) {
+        std::cout << "Error: invalid dereference\n";
+        exit(0);
+    }
+
+    p = (ast::IndirectionType*) type;
     node->set_type(p->get_subtype());
 }
 
@@ -913,6 +914,7 @@ void ScopeBuilder::visit_assignment(ast::BinaryExpression* bin) {
     Expression* left = bin->get_left();
     Expression* right = bin->get_right();
 
+    current_scope->debug(); std::cout << '\n';
     visit(right);
 
     if (left->get_kind() == AST_IDENTIFIER) {
@@ -1290,8 +1292,7 @@ void ScopeBuilder::add_method(ast::Method* method, int idx) {
 }
 
 void ScopeBuilder::define_symbol(SymbolKind kind, std::string name, void* descriptor) {
-    Symbol* symbol = new Symbol(kind, name, descriptor);
-    current_scope->define(symbol);
+    current_scope->define(new Symbol(kind, name, descriptor));
 }
 
 void ScopeBuilder::set_new_scope(Scope* scope) {
